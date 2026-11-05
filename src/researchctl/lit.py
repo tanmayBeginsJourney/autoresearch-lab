@@ -23,13 +23,57 @@ S2 = "https://api.semanticscholar.org/graph/v1"
 FIELDS = "title,year,venue,citationCount,externalIds,authors"
 
 
+MIN_INTERVAL = {"api.semanticscholar.org": 1.05, "export.arxiv.org": 3.0, "api.openalex.org": 0.15}
+CACHE_TTL_S = 7 * 86400
+
+
+def _cache_dir() -> Path:
+    root = os.environ.get("LAB_ROOT")
+    d = Path(root) / "cache" / "lit" if root else Path.home() / ".cache" / "researchctl" / "lit"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def _throttle(host: str) -> None:
+    """Cross-process per-host rate limit (S2 1 rps, arXiv 1 per 3 s as their terms ask)."""
+    gap = MIN_INTERVAL.get(host)
+    if not gap:
+        return
+    import fcntl
+    stamp = _cache_dir() / f".last-{host}"
+    with open(stamp, "a+") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        f.seek(0)
+        last = float(f.read() or 0)
+        wait = last + gap - time.time()
+        if wait > 0:
+            time.sleep(wait)
+        f.seek(0)
+        f.truncate()
+        f.write(str(time.time()))
+
+
 def _get(url: str, headers: dict | None = None, timeout: int = 30, tries: int = 4) -> bytes:
+    """GET with per-host throttling, a 7-day on-disk cache (keyed without API keys) and backoff."""
+    import hashlib
+    key = hashlib.sha256((url + json.dumps(headers or {}, sort_keys=True)).encode()).hexdigest()[:32]
+    cached = _cache_dir() / key
+    if cached.exists() and time.time() - cached.stat().st_mtime < CACHE_TTL_S:
+        return cached.read_bytes()
+    body = _fetch(url, headers, timeout, tries)
+    cached.write_bytes(body)
+    return body
+
+
+def _fetch(url: str, headers: dict | None, timeout: int, tries: int) -> bytes:
     h = {"User-Agent": UA, **(headers or {})}
     if "semanticscholar" in url and os.environ.get("S2_API_KEY"):
         h["x-api-key"] = os.environ["S2_API_KEY"]
     if "openalex.org" in url and os.environ.get("OPENALEX_API_KEY"):
         url += ("&" if "?" in url else "?") + "api_key=" + urllib.parse.quote(os.environ["OPENALEX_API_KEY"])
+    host = urllib.parse.urlparse(url).netloc
     for i in range(tries):
+        _throttle(host)
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=h), timeout=timeout) as r:
                 return r.read()
