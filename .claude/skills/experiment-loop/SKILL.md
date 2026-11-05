@@ -62,4 +62,5 @@ with labkit.init() as run:
 
 ## Recording
 Commit the experiment record (`projects/P/experiments/<id>.yaml`) after collect. Add one dated line
-to PROJECT.md "Findings" per meaningful result, including negative ones.
+to `journal.md` per meaningful result, including negative ones, and update PROJECT.md's current
+understanding if it changed.

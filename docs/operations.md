@@ -54,7 +54,6 @@ and say "resume project <p>".
 | Unapproved H200 job flagged | `researchctl budget` shows it. Cancel it with `scancel <id>` yourself, then investigate how it got through. |
 
 ## Costs
-- AWS: $0 (no instances).
 - Claude: your Pro subscription. Its 5-hour and weekly usage limits are the binding constraint on
   autonomy; check `/usage`. The CLI's compact JSON, the zero-token `wait`, skills loaded on demand,
   and subagents for paper reading are all there to stretch it.

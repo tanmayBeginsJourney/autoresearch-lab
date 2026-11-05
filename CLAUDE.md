@@ -45,7 +45,7 @@ literature, reproduction and gap gates pass.
 - No novelty claim without `lit/novelty.md`: the queries run, the closest prior work, how we differ.
 - Exploratory results generate hypotheses. Only preregistered confirmatory runs support claims.
 - The test split is evaluated once per hypothesis, at the end. Tune on validation only.
-- Report failed and diverged seeds. Report negative results in PROJECT.md "Findings".
+- Report failed and diverged seeds. Record negative results in the project journal like any other.
 - Correlation, probing accuracy or attribution scores are not mechanisms. Causal claims need
   interventions (ablation, patching, steering) with controls such as random-direction and
   matched-norm baselines.
@@ -66,6 +66,16 @@ literature, reproduction and gap gates pass.
   `torch.compile` after the code is correct, pinned-memory dataloaders, no host syncs in the inner loop.
 - Spend tokens wisely: delegate paper reading to subagents that write cards; read text files by
   section; keep tool output short; don't re-read files already in context.
+
+## Documentation: current state, not history
+- Every file except `projects/<p>/journal.md` describes the present. When something changes, edit
+  the file in place; never append "update:" sections. Delete what is obsolete (git keeps history).
+- `projects/<p>/PROJECT.md`: problem, stage, current understanding, open questions, next steps, and
+  what was tried in the last two weeks. Rewrite it at the end of each work session; keep it under
+  ~80 lines.
+- `projects/<p>/journal.md`: append-only, dated one-to-three-line entries for ML decisions and
+  results (with experiment ids). This is the only history file.
+- Docs stay short: if a doc grows past ~150 lines, cut it.
 
 ## Writing and repo hygiene
 - Follow `.claude/skills/write-paper/SKILL.md` for papers and `docs/style.md` for everything you write.

@@ -146,7 +146,9 @@ def find_duplicate(lab: Lab, chash: str) -> str | None:
 
 
 def submit(lab: Lab, cfg_path: Path, dry_run=False, rerun: str | None = None,
-           cost_reason: str | None = None, approval: str | None = None) -> dict:
+           cost_reason: str | None = None, approval: str | None = None, local: bool = False,
+           only_tasks: list[int] | None = None) -> dict:
+    """Validate, snapshot code, write the record, then dispatch to Slurm or run locally (sequentially)."""
     exp = load_experiment(cfg_path)
     errs, facts = validate(lab, exp, cfg_path)
     sha = git_sha(lab.root)
@@ -157,6 +159,7 @@ def submit(lab: Lab, cfg_path: Path, dry_run=False, rerun: str | None = None,
         dup = find_duplicate(lab, chash)
         if dup and not rerun:
             errs.append(f"identical config+code already submitted as {dup}; pass --rerun REASON to repeat")
+    if not errs and not local:  # cluster-only gates
         if facts["gpu_hours_max"] > lab.policy["max_gpu_hours_per_submit"] and not cost_reason:
             errs.append(f"up to {facts['gpu_hours_max']} GPU-h exceeds per-submit cap "
                         f"{lab.policy['max_gpu_hours_per_submit']}; shrink it or pass --cost-reason")
@@ -181,13 +184,14 @@ def submit(lab: Lab, cfg_path: Path, dry_run=False, rerun: str | None = None,
     _materialize(lab, exp, exp_id, run_root, sha, tasks, facts["dirty"])
     script = run_root / "job.sbatch"
     script.write_text(render_script(lab, exp, exp_id, run_root, sha, len(tasks)))
-    job = slurm.sbatch(script)
+    job = None if local else slurm.sbatch(script)
 
     record = {
         "exp_id": exp_id, "name": exp["name"], "project": exp["project"], "kind": exp["kind"],
         "hypothesis": exp.get("hypothesis"), "status": "submitted", "submitted_at": now(),
         "config_file": str(cfg_path.resolve().relative_to(lab.root)), "config_hash": chash,
-        "git_sha": sha, "dirty": facts["dirty"], "slurm_jobs": [job], "run_root": str(run_root),
+        "git_sha": sha, "dirty": facts["dirty"], "executor": "local" if local else "slurm",
+        "slurm_jobs": [] if local else [job], "run_root": str(run_root),
         "profile": exp["profile"], "time": exp["time"], "env": exp["env"], "entry": exp["entry"],
         "seeds": exp["seeds"], "grid": exp["grid"], "params": exp["params"], "eval": exp["eval"],
         "model": exp.get("model"), "data": exp.get("data"), "primary_metric": exp["primary_metric"],
@@ -195,7 +199,17 @@ def submit(lab: Lab, cfg_path: Path, dry_run=False, rerun: str | None = None,
         "rerun_reason": rerun, "cost_reason": cost_reason, "approval": approval,
         "tasks": [{"i": i, **t} for i, t in enumerate(tasks)],
     }
-    dump_yaml(lab.project_dir(exp["project"]) / "experiments" / f"{exp_id}.yaml", record)
+    rec_path = lab.project_dir(exp["project"]) / "experiments" / f"{exp_id}.yaml"
+    dump_yaml(rec_path, record)
+    if local:
+        from .local import run_tasks
+        record["local"] = run_tasks(script, run_root, only_tasks or list(range(len(tasks))),
+                                    walltime_hours(exp["time"]) * 3600)
+        record["status"] = "completed" if all(t["rc"] == 0 for t in record["local"].values()) else "partial_failure"
+        dump_yaml(rec_path, record)
+        failed = [i for i, t in record["local"].items() if t["rc"] != 0]
+        return {**result, "executor": "local", "status": record["status"], "failed_tasks": failed or None,
+                "record": f"projects/{exp['project']}/experiments/{exp_id}.yaml"}
     if approval:
         from .approvals import consume
         consume(lab, approval, exp_id, job)

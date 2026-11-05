@@ -1,4 +1,5 @@
 import yaml
+from pathlib import Path
 import pytest
 
 from conftest import commit, write_exp
@@ -67,3 +68,24 @@ def test_smoke_time_cap(lab_repo):
     with pytest.raises(Fail) as e:
         submit.submit(Lab(), cfg)
     assert any("smoke" in m for m in e.value.extra["errors"])
+
+
+def test_run_local_end_to_end(lab_repo, tmp_path, monkeypatch):
+    """Local executor: real labkit entry point, record, status and collect without Slurm."""
+    import sys
+    from researchctl import runs
+    entry = lab_repo / "projects/demo/src/train.py"
+    entry.write_text("import labkit\nwith labkit.init() as run:\n"
+                     "    run.log(1, loss=1.0)\n    run.finish(val_loss=1.0 + 0.1 * run.seed + (0.5 if run['act'] == 'relu' else 0))\n")
+    cfg = write_exp(lab_repo)
+    commit(lab_repo)
+    venv_bin = tmp_path / "lab/venvs/research/bin"
+    venv_bin.mkdir(parents=True)
+    (venv_bin / "python").symlink_to(sys.executable)
+    monkeypatch.setenv("PYTHONPATH", str(Path(__file__).resolve().parents[1] / "src"))
+    out = submit.submit(Lab(), cfg, local=True)
+    assert out["status"] == "completed", out
+    st = runs.status(Lab(), out["exp_id"])
+    assert st["overall"] == "completed"
+    col = runs.collect(Lab(), out["exp_id"])
+    assert col["completed"] == "6/6" and col["ranking"][0]["act"] == "gelu"

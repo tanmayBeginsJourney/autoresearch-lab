@@ -62,24 +62,32 @@ def cmd_new_project(lab, a):
     for sub in ("lit/cards", "repro", "prereg", "configs", "experiments", "analysis", "paper/figures", "src"):
         (d / sub).mkdir(parents=True)
     (d / "PROJECT.md").write_text(PROJECT_MD.format(slug=a.slug))
+    (d / "journal.md").write_text(JOURNAL_MD.format(slug=a.slug))
     (d / "claims.yaml").write_text("# Claims ledger. See .claude/skills/analyze/SKILL.md for the schema.\nclaims: []\n")
     (d / "gaps.md").write_text("# Gap analysis\n\n<!-- See .claude/skills/gap-analysis/SKILL.md. Add '## Decision' when decided. -->\n")
     return {"created": str(d.relative_to(lab.root))}
 
 
 PROJECT_MD = """# {slug}
+<!-- Current state only. Rewrite in place each session; history goes in journal.md. Keep under ~80 lines. -->
 
-## Problem statement
-<!-- One paragraph: the question, why it matters, what would count as an answer. -->
-
-## Status
 stage: frame   <!-- frame | literature | reproduce | gap | prereg | experiments | analysis | review | writing -->
 
-## Decisions log
-<!-- Dated one-liners: decision, evidence, alternatives rejected. Newest last. -->
+## Problem
+<!-- The question, why it matters, what would count as an answer. -->
 
-## Findings
-<!-- Dated, linked to experiment ids / claims. Negative results included. -->
+## Current understanding
+<!-- What we believe now and how confident we are, with experiment/claim ids. -->
+
+## Open questions
+
+## Next steps
+
+## Tried recently (last ~2 weeks)
+"""
+
+JOURNAL_MD = """# {slug} journal
+<!-- Append-only. One entry per ML decision or result: date, what, evidence (exp ids), consequence. -->
 """
 
 
@@ -191,6 +199,10 @@ def build_parser() -> argparse.ArgumentParser:
             "validate gates and submit an experiment config")
     q.add_argument("config"); q.add_argument("--dry-run", action="store_true")
     q.add_argument("--rerun", metavar="REASON"); q.add_argument("--cost-reason"); q.add_argument("--approval")
+    q = add("run-local", lambda lab, a: submit.submit(lab, Path(a.config), rerun=a.rerun, local=True,
+            only_tasks=[int(x) for x in a.tasks.split(",")] if a.tasks else None),
+            "same gates and record as submit, but run tasks sequentially on this machine")
+    q.add_argument("config"); q.add_argument("--rerun", metavar="REASON"); q.add_argument("--tasks", help="e.g. 0,3")
     q = add("status", lambda lab, a: runs.status(lab, a.exp), "task states, failures, memory"); q.add_argument("exp")
     q = add("wait", lambda lab, a: runs.wait(lab, a.exp, a.timeout), "block until finished (no polling by the agent)")
     q.add_argument("exp"); q.add_argument("--timeout", type=float, default=240, help="minutes")

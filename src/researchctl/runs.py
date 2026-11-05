@@ -17,6 +17,9 @@ def _record(lab: Lab, exp_id: str) -> tuple[Path, dict]:
 
 
 def _tasks_state(rec: dict) -> dict[int, dict]:
+    if rec.get("executor") == "local":
+        from .local import task_states
+        return task_states(rec)
     merged: dict[int, dict] = {}
     for job in rec["slurm_jobs"]:  # later jobs (retries) override earlier ones
         for i, t in slurm.array_tasks(str(job)).items():
@@ -137,6 +140,13 @@ def retry(lab: Lab, exp_id: str, reason: str) -> dict:
     if not bad:
         raise Fail("no failed tasks to retry")
     script = Path(rec["run_root"]) / "job.sbatch"
+    if rec.get("executor") == "local":
+        from .core import walltime_hours
+        from .local import run_tasks
+        rec.setdefault("local", {}).update(run_tasks(script, Path(rec["run_root"]), bad, walltime_hours(rec["time"]) * 3600))
+        rec.setdefault("retries", []).append({"tasks": bad, "reason": reason, "at": now()})
+        dump_yaml(p, rec)
+        return {"exp_id": rec["exp_id"], "retried": bad, "status": status(lab, exp_id)["overall"]}
     job = slurm.sbatch(script, ["--array=" + ",".join(map(str, bad))])
     rec["slurm_jobs"].append(job)
     rec.setdefault("retries", []).append({"job": job, "tasks": bad, "reason": reason, "at": now()})

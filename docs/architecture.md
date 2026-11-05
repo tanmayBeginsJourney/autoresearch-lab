@@ -25,17 +25,17 @@ flowchart LR
   laptop -- interactive ssh --> login
 ```
 
-## Decisions
+## Components
 
-| Decision | Choice | Why |
-|---|---|---|
-| Where the agent runs | Login node, in tmux | The cluster allows outbound HTTPS and TCP 22, so the agent can sit next to Slurm and scratch with no inbound exposure. IT approved. |
-| How you reach it | Claude Code Remote Control | Outbound-only. Works from phone or desktop. Your laptop does not need to be on or on campus. |
-| AWS EC2 + reverse tunnel | Not used | Unnecessary given outbound access. Adds cost, a fragile laptop dependency, and an off-campus route into the cluster. |
-| MCP servers | Not used | A CLI returning compact JSON does the same job with fewer tool definitions in context and no extra service. |
-| Experiment tracking | Experiment records in git plus files on scratch | Durable, diffable, independent of any service. MLflow/W&B add a server or an external dependency for little gain at this scale. |
-| Environments | Three uv projects (`envs/research`, `envs/interp`, `envs/kernels`), venvs on scratch | Locked, reproducible, fast to rebuild. The cluster has no CUDA module; the PyTorch cu128 wheels bring their own runtime. `kernels` adds nvcc via pip. |
-| Accounts | Your account only | The IT staff accounts (hpc2, hpc3) are not used by the agent. Mixing identities would muddy accounting, the H200 budget, and the audit trail. |
+| Component | Current setup |
+|---|---|
+| Agent host | Claude Code on the login node, in tmux (`scripts/lab-session.sh`). Outbound HTTPS only. |
+| Access | Claude Code Remote Control from the Claude app. Interactive ssh from the laptop when on campus. |
+| Compute | `rtx` MIG slices by default (`s24`, `s48`); `h200` only with approval. Profiles in `lab.yaml`. |
+| Experiment record | `projects/<p>/experiments/<exp_id>.yaml` in git; raw run files on scratch. |
+| Environments | uv projects `envs/{research,interp,kernels}`, locked; venvs on scratch. PyTorch cu128 wheels bring the CUDA runtime; `kernels` adds nvcc via pip. |
+| Code and records | GitHub, pushed with a single-repo deploy key. |
+| Secondary machines | This repo also runs locally (laptop RTX 4070, cloud dev containers) via `researchctl run-local`. |
 
 ## Enforcement layers
 
