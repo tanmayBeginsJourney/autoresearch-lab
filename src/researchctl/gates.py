@@ -27,7 +27,7 @@ def status(lab: Lab, pdir: Path) -> dict:
         "full_read": sum(d in ("full", "reproduced") for d in depths),
         "card_errors": [e for c in cards for e in card_problems(c)][:10],
         "reproductions": len(repro),
-        "gap_decision": gap.is_file() and "## Decision" in gap.read_text(),
+        "gap_decision": gap.is_file() and any(l.strip() == "## Decision" for l in gap.read_text().splitlines()),
         "novelty_audit": (pdir / "lit" / "novelty.md").is_file(),
         "preregs": sorted(p.stem for p in (pdir / "prereg").glob("*.yaml")),
     }
