@@ -1,0 +1,51 @@
+id: lesswrong:ieoWstubDQWLrMnhH
+title: "Exploration: fine-tuning with parameter decomposition"
+authors: [Lucius Bushnaq]   # Goodfire; hackathon case study; acknowledgments credit "various Claude Opus 4.8 instances" with much of the experiment design, running and documentation
+year: 2026   # posted 2026-06-25
+venue: LessWrong blog post (not peer reviewed)
+code: null   # VPD repo is public; the fine-tuning code is not public (per author in comments)
+depth: full  # via page fetch; figures not readable, some numbers blank in the extracted text
+
+question: Can fine-tuning be done by rescaling VPD subcomponents (a scalar per subcomponent) instead of adding LoRA matrices, and is the edit more targeted?
+hypothesis: >
+  A decomposition gives mechanism-aligned handles, so training one scalar mask on one German-labelled
+  subcomponent removes German ability with less collateral damage than LoRA.
+journey: >
+  Started from a top-16 subcomponent set (13 of 16 labelled "foreign language in general"), saw
+  off-target damage, narrowed to one component (h.3.attn.v_proj:513) after reading labels and off-target
+  results. Found afterwards that the preserve term used English-only data (unintended).
+
+claims:
+  - text: A scalar fine-tune of one subcomponent drives German cross-entropy to chance (~10.83 nats cap) with <0.10 nats English damage from as few as ~4 German training tokens; rank-4 LoRA needs 32 tokens for the same.
+    evidence: Fig 1, 3 and Appendix A; Europarl, 512-token blocks, German budgets 2 to 2,048 tokens, 9 seeds per setting, 67M VPD model. German CE value and the LoRA token count for rank-1 are blank in the text I could extract.
+    strength: weak
+    concerns: >
+      German tokens were used to build the decomposition and the autointerp labels, so the budget is not a
+      clean token count (author concedes). Single model, single decomposition, single target language. The
+      component was selected after looking at off-target results. LR chosen per method by dev split, which
+      is fair, but the off-target figures pick the least-English-damage setting.
+  - text: Off target, the single-component edit leaves French and Spanish nearly untouched and damages Italian; global LoRAs damage all three.
+    evidence: Figs 2 and 4 at 2,048 German tokens only (held-out parallel Europarl de/fr/es/it, Pile validation, code).
+    strength: weak
+    concerns: One budget; no numbers extractable; code performance is preserved even by LoRAs that never saw code, which suggests the off-target suite is easy. Component also takes part in Italian and German grammar per the author.
+  - text: Top-16 subcomponent fine-tuning beats rank-1 LoRA at low budgets; LoRA catches up and overtakes as the budget grows.
+    evidence: Fig 1/3.
+    strength: weak
+    concerns: Expected from a smaller parameter count; at higher budgets the comparison favours LoRA, so the benefit is a low-data regime effect. No steering-vector baseline (author says SAE/steering not straightforwardly comparable).
+
+setup: 67M LM from the VPD paper, Europarl, gpt-neox-20b tokenizer, EMA-of-loss stopping (patience 300, ceiling 3,000 steps). No compute figures.
+
+skeptic: >
+  Remove-a-capability on a toy-quality model is the easiest edit to demonstrate, and the author says the
+  approach "can't really learn anything new" (new computation needs components that do not exist yet).
+  The result says the decomposition found a German-related component; it does not say PD is a better
+  fine-tuning method. No claim about weight deltas. Note the LLM-assisted workflow: check any number before
+  citing.
+
+relevance: >
+  Nearest neighbour to gap 1: it uses PD as a parameterisation for fine-tuning, but decomposes the base model,
+  not the delta. A delta-PD project differs by decomposing (W_ft - W_base), or by comparing which subcomponents
+  of the base decomposition a fine-tune moves. Also shows the one thing PD fine-tuning cannot do: learn
+  capabilities with no existing component. Cite as prior art and as a benchmark target for any "targeted
+  edit via PD" claim. Do not cite its numbers without the figures.
+links: [arxiv:2610.20748, arxiv:2607.13047]

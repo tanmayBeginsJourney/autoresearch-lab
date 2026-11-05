@@ -1,0 +1,51 @@
+id: arxiv:2410.08417
+title: Bilinear MLPs enable weight-based mechanistic interpretability
+authors: [Michael T. Pearce, Thomas Dooms, Alice Rigg]   # contributions section lists the roles; other names not extracted
+year: 2024   # ICLR 2025 camera-ready text
+venue: ICLR 2025
+code: null   # not extracted
+depth: skim  # abstract, intro, 4.4 (adversarial masks), discussion/limitations read; 4.1-4.3, 5, appendices NOT read
+
+question: Can MLP computation be read directly from weights, without an input dataset, if the MLP has no element-wise nonlinearity?
+hypothesis: >
+  A bilinear layer (GLU without the gate nonlinearity) is a third-order tensor. Eigendecomposing the
+  tensor (or its projections onto an output direction) yields low-rank, interpretable input directions
+  without running the model. Bilinear layers are a near-free swap for SwiGLU.
+journey: >
+  Extends the ICML 2024 MI-workshop paper "Weight-based Decomposition: A Case for Bilinear MLPs"
+  (arXiv:2406.03947). Intro shows MNIST eigenvectors as digit-specific stroke detectors, then language.
+
+claims:
+  - text: "Top eigenvectors of bilinear MLP weights are interpretable (MNIST: stroke detectors) and noise/weight-decay regularisation improves sparsity and interpretability."
+    evidence: Sec 4.1-4.3 and appendices E-F (not read). Qualitative figures plus a consistency measure.
+    strength: moderate   # from the abstract and discussion only
+    concerns: not checked beyond the authors' description. Orthogonal eigenvectors may not be monosemantic (authors' own limitation).
+  - text: Adversarial input masks built from weight-only eigenvectors (pseudoinverse rows) cut MNIST accuracy more than a permuted-mask baseline, even for a model trained with Gaussian noise (std 0.15); an overfitting pattern on the outer pixels found from eigenvectors can be exploited by hand.
+    evidence: Fig 7, MNIST, "average over the top three eigenvectors"; baseline is a random permutation of the mask. No numbers in the text I read.
+    strength: moderate
+    concerns: Input-space attack on MNIST; control is random permutation, not an equal-norm gradient attack, so "stronger than random" is a low bar. This is a weight-derived adversarial direction, a different object from VPD's adversarial ablation masks, but the name overlaps.
+  - text: A sentiment-negation circuit ("not" flips next-token sentiment) is found from low-rank interaction matrices of bilinear MLP weights against SAE output features.
+    evidence: Sec 5 (not read). Language experiments use a small bilinear LM; per the abstract and discussion SAE-derived output features are required for deep models.
+    strength: weak
+    concerns: Depends on SAE features from an input dataset, which defeats part of the "data-free" claim (stated in the limitations). One circuit.
+
+setup: >
+  Shallow MNIST classifiers and small bilinear transformers (TinyStories scale per the precursor);
+  fine-tuning a conversion of TinyLlama-1.1B into a bilinear variant is mentioned in the precursor
+  paper (the CoreWeave compute acknowledgment here is for "finetuning experiments"). Scale and compute not
+  extracted.
+
+skeptic: >
+  Applies only to bilinear MLPs; real LLMs are SwiGLU. Converting a pretrained SwiGLU model by fine-tuning
+  changes the weights being interpreted (no claim that circuits transfer). Interpretability is judged by
+  looking at top eigenvectors; there is no faithfulness metric of the PD kind (mask-ablation KL, recovered
+  compute). Attention and layer-to-layer composition are not handled, so a whole-model weight-based
+  decomposition is out of reach. Not read: the language sections, so those claims are unchecked here.
+
+relevance: >
+  Closest non-PD "weight-native" interpretability and the natural baseline for a data-free decomposition of
+  MLP weights on bilinear models. The limitations section proposes applying sparse dictionary learning to
+  the bilinear tensor, which is what arXiv:2605.08891 (bilinear autoencoders) appears to do. For a delta-PD
+  project: eigen-structure of (W_ft - W_base) in a bilinear layer is analytically accessible; untested.
+  For citation: PD papers cover attention and MLP; bilinear work covers only MLP.
+links: [arxiv:2406.03947, arxiv:2605.08891, arxiv:2506.20790, arxiv:2610.20748]

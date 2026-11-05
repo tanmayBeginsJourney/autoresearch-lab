@@ -1,0 +1,50 @@
+id: web:bigsnarfdude-svd-vpd-2026-05-06
+title: "SVD and VPD: Two Methods for Reading What Training Wrote Into a Model's Weights"
+authors: [bigsnarfdude]   # pseudonymous independent AI safety researcher
+year: 2026   # posted 2026-05-06, caveat added the same day
+venue: personal blog (https://bigsnarfdude.github.io/research/svd-and-vpd-weight-space-stage-attribution/); not peer reviewed
+code: null
+depth: full  # via page fetch of the whole post
+
+question: Which training stage (SFT vs DPO) writes a given behavioural direction into the weights, and does VPD show how dense or sparse the installation is?
+hypothesis: >
+  SFT writes an authority-register direction early (layer 5) and precisely; DPO writes large but orthogonal
+  changes. VPD sparsity (L0 per module) distinguishes dense from sparse installations.
+journey: "Author's own caveat: the magnitude-amplification claim (L24-25) did not survive a control (unrelated contrast `control_transit` 4.09x vs `emergency` 2.76x). The caveat sits above body text that still contains the claim."
+
+claims:
+  - text: The top left singular vector of W_diff = W_sft - W_base for mlp_resid at layer 5 has cosine +0.94 with a DEFER probe direction; other layers listed are +0.12, -0.08, +0.11, +0.07; IT-SFT cosines are below 0.17 everywhere.
+    evidence: Truncated SVD on CPU, 20 minutes, talkie-1930-13b base/SFT/IT checkpoints, one probe.
+    strength: weak
+    concerns: >
+      No null: no random directions, no other probe, no shuffled-weights control. Cosine of a probe direction
+      with a top singular vector measures alignment, not causal installation of the behaviour. Only five layers
+      shown in the table.
+  - text: VPD on the SFT checkpoint (not the diff) at layers 5, 29, 31, 36, 39 with 128 components per module reaches pgd_recon_loss 1.723 (below a 2.0 target) and L0 values that fall to 2-5 in some modules (L29 mlp_gate 68 -> 5) and rise in others (L5 mlp_gate 59 -> 93).
+    evidence: One H100 80GB run stopped at step 11,800 of a planned 50k; table labelled step 9,000.
+    strength: weak
+    concerns: >
+      One run, no seed, oscillating loss, label mismatch between the table step and the text. L0 is the only
+      minimality number. No faithfulness check beyond pgd_recon_loss, no ablation or causal-importance
+      validation, SVD at L5 is on mlp_resid but VPD at L5 is on mlp_gate, so the two methods never look at the
+      same matrix. The "dense installation at L5" reading is not tested against the DEFER direction.
+  - text: A model trained to pursue and then conceal a hidden goal is detected by SAE probes (GemmaScope 2, L13, 16k features, AUROC about 0.58) after inoculation, while dense mean-difference sweeps fail.
+    evidence: Separate experiment, model not named.
+    strength: weak
+    concerns: AUROC 0.58 is barely above chance, no n or CI, and the link to the weight analysis is by analogy.
+
+setup: talkie-1930-13b (base/SFT/IT); VPD on one H100 80GB, 128 components per module, 5 layers, 11.8k steps. Weight-diff SVD on CPU.
+
+skeptic: >
+  A blog result with no controls on its headline number, and its own caveat shows one headline claim failed a
+  control. Useful only as (a) evidence that someone has run VPD on a 13B model on one H100 (feasibility
+  signal for cost, unverified: no throughput or wall-clock given beyond "terminated at 11,800 steps"), and
+  (b) a statement that the VPD paper lists weight-diff decomposition as future work.
+
+relevance: >
+  Prior-art flag for gap 1: someone has put SVD-of-delta plus VPD in one post, so "first to look at weight
+  diffs with PD tools" is not available as a claim, but the post does not decompose the diff with PD, has no
+  controls and no faithfulness evaluation. A peer-reviewed delta-PD paper would differ by decomposing the
+  delta itself, with random-direction nulls and causal ablation. Re-check the author's later posts before the
+  novelty audit.
+links: [arxiv:2610.20748, lesswrong:ieoWstubDQWLrMnhH, doi:10.18653/2026.findings-emnlp.679]

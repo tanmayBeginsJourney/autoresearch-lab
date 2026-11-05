@@ -1,0 +1,62 @@
+id: doi:10.18653/2026.findings-emnlp.679
+title: Sparse Model Diffing via Dynamic Circuits
+authors: [Yueyan Li, Wenhao Gao, Caixia Yuan, Xiaojie Wang]   # BUPT; openalex lists three, ACL Anthology lists four
+year: 2026
+venue: Findings of EMNLP 2026, pp. 14254-14276
+code: https://github.com/Siriusslala/circuit-tuning
+depth: full  # main text sections 1-6 read; appendices (C.2.2 pruning, D gender-debiasing details, figures) skimmed or not read
+
+question: Fine-tuning deltas are dense (every parameter changes), so diffing only a circuit ignores most of the change. Can fine-tuning be made sparse so that circuit-based diffing is faithful?
+hypothesis: >
+  Alternating circuit discovery (graph pruning with a task metric, mean ablation, EAP/EAP-IG/AtP) and
+  fine-tuning only the circuit's nodes (K steps, then reset to the full graph) yields an update set U that
+  is concentrated inside the circuit. "Strict faithfulness" is defined as analysis set S containing update set U.
+journey: >
+  The method is sparse fine-tuning, in the lineage of pruning-then-tuning and BitFit, with circuit discovery as
+  the mask selector. It is not a decomposition of an existing delta. APD and SPD are cited once (as
+  parameter-space circuit methods) and not used or compared.
+
+claims:
+  - text: Standard fine-tuning (full, LoRA) updates all parameters, so circuit-restricted diffing is unfaithful (Fig 3).
+    evidence: Fig 3 parameter-change distributions, GPT-2-small and the Subject-Verb Disagreement (SVD) task, which the authors created.
+    strength: moderate
+    concerns: >
+      True almost by definition for dense optimisers and merged LoRA, which is the authors' point. "Many
+      parameters show similar magnitudes of change" is not the same as "no low-dimensional or sparse
+      structure": a dense delta can be low-rank or sparse in a rotated basis, which is exactly what rank-one
+      PD subcomponents would test. The paper never examines delta structure in any basis.
+  - text: Circuit-tuning matches full fine-tuning on task performance while concentrating updates in the circuit; random activation of nodes outside the circuit gives no gain (Fig 8).
+    evidence: "Llama-3.2-1B/3B and Llama-3.1-8B (instruct), gender-debiasing and benchmark table (MMLU-style, GSM8K, GPQA, HumanEval, MGSM, IFEval, Winogrande), 10 seeds, baselines full FT, LoRA (r = 32, alpha = 64), AdaLoRA, BitFit; relative change vs the instruct model. Example row: Llama-3.2-1B reading comprehension 45.56 (circuit-tuning) vs 45.47 (full FT) vs 44.58 (LoRA)."
+    strength: weak-to-moderate
+    concerns: >
+      Differences among full FT and circuit-tuning are within noise; the authors say "no significant
+      difference" without reporting CIs in the main text. The LoRA setting is a single "optimal" r, learning
+      rates differ (3e-5 full vs 1e-4 others), and tuning budgets for circuit-tuning hyperparameters (N, K) are
+      chosen per model. One cell reports 5.05% gain for the circuit method over full FT on 1B reading
+      comprehension, which the authors dismiss as incidental.
+  - text: "Stage-wise diffing on GPT-2 SVD: heads 8.5, 10.9, 11.8 flip their direct logit attribution from agreement to disagreement; edge scores between causally linked nodes rise with training steps (Pearson 0.942 for head.1.8.out -> head.10.9.key) and others fall, interpreted as Hebbian learning and lateral inhibition."
+    evidence: Figs 4, 17; 128 test samples for DLA.
+    strength: weak
+    concerns: >
+      One model, one made-up task, one run; the Hebbian and lateral-inhibition labels are analogies from a
+      correlation with step count. The analysis is on a model trained to be sparse in this very circuit, so
+      the sparsity is a product of the training constraint, not a finding about natural fine-tuning.
+
+setup: GPT-2-small for the mechanism analysis; Llama-3.2-1B/3B, Llama-3.1-8B for utility. Circuit nodes are attention heads or MLP layers (coarse; limitation 1). Compute not stated in the main text.
+
+skeptic: >
+  The paper diagnoses a real problem (diffing a circuit ignores parameter changes elsewhere) and offers a
+  constrained-training fix. It cannot diff an existing fine-tuned checkpoint, which is what a weight-space
+  decomposition could do. The benefit measured is sparsity of updates under the authors' own constraint,
+  with no measure of how well the circuit explains behaviour change (no faithfulness-vs-full-delta KL, no
+  ablation of the circuit's update on the fine-tuned model). Task choice (reversing subject-verb agreement)
+  is artificial.
+
+relevance: >
+  States the premise of candidate gap 1 from the other side: fine-tuning deltas are dense in the parameter
+  basis, so a decomposition of the delta must find sparse structure in a learned basis. This is both a
+  motivation and a risk (the delta may be neither sparse nor low-rank). Also the only EMNLP-level paper
+  that cites APD and SPD in a model-diffing context, so reviewers may know it. Not a competing method.
+  Before gap analysis, run a rank and sparsity profile of a small SFT delta (singular spectrum, top-k
+  energy) to see whether delta-PD has anything to find.
+links: [arxiv:2501.14926, arxiv:2506.20790]

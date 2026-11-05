@@ -1,0 +1,68 @@
+id: arxiv:2511.08854
+title: Decomposition of Small Transformer Models
+authors: [Casper L. Christensen, Logan Riggs Smith]
+year: 2025   # arXiv v2 9 Dec 2025
+venue: NeurIPS 2025 Mechanistic Interpretability Workshop (independent researchers, Pivotal fellowship)
+code: null   # none linked in the text
+depth: full  # main text + appendix A.3.2-A.3.4 read; hyperparameter tables skimmed
+
+question: Can SPD be extended from toy MLPs to transformers (attention, sequences) and used on a real model?
+hypothesis: >
+  SPD works on transformers if causal importance (CI) can see other tokens (a 1-layer, 1-head attention
+  network before the per-subcomponent CI MLPs) and if partial-layer reconstruction losses stop the
+  decomposition from "cheating" when it is trained on very few examples.
+journey: >
+  Workshop paper, 7 pages plus appendix. Authors credit Bushnaq/Braun/Sharkey for discussion. They mention
+  L3D (arXiv:2504.00194) as concurrent work. The partial losses (Eq 5-6) are a fix for a failure they hit
+  (A.3.3): with 2 training examples the decomposed model writes a new mechanism into unused final-layer
+  subcomponents and keeps everything else sparse.
+
+claims:
+  - text: SPD with an attention-based CI function recovers the 2-step induction-head circuit in a 2-layer attention-only toy model.
+    evidence: Table 1 (single model, single run). L_faithful 3e-9, L_recon 1e-4, mean attention KL 0.194 (layer-1 attention KL 0.385). Active subcomponents sit at the expected positions (K0 on s1 = 1.0, Q1 on s2 = 1.0, V1 on m = 5.05 average, 11 unique).
+    strength: moderate
+    concerns: >
+      One toy model, one seed, no ground truth beyond the authors' own reading of the circuit. Layer-1
+      attention KL of 0.385 is large next to 0.002 for layer 2, and the text does not discuss it. V1 needs
+      ~5 active subcomponents at m, which the authors explain as "rank > 1 is needed" without testing it.
+  - text: SPD beats greedy SVD low-rank approximation on subcomponent count (Fig 2).
+    evidence: Fig 2 only, bar chart per matrix, toy model.
+    strength: weak
+    concerns: >
+      The SVD baseline is a greedy truncation chosen by the authors (Algorithm 2). Not a data-aware
+      baseline (no activation-weighted or pruning baseline). Footnote 3 says they do not compare
+      against pruning because a QK circuit with 0 active subcomponents still computes (uniform attention).
+  - text: On GPT-2-small, 2 example sentences give 96 active subcomponents (99% size reduction), and suppressing 1-3 rank-1 directions in layer-0 MLP drops the target probability (Kobe -> basketball 0.62 -> 0.03; Tiger Woods -> golf 0.62 -> 0.09) while the other example stays at ~0.62.
+    evidence: Fig 3-4; held-out "test set" probability 0.33 -> 0.32-0.33; 100-example synthetic fact set (A.3.4) used as an "edit is not overfitting" check.
+    strength: weak
+    concerns: >
+      Decomposed over 2 sentences, evaluated on the same 2 sentences, so "selective" is partly by
+      construction. The fact set check is a list of ~25-100 facts whose results are in a figure, not a
+      table; no random-direction or matched-norm control, no comparison with ROME/MEMIT or a plain
+      layer-0 rank-1 edit chosen by gradient. Orthogonal projection of a rank-1 slice that is allowed to
+      destroy "athlete -> sport" does not show the fact is stored there (the authors' own Fig 9 shows that
+      zeroing a layer proves little). "Fact lives in layer 0 MLP" conflicts with ROME-style localisation
+      and the authors do not test whether the effect is a token-embedding artifact for "Kobe"/"Woods".
+  - text: Partial reconstruction losses are needed when decomposing over few samples.
+    evidence: Appendix A.3.3 narrative only. No ablation table.
+    strength: weak
+    concerns: Reasonable mechanism, no with/without comparison reported.
+
+setup: >
+  2-layer 1-head attention-only transformer on a synthetic induction task (128-token vocabulary; 100k
+  steps). GPT-2-small decomposed for 20k steps on 2 sentences. No GPU-hours or throughput reported.
+  The authors say the attention CI function "scales worse" and add a flex-attention speed comparison in
+  the appendix (numbers not extracted).
+
+skeptic: >
+  Everything is qualitative and in-sample. The central VPD concern (faithfulness under adversarial masks)
+  is absent: stochastic masks only. The decomposition covers 2 sentences, so it says nothing about
+  decomposing a whole model. No seed variance. The CI-attention design is the one idea that later work
+  could reuse; VPD uses its own transformer CI function, and nobody has compared the two (open).
+  The GPT-2 result reads as a demonstration, not a test.
+
+relevance: >
+  Prior art for "CI function must be sequence-aware" and for the cheating failure mode of narrow-data PD
+  (relevant to tPD and any delta-PD that decomposes over a small prompt set). Evidence that independent
+  groups can run SPD on transformers with small compute. Not a baseline for faithfulness numbers.
+links: [arxiv:2506.20790, arxiv:2610.20748, arxiv:2607.13047, arxiv:2504.00194]

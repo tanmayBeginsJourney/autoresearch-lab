@@ -200,7 +200,7 @@ def lint_prose(paths: list[Path], bib: Path | None = None) -> dict:
                         issues.append(f"{f.name}:{ln} {tag}: {msg}")
                 if re.search(AI_TELLS, line, re.I):
                     issues.append(f"{f.name}:{ln} wording: replace stock phrase ({re.search(AI_TELLS, line, re.I).group(0)})")
-                if line.count("—") + line.count("---") > 1:
+                if not re.fullmatch(r"\s*\|?[\s:|-]+\|?\s*", line) and line.count("—") + line.count("---") > 1:
                     issues.append(f"{f.name}:{ln} wording: more than one em dash in a line")
                 if re.search(r"CITATION NEEDED|\?\?|TODO|XXX", line):
                     issues.append(f"{f.name}:{ln} unresolved placeholder")

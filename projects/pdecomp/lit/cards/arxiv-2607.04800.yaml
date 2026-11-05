@@ -1,0 +1,50 @@
+id: arxiv:2607.04800
+title: Compressed Computation under L4 Loss is likely Computation in Superposition
+authors: [Francisco Ferreira da Silva, Stefan Heimersheim]   # Pivotal Research; Heimersheim is an APD co-author
+year: 2026   # v1 6 Jul 2026
+venue: arXiv preprint (ICML-style format)
+code: https://github.com/FranciscoHS/toy-model-cis-code   # URL truncated across a line break in the text; verify
+depth: skim  # abstract, intro, methodology, Table 2, discussion read; 4.2 mechanism and appendices A-C not read in full
+
+question: Is there a toy model of computation in superposition (CiS) that arises from training and can be reverse-engineered?
+hypothesis: >
+  Training the CC architecture (100 inputs, 50 ReLU neurons, no residual) with L4 instead of L2 loss
+  prioritises equal accuracy over all features, which elicits superposition. The solution is a sparse binary
+  codeword per feature over neurons, decoded with a pseudoinverse of the encoder.
+journey: Builds on Braun et al. (APD) and Bhagat et al. (arXiv:2606.14673, cited as 2025). Concurrent with Gibson (2026), whose network learns binary codes on a different (identification) task.
+
+claims:
+  - text: L2 gives the naive solution (half the features exact, rest ignored); L4 gives all 100 features at roughly equal per-feature loss.
+    evidence: Fig 2, p = 0.02 (about 2 active features), Adam lr 0.01 cosine, batch 8192, 100k steps, 10 seeds for trained networks; plus an "emulate-bias" no-superposition baseline that helps only marginally at this sparsity.
+    strength: moderate
+    concerns: >
+      "Equal per-feature loss" is what a loss that punishes outliers would produce under any
+      distributed solution; it does not by itself show computation in superposition. Evidence for CiS rests on
+      the reverse-engineering below. Single sparsity level in the main figure.
+  - text: A 3-scalar description (on-code value, off-code value, decoder scale) given the trained codewords recovers about 1.06-1.13x the trained L4 loss; hand-designed biregular codes with overlap minimisation reach 1.12x.
+    evidence: Table 2 (random codes 1.90x, biregular 1.67x without and 1.12x with overlap-min, trained support with 3 scalars and pinv decoder 1.13x, full trained encoder with pinv decoder 1.15x, full trained 1.00x).
+    strength: moderate
+    concerns: >
+      Loss ratios relative to one trained network; the trained network still beats every designed alternative,
+      and the authors state they do not understand the per-entry encoder values or the decoder residual.
+      "Recovers most performance" is not a full mechanism. No seed spread in the table as extracted.
+  - text: The embedded variant (1000-d random near-orthogonal embedding, as in the original APD toy model) gives an identical solution.
+    evidence: Section A (not read).
+    strength: weak
+    concerns: Unchecked here.
+
+setup: Single-layer ReLU MLP, 50 neurons, p = 0.02, small compute (CPU or one small GPU; not stated).
+
+skeptic: >
+  The title says "likely" and the evidence is a loss-ratio argument plus a partly fitted description.
+  The change of loss exponent changes the task, so this is a new toy model, not a rescue of the APD one.
+  Whether SPD/VPD recover codeword-structured subcomponents from it is untested; the authors state they plan
+  to test it. A decomposition with C rank-one subcomponents per matrix and 100 features in 50 neurons will
+  need C >> 50, which makes it a hard PD case. No sparsity sweep beyond the main setting in what I read.
+
+relevance: >
+  A PD benchmark with a known solution (codewords over neurons, pseudoinverse decoder) that postdates and
+  repairs the APD toy model. For gap 2 (faithfulness): a cheap, ground-truth testbed where "does the
+  decomposition recover the codewords" is checkable on CPU. The authors say they will run PD on it, so
+  check for their results before using it. Heimersheim co-wrote APD, so independence is partial.
+links: [arxiv:2606.14673, arxiv:2501.14926, arxiv:2506.20790]

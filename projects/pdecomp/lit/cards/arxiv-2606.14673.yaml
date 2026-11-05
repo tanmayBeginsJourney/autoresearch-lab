@@ -1,0 +1,47 @@
+id: arxiv:2606.14673
+title: Compressed Computation is (probably) not Computation in Superposition
+authors: [Jai Bhagat, Sara Molas-Medina, Giorgi Giglemiani]   # author list as returned by search, possibly truncated
+year: 2026
+venue: arXiv preprint (4-page main text); 2607.04800 cites it as "Bhagat et al. (2025)", so an earlier version or workshop paper may exist
+code: null
+depth: full  # main text read (3 results pages + conclusion); appendices A-D (mixing-matrix maths, training details, dense regime) NOT read
+
+question: Does the compressed-computation (CC) toy model of APD/SPD actually compute 100 ReLUs with 50 neurons in superposition?
+hypothesis: >
+  The loss advantage over the "naive" solution (represent 50 ReLUs perfectly, ignore the rest) comes from an
+  unintended mixing matrix M = 1 - W_E W_E^T in the labels, produced by the noisy residual stream, not from
+  computation in superposition.
+journey: Reproduces the Braun et al. CC results with a simplified 1-layer MLP trained on y = ReLU(x) + M x, then removes or rescales M.
+
+claims:
+  - text: With M = 0 the model does not beat the naive loss; the "better than naive at high sparsity" profile is reproduced with embedding-like M, random M ~ N(0, 0.02), and symmetric random M (symmetric matches almost exactly).
+    evidence: Fig 2 left. Naive baseline loss 0.0833 on clean data (footnote 1).
+    strength: strong
+    concerns: Single toy setup and plots only in the text I read; seed counts not stated in the main text.
+  - text: Loss advantage grows with the noise scale of M for sigma up to about 0.03, then reverses.
+    evidence: Fig 2 right, sigma in [0, 0.08].
+    strength: moderate
+    concerns: Non-monotonic; the explanation for the reversal is not given.
+  - text: A model trained on M != 0 reverts to the naive loss immediately when fine-tuned on M = 0 data.
+    evidence: Fig 3.
+    strength: moderate
+    concerns: "Shows the advantage is not a training-dynamics artifact only. Does not exclude that a different loss (see 2607.04800: L4) would elicit superposition."
+  - text: Neuron read/write directions lie in the span of the top-50 eigenvectors of M, and a semi-NMF baseline built from M alone reproduces the qualitative loss-vs-sigma curve but does not reach the trained loss.
+    evidence: Fig 4-6; W_out W_in entries correlate strongly with M entries.
+    strength: moderate
+    concerns: Mechanism is partial (authors say they did not fully reverse-engineer the model); SNMF does not match the trained model.
+
+setup: Toy 1-layer ReLU MLP, 50 neurons, 100 features. No GPU requirement.
+
+skeptic: >
+  The negative result is about this training loss (L2) and this label structure. 2607.04800 argues that
+  switching to L4 on the same architecture without the residual yields real superposition. So "CC is not CiS"
+  is narrower than the title suggests. The paper does not test what APD/SPD recover on the model, so it says
+  nothing directly about whether PD results on CC are wrong; it says the ground-truth story used to judge them
+  (a CiS solution) is not the real mechanism.
+
+relevance: >
+  APD and SPD both evaluate on this toy model. If the learned mechanism is a noise-driven mixing solution,
+  then "SPD recovers the 100 ground-truth ReLU subnetworks" needs re-reading. Any faithfulness benchmark we
+  use must not rely on CC under L2. Check our existing SPD card claims about CC against this paper.
+links: [arxiv:2607.04800, arxiv:2501.14926, arxiv:2506.20790]
