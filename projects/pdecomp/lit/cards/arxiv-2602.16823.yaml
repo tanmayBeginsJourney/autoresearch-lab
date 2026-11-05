@@ -1,0 +1,16 @@
+id: arxiv:2602.16823
+title: "Formal Mechanistic Interpretability: Automated Circuit Discovery with Provable Guarantees"
+authors: [Itamar Hadad, Guy Katz, Shahaf Bassan]
+year: 2026
+venue: ICLR 2026
+depth: abstract  # arXiv abstract page only; mechanism not read
+question: Can circuits be discovered with formal guarantees using neural network verification?
+hypothesis: Verification gives input-region robustness, robust patching under continuous perturbations, and minimality guarantees.
+claims:
+  - text: Circuit discovery algorithms with provable robustness over input regions and over continuous patching perturbations, evaluated on vision models.
+    evidence: abstract
+    strength: unverified
+    concerns: Unknown whether the perturbation set is activation values or an ablation-set choice; read before claiming 'certified mask robustness' is open.
+skeptic: "Closest work to the bound-propagation idea (ideas.md #1), more than to G2 attacks. Not an attack ensemble."
+relevance: Verification-side neighbour; must be read in full before any certificate claim.
+links: [arxiv:2407.15166]

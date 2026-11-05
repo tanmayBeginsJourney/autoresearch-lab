@@ -1,0 +1,16 @@
+id: arxiv:2505.16004
+title: Evaluating Adversarial Robustness of Concept Representations in Sparse Autoencoders
+authors: [Aaron J. Li, Suraj Srinivas, Usha Bhalla, Himabindu Lakkaraju]
+year: 2026
+venue: arXiv v2, 22 Jan 2026 (EACL 2026 per earlier map; unchecked)
+depth: full  # method (Sec 3.2-3.3), discussion and conclusion read from cached text; appendices D-H skimmed by heading only
+question: Are SAE concept latents robust to small input perturbations?
+hypothesis: SAE concept representations are fragile; tiny input edits can manipulate which latents fire without changing base-LLM activations much.
+claims:
+  - text: One-token input edits (GCG-style coordinate gradient search, plus constrained synonym swaps) change population-level concept overlap and individual latent activation status in most settings tested.
+    evidence: Sec 4 results, Fig 2, Table 3 (Gemma2-2B/9B JumpReLU, Llama3-8B TopK; AdvBench, AG News, SST2, Art & Science; 200 pairs per combination)
+    strength: moderate
+    concerns: One attack family (GCG variant), no ensemble, no restarts or attack-strength sweep discussed in the text read; fragility is not calibrated against any ground-truth concept recovery.
+skeptic: "Perturbation set is discrete input tokens (edit distance 1), not an ablation or mask set. No adversarial training of the SAE; Discussion only suggests denoising as future work and says attacks 'might help identify and filter out non-robust SAE interpretations'. Gradients come from differentiable surrogates while candidates are scored on non-differentiable metrics."
+relevance: Shows 'adversarial evaluation of a decomposition' exists for SAEs but over inputs; says nothing about mask/ablation adversaries, attack ensembles, or training-time use. Do not cite as prior art for G2's core; cite as input-space analogue.
+links: [arxiv:2407.15166, arxiv:2610.20748]

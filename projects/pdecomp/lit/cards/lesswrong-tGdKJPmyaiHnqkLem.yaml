@@ -1,0 +1,20 @@
+id: lesswrong:tGdKJPmyaiHnqkLem
+title: "VPD's Evaluation Adversary Finds Systematic Defects in the Released Decomposition"
+authors: [Tom Angsten]
+year: 2026   # posted 2026-10-20
+venue: LessWrong blog post (not peer reviewed)
+depth: skim  # via WebFetch summary of the page, not line-by-line; numbers below are as relayed and should be re-checked on the page before citing
+question: Are the faithfulness defects found by VPD's evaluation adversary systematic (transfer to unseen text) or input-specific noise?
+hypothesis: Defects are systematic properties of the released 67M decomposition.
+claims:
+  - text: Mask patterns found on one batch retain 78% (20 steps) to about 95% (160-320 steps) of their damage on unseen batches; shuffled-source controls give only 0.30-0.32 nats vs 0.22 random baseline.
+    evidence: 5 random starts x 16 batches, steps 20-320 (as relayed)
+    strength: moderate
+    concerns: One decomposition of one model; optimizer and step sizes not stated in the post; no ground-truth labels.
+  - text: The training adversary (one source per position, 3 small steps, persistent) never found a significant pattern in 1,000 unseen batches; per-document sharing found one after ~325-374 batches and whole-batch sharing after ~88-123.
+    evidence: training-adversary diagnosis section (as relayed)
+    strength: moderate
+    concerns: Not tested as a training fix.
+skeptic: "This is already an empirical study of adversary scope/strength on VPD, with restarts and step sweeps, but by an outside author on one released model. No attack-family comparison (APGD, FW, Square not discussed), no toy ground truth."
+relevance: "Closest PD-specific prior work for G2: evaluation-adversary audit with restarts and a transfer metric. Pre-empts the claim that nobody stress-tested VPD's adversary; leaves attack ensembles and ground-truth calibration open."
+links: [arxiv:2610.20748, lesswrong:KeBccWBGXnNXzZFBp]

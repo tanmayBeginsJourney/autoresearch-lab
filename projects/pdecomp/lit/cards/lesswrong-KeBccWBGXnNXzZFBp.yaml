@@ -1,0 +1,20 @@
+id: lesswrong:KeBccWBGXnNXzZFBp
+title: "Do VPD's Explanations Aggregate? An Audit of the Released Decomposition"
+authors: [Tom Angsten]
+year: 2026   # posted 2026-09-30
+venue: LessWrong blog post (not peer reviewed)
+depth: skim  # via WebFetch summary, not line-by-line; re-check before citing numbers
+question: When components needed by different tokens are switched on together (aggregation), does output stay faithful?
+hypothesis: Aggregated explanations in the released VPD decomposition break at levels comparable to the VPD 20-step adversary.
+claims:
+  - text: Search-free donor-token aggregation reaches about 0.80 nats KL at 64 donor tokens, close to the paper's 20-step adversary (0.83); an untrained-adversary decomposition suffers 4-7x the aggregation harm.
+    evidence: 1,024 recipient texts, 38,912 components (as relayed)
+    strength: moderate
+    concerns: One decomposition; no toy ground truth.
+  - text: Lee Sharkey comment (2026-10-17) says the issue is that the procedure for finding adversarial ablations 'isn't getting good enough coverage' of ablation space, and that he is looking into a more powerful adversary.
+    evidence: comment thread (as relayed by WebFetch; verify on page)
+    strength: weak
+    concerns: A statement of intent, not a result. Goodfire may publish a stronger adversary soon.
+skeptic: "Proposes realistic structured masks (aggregations) as an evaluation alternative to optimized masks; this is a rival to the 'stronger optimizer' route and must be a baseline in G2."
+relevance: Scoop risk for G2 (authors say a stronger adversary is in progress). Also supplies a non-optimization baseline (donor aggregation KL) to compare against.
+links: [arxiv:2610.20748, lesswrong:tGdKJPmyaiHnqkLem]

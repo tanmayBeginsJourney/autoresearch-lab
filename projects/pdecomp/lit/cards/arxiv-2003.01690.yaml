@@ -1,0 +1,20 @@
+id: arxiv:2003.01690
+title: Reliable evaluation of adversarial robustness with an ensemble of diverse parameter-free attacks (AutoAttack)
+authors: [Francesco Croce, Matthias Hein]
+year: 2020
+venue: ICML 2020
+depth: skim  # intro, Sec 2-3 (APGD, Alg 1) and Sec 5 ensemble definition read from cached text; experiments not read
+question: How to get a reliable, user-independent robustness estimate that does not depend on attack tuning?
+hypothesis: A small ensemble of diverse, step-size-free attacks gives a much better worst-case estimate than a single tuned PGD.
+claims:
+  - text: Fixed-step PGD has three weaknesses (fixed step size, budget-agnostic, trend-agnostic); APGD fixes them with momentum, checkpoint-based step halving and restart from best point.
+    evidence: Sec 3, Algorithm 1
+    strength: strong
+    concerns: Designed for l_p-ball threat models on classifiers with margin/DLR losses; mask box [0,1]^C with KL objective is a different geometry (but a box is the l_inf case).
+  - text: AutoAttack = APGD-CE + APGD-T + FAB-T + Square; worst case over the four; lowers reported robust accuracy for all but 2 of 50+ published defenses, 13 by more than 10 points.
+    evidence: Sec 5-6
+    strength: strong
+    concerns: Frank-Wolfe is NOT part of AutoAttack (FAB is a minimum-norm boundary attack); our G2 wording 'AutoAttack-style incl. FW' is our own extension.
+skeptic: "Everything is classification with a decision boundary. KL-to-target on LM outputs has no margin, so APGD-T/DLR/FAB-T do not transfer directly; only APGD-CE-like (with KL loss) and Square are directly usable."
+relevance: "The methodological template, a single PGD number understates vulnerability so report the ensemble worst case. Using it on masks is a transfer of a known idea, which a reviewer will call obvious."
+links: [arxiv:2610.20748, arxiv:2002.08347]
