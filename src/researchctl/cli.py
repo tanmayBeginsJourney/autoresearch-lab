@@ -237,7 +237,7 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("model_id"); q.add_argument("--revision", default="main")
 
     q = add("lit-search", lambda lab, a: lit.search(lab, a.query, a.limit, a.source, a.year, a.project), "search S2 + arXiv")
-    q.add_argument("query"); q.add_argument("--limit", type=int, default=15); q.add_argument("--source", default="all", choices=["all", "s2", "arxiv"])
+    q.add_argument("query"); q.add_argument("--limit", type=int, default=15); q.add_argument("--source", default="all", choices=["all", "s2", "arxiv", "openalex"])
     q.add_argument("--year", help="e.g. 2024- or 2022-2025"); q.add_argument("--project", help="log the query to the project's audit trail")
     q = add("lit-refs", lambda lab, a: lit.graph(a.id, "references", a.limit), "papers this one cites"); q.add_argument("id"); q.add_argument("--limit", type=int, default=40)
     q = add("lit-citers", lambda lab, a: lit.graph(a.id, "citations", a.limit), "papers citing this one"); q.add_argument("id"); q.add_argument("--limit", type=int, default=40)

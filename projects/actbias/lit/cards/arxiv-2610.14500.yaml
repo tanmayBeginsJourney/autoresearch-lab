@@ -1,0 +1,39 @@
+id: arxiv:2610.14500
+title: "Rethinking Activation Functions: Reducing Bias Can Improve Learning"
+authors: [Zirui Peng, Heyi Zheng, Ziming Liu]
+year: 2026
+venue: arXiv (Oct 2026)
+code: null   # only nanoGPT linked
+depth: full
+question: How does the positive post-activation mean ("activation bias") of ReLU/GELU/Swish shape training dynamics?
+hypothesis: >
+  Activation bias speeds early learning (model exploits the bias component, hidden state overshoots)
+  but steepens the landscape and hurts late-stage loss; removing it trades early speed for lower final loss.
+journey: >
+  Controlled pre-LN residual MLP teacher-student (fixed shift phi(z)-b, b = E[phi] at init: ReLU .230,
+  GELU .115, Swish .077, sigmoid .5) -> landscape/gradient-plane analysis -> image-reconstruction probe of
+  the bias component -> scale-up with "adaptive shifting" (subtract per-token mean across neurons) on
+  ViT-B, DiT-B/2, GPT-2 Small. Appendix C.3 adds trainable biases, post-norm, CE loss: effect persists.
+claims:
+  - text: Shifted student learns slower early, reaches lower final loss than unshifted (teacher-student).
+    evidence: Fig 2; paired seeds; sweep of b (App A.2, 100 paired seeds per size in C.2)
+    strength: moderate
+    concerns: Same optimizer settings for both arms; no per-arm LR tuning found. Centering changes curvature, so a shared LR may favour one arm.
+  - text: Advantage persists with trainable biases (so it is a parametrization/conditioning effect, not a missing offset).
+    evidence: App C.3, Fig 14
+    strength: moderate
+    concerns: ReLU only; seed count not stated in C.3.
+  - text: Adaptive shifting improves GPT-2 Small on OpenWebText by ~0.01 loss (~1% ppl), 300k steps.
+    evidence: Fig 7c
+    strength: weak
+    concerns: Apparently a single run per arm, no LR retuning; 0.01 nats is near seed noise for GPT-2 Small.
+setup: Teacher-student sizes (d, m, L) up to (50, 200, 20); ViT-B ImageNet-1K; DiT-B/2 400k steps; GPT-2 124M nanoGPT recipe.
+skeptic: >
+  (1) Adaptive shifting = per-token centering of the FFN hidden vector = the mean-subtraction half of a
+  post-activation LayerNorm (NormFormer's FFN-LN, Shleifer et al. 2021, not cited); it also forces the
+  down-projection to ignore the all-ones direction (W2 P, P = I - 11^T/m), a function-class restriction,
+  not only a conditioning change. (2) The early-speed/late-loss trade-off may partly reflect shared LR:
+  with per-arm LR tuning the gap could shrink or flip. (3) Mechanism story overlaps classic centering
+  results (LeCun et al. 1998; Schraudolph 1998; Raiko, Valpola & LeCun 2012), which the paper cites.
+relevance: Candidate first project; cheap to reproduce at teacher-student scale (CPU) and nanoGPT scale (slices).
+links: []

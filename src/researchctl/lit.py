@@ -27,15 +27,20 @@ def _get(url: str, headers: dict | None = None, timeout: int = 30, tries: int = 
     h = {"User-Agent": UA, **(headers or {})}
     if "semanticscholar" in url and os.environ.get("S2_API_KEY"):
         h["x-api-key"] = os.environ["S2_API_KEY"]
+    if "openalex.org" in url and os.environ.get("OPENALEX_API_KEY"):
+        url += ("&" if "?" in url else "?") + "api_key=" + urllib.parse.quote(os.environ["OPENALEX_API_KEY"])
     for i in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=h), timeout=timeout) as r:
                 return r.read()
         except urllib.error.HTTPError as e:
             if e.code in (429, 500, 502, 503) and i < tries - 1:
-                time.sleep(2 ** (i + 1))
+                ra = e.headers.get("Retry-After") if e.headers else None
+                time.sleep(min(float(ra), 60) if ra and ra.isdigit() else 2 ** (i + 1))
                 continue
-            raise Fail(f"HTTP {e.code} from {urllib.parse.urlparse(url).netloc}")
+            host = urllib.parse.urlparse(url).netloc
+            hint = " (set a free API key: OPENALEX_API_KEY / S2_API_KEY)" if e.code == 429 else ""
+            raise Fail(f"HTTP {e.code} from {host}{hint}")
         except (urllib.error.URLError, TimeoutError, OSError) as e:
             if i < tries - 1:
                 time.sleep(2 ** i)
@@ -84,14 +89,39 @@ def search_arxiv(q: str, limit: int) -> list[dict]:
     return out
 
 
+def search_openalex(q: str, limit: int, year: str | None) -> list[dict]:
+    params = {"search": q, "per-page": limit}
+    if year:
+        lo, _, hi = year.partition("-")
+        f = [f"from_publication_date:{lo}-01-01"] if lo else []
+        f += [f"to_publication_date:{hi}-12-31"] if hi else []
+        if f:
+            params["filter"] = ",".join(f)
+    data = json.loads(_get("https://api.openalex.org/works?" + urllib.parse.urlencode(params)))
+    out = []
+    for w in data.get("results", []):
+        doi = (w.get("doi") or "").replace("https://doi.org/", "")
+        m = re.search(r"arxiv\.(\d{4}\.\d{4,5})", doi, re.I)
+        src = ((w.get("primary_location") or {}).get("source") or {}).get("display_name")
+        out.append({"id": f"arxiv:{m.group(1)}" if m else (f"doi:{doi}" if doi else w.get("id")),
+                    "title": w.get("display_name"), "year": w.get("publication_year"), "venue": src,
+                    "cites": w.get("cited_by_count"),
+                    "authors": ", ".join(a["author"]["display_name"] for a in (w.get("authorships") or [])[:3])})
+    return out
+
+
 def search(lab: Lab, q: str, limit: int, source: str, year: str | None, project: str | None) -> dict:
     rows, errors = [], []
-    for name, fn in (("s2", lambda: search_s2(q, limit, year)), ("arxiv", lambda: search_arxiv(q, limit))):
-        if source in (name, "all"):
-            try:
-                rows += fn()
-            except Fail as e:
-                errors.append(f"{name}: {e}")
+    if source == "all":  # Semantic Scholar's anonymous pool is mostly rate-limited; use it only with a key
+        source = "all+s2" if os.environ.get("S2_API_KEY") else "default"
+    srcs = {"default": ("openalex", "arxiv"), "all+s2": ("openalex", "arxiv", "s2")}.get(source, (source,))
+    fns = {"s2": lambda: search_s2(q, limit, year), "arxiv": lambda: search_arxiv(q, limit),
+           "openalex": lambda: search_openalex(q, limit, year)}
+    for name in srcs:
+        try:
+            rows += fns[name]()
+        except Fail as e:
+            errors.append(f"{name}: {e}")
     seen, uniq = set(), []
     for r in rows:
         key = re.sub(r"\W", "", (r["title"] or "").lower())
