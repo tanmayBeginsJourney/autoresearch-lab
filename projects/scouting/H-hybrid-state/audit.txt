@@ -1,0 +1,122 @@
+H-hybrid-state: novelty audit, CPU feasibility and first kill test (2026-11-05)
+
+Idea under audit: read and edit the recurrent state S_t of hybrid LMs (Gated DeltaNet / Mamba-2 layers
+interleaved with attention). Memory lens = query S with the model's keys. State edit = closed-form delta-rule
+write S <- S + beta k (v_new - S^T k)^T that inserts, deletes or overwrites an in-context fact without
+re-prefill.
+
+== 1. Queries run ==
+researchctl lit-search (project pdecomp): "editing recurrent state of linear attention language model";
+"Mamba state interpretability associative memory probing"; "state steering state space model";
+"DeltaNet hidden state knowledge editing in-context"; "hybrid language model mechanistic interpretability
+recurrent state"; "sparse autoencoder recurrent state linear attention"; "state injection recurrent language
+model"; "rank-one edit state matrix linear attention memory"; "reading memory of linear recurrent models key
+value decode"; "in-context knowledge editing Mamba"; "recurrent state caching surgery prompt"; "Gated DeltaNet
+interpretability"; "test-time regression associative memory linear attention"; "unlearning in-context
+recurrent state"; "state compression linear attention editing facts"; "steering recurrent state Mamba RWKV";
+"write to fast weights closed form language model memory".
+OpenReview ICLR 2027 search (api2 notes/search): "recurrent state editing"; "linear attention memory
+interpretability"; "state space model interpretability"; "hybrid model recurrent state"; "Gated DeltaNet
+state"; "Mamba state steering"; "associative memory recurrent state knowledge".
+Web: "editing recurrent state linear attention in-context fact overwrite delta rule rank-one write 2026".
+
+== 2. Closest work (read in full: A, B, C; abstract: D-H) ==
+A. How Linear Attention Remembers (arXiv:2609.33093; ICLR 2027 submission b3lZofUyGC). Full read.
+   Pure GLA-340M, GDN-340M, GDN-1.3B plus hybrids GDN-340M-hybrid, Qwen3.5-4B/9B. Decomposes the state into
+   per-position contributions, finds concentrated fact writes and read heads, and edits facts by swapping a
+   head's write with a donor write: donor value becomes the answer in 68-90%, equal-norm random writes do
+   not; K=4 multi-fact transfer 61-89% with 0.4-1.4% non-target breaks; editability falls with memory load.
+   KEY: in hybrids, recurrent interventions recover 0.2-3.6% of the donor effect, KV interventions 96-100%.
+   Difference from us: no closed-form edit (donor swaps need an oracle run), no lens method, no re-prompt
+   baseline. But it already owns "state as editable associative memory" for pure GDN and refutes the premise
+   for hybrids.
+B. WriteSAE (arXiv:2605.12770, J. Young). Full read. Rank-1 matrix SAE atoms for writes in Qwen3.5-0.8B GDN,
+   Mamba-2-370M, RWKV-7; atom substitution beats deletion on 92.4% of firings; closed-form logit-change
+   formula G<w,q><v,W_U> (R^2 0.98 on GDN); steering by writing directions into the cache (mid-rank tokens to
+   greedy output 33% -> 100%). Difference: steering of output tokens, not in-context fact editing; no
+   attention; no re-prompt baseline. It owns "read the state through rank-1 write directions" and "closed-form
+   rank-1 writes into Qwen3.5 GDN state".
+C. The Key Handoff (arXiv:2609.32942). Full body read. 12 dense/hybrid models (Nemotron-H, Granite-4.0-H,
+   RecurrentGemma, Falcon-H1). Attention converts the retrieval key (95% of the effect in Nemotron-H with 4/28
+   mixing layers). Swapping post-attention Mamba-2 memory with a fact-exchanged prompt's memory multiplies the
+   answer odds by only 1.3-2.7 (top-1 +1.4 to +22 pp). Difference: whole-state swaps, no closed form; but it
+   again shows the recurrent state is a weak lever on retrieved facts in hybrids.
+D. From Recurrent Computation to Attention Memory in Hybrid LMs (ICLR 2027 submission zutTcXMv8y; abstract).
+   Five hybrids: recurrent computation acts through the KV cache of deep attention layers; modified KV keeps
+   67-93% of the answer shift after restoring the clean recurrent state; 98-99% on SQuAD pairs (Qwen3.5-9B,
+   Qwen3.6-27B).
+E. Residual Streams Read, Recurrent States Remember (arXiv:2609.32102; ICLR 2027 zaTTfwGdRw; abstract).
+   Jacobian lenses on Mamba-1/2/3 states; state readouts beat residual lenses; sign-guarded state steering;
+   relational-answer edits often fail. Owns "state lens" for Mamba.
+F. PRECOG / O(1) SSM state injection (arXiv:2608.02560; abstract). Precomputed SSM states injected for
+   retrieval and memory consolidation. Owns "state injection instead of re-prefill" as a systems idea.
+G. Models Take Notes at Prefill: KV cache can be editable (arXiv:2606.17107; abstract). Editing a field's own
+   KV leaves the model acting on the old value (<1% of decision); downstream notes carry the conclusion. The
+   transformer analogue of our edit, with a negative core finding that applies equally to state edits.
+H. Also adjacent: ROME on Mamba (2404.03646), Mamba Knockout (2505.24244), activation-bottleneck steering of
+   SSMs (2602.22719), Beyond State Capacity (2610.19709; ICLR 2027), LatentPort recurrent-memory transfer and
+   Receiver-Conditioned State Reconstruction (ICLR 2027, Qwen3.5 GDN state), WriteSAE-like SAE studies
+   (2609.24440), test-time regression view (2501.12352), Gated DeltaNet-2 / OSDN / Kronecker delta rule
+   (architectures that change the write rule; not editing of pretrained states).
+
+== 3. Crowding (ICLR 2027) ==
+At least six on-topic submissions analyse recurrent memory of linear-attention or hybrid LMs: A, D, E,
+Beyond State Capacity, LatentPort, Receiver-Conditioned State Reconstruction (plus backdoors-in-Mamba). Three
+papers (A, C, D) reach the same conclusion by independent methods: in hybrids, retrieved in-context facts are
+held and read through the attention KV cache; the recurrent state carries keys and context but is a weak
+edit target. The "efficiency only" picture in S0/problems.md is out of date: the interpretability side is
+now medium-to-high crowding, and the specific premise of #1 is contradicted.
+
+== 4. Feasibility on CPU (done) ==
+Smallest usable hybrid: Qwen/Qwen3.5-0.8B-Base @ dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68 (transformers 5.22.1
+native qwen3_5; 24 layers = 18 Gated DeltaNet + 6 full attention, layer_types in config; GDN 16 heads,
+dk = dv = 128). Loads as Qwen3_5ForCausalLM in fp32 (~3.2 GB) in ~10 s; a 14-token prompt answers " Paris".
+No fla / causal_conv1d needed (reference PyTorch kernels; slow but correct).
+API: out = model(input_ids, use_cache=True); cache = out.past_key_values (DynamicCache).
+  GDN layer i: cache.layers[i].recurrent_states[0]  shape [B, 16, 128(k), 128(v)], fp32;
+               cache.layers[i].conv_states[0]       shape [B, 6144, 4] (pre-conv q,k,v of last tokens).
+  attention layer i: cache.layers[i].keys / .values  shape [B, 2, T, 256].
+  Read convention: o = q^T S (q, k L2-normalised, q scaled by dk^-0.5); write: S <- exp(g) S;
+  S <- S + k (beta (v - S^T k))^T  (modeling_qwen3_5.torch_recurrent_gated_delta_rule).
+  Per-token k, v, beta, g: wrap modeling_qwen3_5.torch_chunk_gated_delta_rule /
+  torch_recurrent_gated_delta_rule (forward calls them as module globals; patching works, called once per
+  GDN layer in order). Edited caches are fed back with model(input_ids=q, past_key_values=cache).
+Also available natively: falcon_h1, zamba2, nemotron_h, mamba2, recurrent_gemma, jamba, kimi_linear,
+olmo_hybrid, granitemoehybrid, lfm2, rwkv (v4 only; RWKV-7 needs fla).
+
+== 5. Kill test ==
+Pre-statement: killtest_prereg.txt (written before running). Script:
+scratchpad killtest.py (not in repo). Results: see section 6.
+
+== 6. Kill-test results (Qwen3.5-0.8B-Base, seed 0, 6 edits; scope cut further for time: 1 seed, specificity
+on 1 other fact per edit; the planned 3 seeds did not fit the overloaded node) ==
+cond        flip  pref(new>old)  keeps_old  specificity  mean logp(new)  mean logp(old)
+base        0/6   0/6            6/6        1.00         -11.4           -0.19
+oracle      6/6   6/6            0/6        1.00          -0.09          -10.3
+append      6/6   6/6            0/6        1.00          -0.20           -3.8
+swap_gdn    0/6   0/6            6/6        1.00          -9.9            -0.27
+swap_attn   6/6   6/6            0/6        1.00          -0.16           -8.8
+delta_edit  0/6   0/6            6/6        1.00         -10.0            -0.25
+delta_val   0/6   0/6            6/6        1.00         -10.4            -0.19
+random      0/6   0/6            0/6        0.00         -11.6            -9.2
+Validity: base accuracy 6/6. Outcome against the pre-statement: KILL (delta_edit and delta_val flip 0 < 0.30).
+Diagnostic: putting ALL 18 GDN layers' recurrent+conv state from the corrected re-prefill into the cache
+changes nothing (0/6, logp(new) -11.4 -> -9.9), while swapping only the 6 attention layers' KV flips 6/6. The
+fact is retrieved from the attention KV cache; the GDN state is not a lever for it. Random writes at the
+delta_edit norm destroy every answer, so the delta writes are large but aligned with what the state already
+holds. Same conclusion as A (Qwen3.5-4B/9B: 0.2-3.6% recurrent vs 96-100% KV) and D, now at 0.8B.
+Caveat: one task type (exact in-context retrieval), 6 edits, one model. Raw results: scratchpad only (not saved
+to the repo or $LAB_ROOT).
+
+== 7. Verdict ==
+KILL #1 as framed. (a) Novelty: "state as associative memory, read and edit it" is owned by How Linear Attention
+Remembers (pure GDN, donor-write edits 68-90%), WriteSAE (rank-1 reads and writes in Qwen3.5 GDN state),
+Residual Streams Read... (Mamba state lens) and PRECOG (state injection). A closed-form edit would only extend
+that work. (b) Premise: in hybrids, in-context facts live in the attention KV; three papers plus our test agree.
+Editing the recurrent state of a hybrid cannot move retrieved facts. (c) Crowding: at least six ICLR 2027
+submissions on recurrent memory in linear or hybrid LMs.
+Possible residues (none is the original idea; each needs its own audit): KV-plus-state joint editing for
+hybrids (transformer KV editing is already shown to fail, arXiv:2606.17107); closed-form edits in PURE recurrent
+production models (RWKV-7 G1, pure GDN), which A covers with oracle swaps but not with a practical method;
+what the GDN state does carry (keys, format, task state per C) as a steering target. Expected value of each is
+low to moderate; none is a clear NeurIPS-2027 positive.

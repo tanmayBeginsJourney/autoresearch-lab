@@ -1,0 +1,31 @@
+Kill-test pre-statement (written 2026-11-05 before any run)
+
+Model: Qwen/Qwen3.5-0.8B-Base @ dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68 (18 Gated DeltaNet layers, 6 full-attention
+layers, fp32 on CPU).
+Task: context lists N=6 facts "The capital of <fictional country> is <real city>." plus filler. Query
+"Q: What is the capital of X?\nA: The capital of X is" -> next token. 3 seeds (different country/city assignments).
+Edit target: replace city of one fact by another city not in the context (distinct first token).
+
+Conditions, all applied to the prefilled cache (context only), then the query is fed with the cache:
+  base        no edit
+  oracle      re-prefill with the corrected sentence in place (upper bound)
+  append      re-prompting: context + " Correction: the capital of X is NEW." (full model, all layers)
+  swap_gdn    diagnostic: GDN recurrent+conv states from the oracle prefill, attention KV from the original
+  swap_attn   diagnostic: attention KV from the oracle, GDN states from the original
+  delta_edit  closed-form delta-rule writes S <- S + beta k (v - S^T k)^T, no decay, at every GDN layer/head,
+              with (k, v, beta) of the tokens of the corrected sentence computed in one short pass that
+              continues from the cached context; attention KV untouched. Rank <= #tokens of the sentence.
+  delta_val   same but only the writes of the new-value tokens (rank <= 2-3).
+  random      random rank-one writes per layer/head with Frobenius norm matched to delta_edit.
+Metrics: flip = top-1 next token equals first token of NEW; pref = logp(NEW) > logp(OLD);
+specificity = top-1 accuracy on the other 5 facts after the edit (vs base).
+
+Thresholds (pre-stated):
+  PASS (direction alive): delta_edit flip >= 0.70, specificity drop <= 10 pp vs base, random flip <= 0.10.
+  KILL (state-only editing is not a lever in this hybrid): delta_edit flip < 0.30 AND delta_val flip < 0.30.
+  In between: inconclusive; the swap_gdn vs swap_attn diagnostic decides where the fact is stored.
+Validity check: base accuracy must be >= 0.8, else the model cannot do the task and the test is void.
+
+Deviation (before any result was seen): the first launch was killed after ~10 min with no output because the
+node was overloaded (load avg 16 on 4 cores). Rerun with 2 seeds (12 edits) and specificity over 3 of the other
+5 facts. Thresholds unchanged.
