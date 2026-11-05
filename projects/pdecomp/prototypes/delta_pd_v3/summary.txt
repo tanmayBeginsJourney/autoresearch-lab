@@ -1,0 +1,68 @@
+A svd_k0 hung_all=0.26±0.00 restore_all=0.50±0.00 collateral_all=0.24±0.01 clean_dmg_all=0.35±0.01
+A varimax_k0 hung_all=0.26±0.00 restore_all=0.50±0.00 collateral_all=0.24±0.01 clean_dmg_all=0.35±0.01
+A ica_k0 hung_all=0.28±0.00 restore_all=0.50±0.00 collateral_all=0.25±0.00 clean_dmg_all=0.35±0.00
+A svd_k2 hung_all=0.26±0.00 restore_all=0.50±0.00 collateral_all=0.24±0.01 clean_dmg_all=0.35±0.01
+A varimax_k2 hung_all=0.26±0.00 restore_all=0.50±0.00 collateral_all=0.24±0.01 clean_dmg_all=0.35±0.01
+A ica_k2 hung_all=0.28±0.00 restore_all=0.50±0.00 collateral_all=0.25±0.00 clean_dmg_all=0.35±0.00
+A lora_svd hung_all=0.00±0.00 restore_all=0.00±0.00 collateral_all=0.00±0.00 clean_dmg_all=0.00±0.00
+A lora_raw hung_all=0.00±0.00 restore_all=0.00±0.00 collateral_all=0.00±0.00 clean_dmg_all=0.00±0.00
+A dpd hung_all=0.75±0.19 restore_all=0.74±0.17 collateral_all=0.17±0.08 clean_dmg_all=0.46±0.04
+A dpd_alive hung_all=0.74±0.19 restore_all=0.74±0.17 collateral_all=0.17±0.08 clean_dmg_all=0.45±0.04
+A full hung_all=0.60±0.05 restore_all=0.09±0.05 collateral_all=0.30±0.03 clean_dmg_all=0.66±0.05
+A oracle restore_all=1.00±0.00 collateral_all=0.00±0.00 clean_dmg_all=0.39±0.00
+A random restore_all=-0.24±0.05 collateral_all=0.58±0.03 clean_dmg_all=0.71±0.03
+B svd_k0 hung_all=0.74±0.10 restore_all=0.46±0.10 collateral_all=0.33±0.08 clean_dmg_all=0.64±0.01 _pair_linear=0.67±0.24
+B varimax_k0 hung_all=0.90±0.05 restore_all=0.86±0.05 collateral_all=0.17±0.05 clean_dmg_all=0.62±0.09 _pair_linear=0.33±0.24
+B ica_k0 hung_all=0.81±0.00 restore_all=0.99±0.00 collateral_all=0.18±0.00 clean_dmg_all=0.46±0.00 _pair_linear=1.00±0.00
+B svd_k2 hung_all=0.74±0.10 restore_all=0.46±0.10 collateral_all=0.33±0.08 clean_dmg_all=0.64±0.01 _pair_linear=0.67±0.24
+B varimax_k2 hung_all=0.88±0.01 restore_all=0.90±0.03 collateral_all=0.17±0.01 clean_dmg_all=0.58±0.07 _pair_linear=0.33±0.24
+B ica_k2 hung_all=0.81±0.00 restore_all=0.98±0.00 collateral_all=0.18±0.00 clean_dmg_all=0.46±0.00 _pair_linear=1.00±0.00
+B lora_svd hung_all=0.20±0.05 restore_all=0.12±0.05 collateral_all=0.09±0.07 clean_dmg_all=0.19±0.06 _pair_linear=0.00±0.00
+B lora_raw hung_all=0.19±0.02 restore_all=0.16±0.07 collateral_all=0.10±0.05 clean_dmg_all=0.18±0.04 _pair_linear=0.00±0.00
+B dpd hung_all=0.86±0.04 restore_all=0.94±0.03 collateral_all=0.14±0.00 clean_dmg_all=0.50±0.01 _pair_linear=0.67±0.24 _pair_gate=1.00±0.00 _bd_gate_clean_max=0.21±0.09 _bd_gate_trig_mean=1.00±0.00 _bd_gate_clean_frac_gt0.1=0.00±0.00 _n_dormant=10.67±1.25 _n_dormant_bd=4.67±1.25
+B dpd_alive hung_all=0.86±0.04 restore_all=0.91±0.05 collateral_all=0.15±0.01 clean_dmg_all=0.53±0.03 _pair_linear=0.83±0.24
+B full hung_all=0.62±0.06 restore_all=-0.08±0.10 collateral_all=0.26±0.16 clean_dmg_all=0.86±0.03 _pair_linear=0.50±0.00
+B oracle restore_all=1.00±0.00 collateral_all=0.06±0.00 clean_dmg_all=0.46±0.00
+B random restore_all=-0.04±0.05 collateral_all=0.33±0.08 clean_dmg_all=0.88±0.12
+B_trigfree svd_k0 hung_all=0.74±0.10 restore_all=0.46±0.10 collateral_all=0.33±0.08 clean_dmg_all=0.64±0.01 _pair_linear=0.50±0.00
+B_trigfree varimax_k0 hung_all=0.90±0.05 restore_all=0.86±0.05 collateral_all=0.17±0.05 clean_dmg_all=0.62±0.09 _pair_linear=0.33±0.24
+B_trigfree ica_k0 hung_all=0.65±0.00 restore_all=0.73±0.16 collateral_all=0.21±0.02 clean_dmg_all=0.64±0.13 _pair_linear=0.17±0.24
+B_trigfree svd_k2 hung_all=0.74±0.10 restore_all=0.46±0.10 collateral_all=0.33±0.08 clean_dmg_all=0.64±0.01 _pair_linear=0.50±0.00
+B_trigfree varimax_k2 hung_all=0.88±0.01 restore_all=0.90±0.03 collateral_all=0.17±0.01 clean_dmg_all=0.58±0.07 _pair_linear=0.17±0.24
+B_trigfree ica_k2 hung_all=0.56±0.05 restore_all=0.84±0.00 collateral_all=0.30±0.01 clean_dmg_all=0.74±0.00 _pair_linear=0.00±0.00
+B_trigfree lora_svd hung_all=0.15±0.04 restore_all=0.12±0.03 collateral_all=0.09±0.05 clean_dmg_all=0.18±0.06 _pair_linear=0.00±0.00
+B_trigfree lora_raw hung_all=0.17±0.05 restore_all=0.13±0.01 collateral_all=0.09±0.03 clean_dmg_all=0.16±0.02 _pair_linear=0.00±0.00
+B_trigfree dpd hung_all=0.81±0.02 restore_all=0.86±0.03 collateral_all=0.20±0.01 clean_dmg_all=0.55±0.04 _pair_linear=0.83±0.24 _pair_gate=1.00±0.00 _bd_gate_clean_max=-0.00±0.00 _bd_gate_trig_mean=0.51±0.30 _bd_gate_clean_frac_gt0.1=0.00±0.00 _n_dormant=13.00±2.16 _n_dormant_bd=11.00±2.16
+B_trigfree dpd_alive hung_all=0.72±0.04 restore_all=0.69±0.05 collateral_all=0.19±0.01 clean_dmg_all=0.54±0.04 _pair_linear=0.83±0.24
+B_trigfree full hung_all=0.52±0.04 restore_all=-0.22±0.02 collateral_all=0.18±0.06 clean_dmg_all=0.99±0.15 _pair_linear=0.50±0.00
+B_trigfree oracle restore_all=1.00±0.00 collateral_all=0.06±0.00 clean_dmg_all=0.46±0.00
+B_trigfree random restore_all=-0.04±0.05 collateral_all=0.33±0.08 clean_dmg_all=0.88±0.12
+C svd_k0 hung_all=0.54±0.03 restore_all=0.39±0.15 collateral_all=0.47±0.02 clean_dmg_all=0.54±0.02 _pair_linear=0.67±0.00
+C varimax_k0 hung_all=0.85±0.07 restore_all=0.64±0.12 collateral_all=0.17±0.05 clean_dmg_all=0.50±0.01 _pair_linear=0.78±0.31
+C ica_k0 hung_all=1.00±0.00 restore_all=0.99±0.00 collateral_all=0.01±0.00 clean_dmg_all=0.52±0.01 _pair_linear=1.00±0.00
+C svd_k2 hung_all=0.54±0.03 restore_all=0.39±0.15 collateral_all=0.47±0.02 clean_dmg_all=0.54±0.02 _pair_linear=0.67±0.00
+C varimax_k2 hung_all=0.84±0.01 restore_all=0.71±0.13 collateral_all=0.14±0.03 clean_dmg_all=0.51±0.01 _pair_linear=0.89±0.16
+C ica_k2 hung_all=1.00±0.00 restore_all=0.99±0.00 collateral_all=0.01±0.00 clean_dmg_all=0.52±0.00 _pair_linear=1.00±0.00
+C lora_svd hung_all=0.16±0.05 restore_all=0.20±0.04 collateral_all=0.11±0.10 clean_dmg_all=0.27±0.03 _pair_linear=0.22±0.16
+C lora_raw hung_all=0.17±0.05 restore_all=0.19±0.03 collateral_all=0.05±0.04 clean_dmg_all=0.25±0.02 _pair_linear=0.22±0.16
+C dpd hung_all=0.93±0.02 restore_all=0.86±0.02 collateral_all=0.00±0.00 clean_dmg_all=0.55±0.01 _pair_linear=0.78±0.16 _pair_gate=0.89±0.16
+C dpd_alive hung_all=0.93±0.02 restore_all=0.80±0.04 collateral_all=0.00±0.00 clean_dmg_all=0.59±0.02 _pair_linear=1.00±0.00
+C full hung_all=0.55±0.04 restore_all=-0.11±0.02 collateral_all=0.05±0.06 clean_dmg_all=0.78±0.05 _pair_linear=0.56±0.16
+C oracle restore_all=1.00±0.00 collateral_all=0.00±0.00 clean_dmg_all=0.52±0.01
+C random restore_all=-0.20±0.04 collateral_all=0.36±0.09 clean_dmg_all=0.43±0.03
+A dpd_info {'alive': [{'l1': 5}, {'l1': 6}, {'l1': 7}], 'n_kept': [6, 9, 7], 'steps_to_5pct': [750, 1000, 1000], 'final_ci_rel': [0.0291, 0.0291, 0.0171], 'final_stoch_rel': [0.0151, 0.0155, 0.0087]}
+A full_info {'alive': [{'l1': 10}, {'l1': 9}, {'l1': 11}], 'n_kept': [10, 9, 11], 'steps_to_5pct': [1250, 1750, 1500], 'final_ci_rel': [0.0311, 0.0411, 0.0432], 'final_stoch_rel': [0.0172, 0.0235, 0.0204]}
+A lora {'recon_rel': [0.633, 0.648, 0.643]}
+A rank {'rank': [{'l1': 3}, {'l1': 3}, {'l1': 3}]}
+B dpd_info {'alive': [{'l1': 3, 'l2': 5}, {'l1': 3, 'l2': 3}, {'l1': 2, 'l2': 5}], 'n_kept': [16, 13, 16], 'steps_to_5pct': [750, 500, 500], 'final_ci_rel': [0.0146, 0.016, 0.014], 'final_stoch_rel': [0.0055, 0.0076, 0.0059]}
+B full_info {'alive': [{'l1': 11, 'l2': 11}, {'l1': 10, 'l2': 9}, {'l1': 10, 'l2': 12}], 'n_kept': [22, 19, 22], 'steps_to_5pct': [2750, 2500, None], 'final_ci_rel': [0.0522, 0.0476, 0.0574], 'final_stoch_rel': [0.0215, 0.0193, 0.024]}
+B lora {'recon_rel': [0.079, 0.095, 0.083]}
+B rank {'rank': [{'l1': 2, 'l2': 3}, {'l1': 2, 'l2': 3}, {'l1': 2, 'l2': 3}]}
+B_trigfree dpd_info {'alive': [{'l1': 2, 'l2': 3}, {'l1': 1, 'l2': 4}, {'l1': 2, 'l2': 6}], 'n_kept': [15, 14, 19], 'steps_to_5pct': [500, 500, 500], 'final_ci_rel': [0.0148, 0.0154, 0.0132], 'final_stoch_rel': [0.0059, 0.0062, 0.0062]}
+B_trigfree full_info {'alive': [{'l1': 7, 'l2': 11}, {'l1': 8, 'l2': 12}, {'l1': 9, 'l2': 13}], 'n_kept': [18, 20, 22], 'steps_to_5pct': [1750, 2250, 1750], 'final_ci_rel': [0.0421, 0.0455, 0.0396], 'final_stoch_rel': [0.0179, 0.0191, 0.0165]}
+B_trigfree lora {'recon_rel': [0.187, 0.284, 0.336]}
+B_trigfree rank {'rank': [{'l1': 2, 'l2': 3}, {'l1': 2, 'l2': 3}, {'l1': 2, 'l2': 3}]}
+C dpd_info {'alive': [{'l1': 3, 'l2': 3}, {'l1': 3, 'l2': 3}, {'l1': 3, 'l2': 3}], 'n_kept': [13, 11, 16], 'steps_to_5pct': [500, 500, 500], 'final_ci_rel': [0.0042, 0.0043, 0.0038], 'final_stoch_rel': [0.0018, 0.0018, 0.0015]}
+C full_info {'alive': [{'l1': 9, 'l2': 8}, {'l1': 9, 'l2': 8}, {'l1': 8, 'l2': 10}], 'n_kept': [17, 17, 18], 'steps_to_5pct': [1000, 750, 750], 'final_ci_rel': [0.0124, 0.0146, 0.0151], 'final_stoch_rel': [0.0044, 0.0059, 0.006]}
+C lora {'recon_rel': [0.0, 0.0, 0.0]}
+C rank {'rank': [{'l1': 3, 'l2': 3}, {'l1': 3, 'l2': 3}, {'l1': 3, 'l2': 3}]}
