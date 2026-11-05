@@ -1,0 +1,28 @@
+{
+ "tag": "tms4010_imp0.001_s0",
+ "args": {
+  "seed": 0,
+  "coeff_imp": 0.001,
+  "steps": 700,
+  "C": 80,
+  "batch": 1024
+ },
+ "wall_s": 167.1,
+ "eval": {
+  "recon_ci_masked": 0.004720283672213554,
+  "recon_unmasked": 0.00011701225594151765,
+  "recon_stoch": 0.001985172275453806,
+  "faith": 0.00011356292088748887,
+  "ci_l0/linear1": 2.714250087738037,
+  "alive/linear1": 31,
+  "ci_l0/linear2": 2.9928998947143555,
+  "alive/linear2": 28
+ },
+ "gt_linear1": {
+  "mmcs": 0.732434093952179,
+  "ml2r": 0.2774272859096527,
+  "full_matrix_cos_mean": 0.2953995168209076,
+  "full_matrix_cos_min": 0.15524709224700928,
+  "n_distinct_best": 22
+ }
+}
