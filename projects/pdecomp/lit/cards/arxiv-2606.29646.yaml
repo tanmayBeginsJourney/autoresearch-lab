@@ -1,0 +1,16 @@
+id: arxiv:2606.29646
+title: "Fuzzing Large Language Models to Elicit Hidden Behaviours"
+authors: [M D Baker, Lakshmi Babu Saheer]
+year: 2026
+venue: arXiv preprint (Jun 2026)
+depth: abstract
+question: Does Gaussian noise in weights or residual activations elicit trigger-gated behaviour without the trigger?
+hypothesis: Perturbations push the model across the trigger gate more often than temperature sampling.
+claims:
+  - text: "On 6 backdoored models (7B-13B), fuzzing beats temperature sampling on 4 of 6 (up to ~6x on OpenHermes-13B); best hyperparameter cell is 2-10x a uniform sweep; Thompson sampling on an in-context-secret proxy picks cells."
+    evidence: Abstract
+    strength: moderate
+    concerns: "Elicits behaviour, does not recover the trigger; isotropic noise ignores dW."
+skeptic: "Abstract-level."
+relevance: "Isotropic-perturbation baseline; a dW-whitened perturbation direction is the natural targeted version (steer along the top generalized eigenvector)."
+links: [arxiv:2602.03085]

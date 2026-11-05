@@ -1,0 +1,24 @@
+id: arxiv:2609.33093
+title: "How Linear Attention Remembers"
+authors: [unverified; read from arXiv HTML, author list not recorded]
+year: 2026
+venue: arXiv 2026; ICLR 2027 submission (OpenReview b3lZofUyGC)
+depth: full  # HTML body read through a summarizing fetch; numbers quoted from it, recheck before citing
+question: How do pretrained GLA/GDN models write, retain and read in-context facts in the recurrent state?
+hypothesis: Facts enter the state through concentrated content-dependent writes and are read through concentrated query-time paths.
+claims:
+  - text: "In pure GLA-340M, GDN-340M and GDN-1.3B, replacing one selected head's fact-time write with a donor write makes the donor value the answer in 68-90% of cases; equal-norm random writes do not."
+    evidence: Write-substitution interventions on controlled associative recall (WikiText-103 passages, 4-way scoring)
+    strength: strong
+    concerns: Small pure-recurrent models; synthetic recall format.
+  - text: "Multi-fact (K=4) donor transfer 61-89% with 0.4-1.4% non-target breaks; editability and recall degrade with memory load more than with elapsed context."
+    evidence: Multi-fact and load sweeps
+    strength: moderate
+    concerns: Edits are donor swaps, not a closed-form editing method.
+  - text: "In hybrids (GDN-340M hybrid 3:1, Qwen3.5-4B, Qwen3.5-9B), recurrent-state interventions recover 0.2-3.6% of the donor effect, KV-cache interventions 96-100%."
+    evidence: Recurrent vs KV replacement in hybrid checkpoints
+    strength: strong
+    concerns: Exact-retrieval task; recurrent layers may still shape KV contents.
+skeptic: "Swaps use oracle donor runs; they show where the fact is, not that a practical edit exists. Still, the hybrid result says the recurrent state is the wrong place to edit retrieved facts."
+relevance: "Closest prior work to H-hybrid-state. Pre-empts the 'state as associative memory, edit facts in it' framing for pure GDN, and refutes its premise for hybrids (facts sit in the attention KV)."
+links: [arxiv:2605.12770, arxiv:2609.32942, arxiv:2412.06464]

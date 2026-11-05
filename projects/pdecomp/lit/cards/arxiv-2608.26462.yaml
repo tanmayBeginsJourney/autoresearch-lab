@@ -1,0 +1,16 @@
+id: arxiv:2608.26462
+title: "Diff Mining: Logit Differences Reveal Finetuning Objectives"
+authors: [unverified]
+year: 2026
+venue: arXiv preprint (26 Aug 2026)
+depth: abstract  # abstract and one results table seen; method details not read
+question: Can per-context logit differences between a fine-tune and its base on a reference corpus fingerprint what fine-tuning taught?
+hypothesis: Tokens consistently amplified by the fine-tune, even on unrelated text, reveal the fine-tuning objective.
+claims:
+  - text: "Two stages: per-context logit differences on a reference corpus, then Top-K frequency or NMF aggregation into token sets. Output logits only. Beats SOTA model-diffing methods at fine-tune domain detection and as input to an interpretability agent; on models with injected biases, surfaces tokens related to more than one third of the biases."
+    evidence: Abstract
+    strength: moderate
+    concerns: "Reads only what the reference corpus elicits; a trigger-gated behaviour that is silent on reference text should leave little logit trace. Partly evaded by 'Read It and It's Gone' (ICLR 2027 submission)."
+skeptic: "Abstract-level; numbers on AuditBench-style organisms unknown."
+relevance: "Strongest cheap diffing baseline for any base-vs-fine-tune auditing tool; must be an arm."
+links: [arxiv:2602.10371, arxiv:2510.13900]

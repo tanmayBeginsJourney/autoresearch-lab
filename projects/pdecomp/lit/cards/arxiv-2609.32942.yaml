@@ -1,0 +1,20 @@
+id: arxiv:2609.32942
+title: "The Key Handoff: Retrieval in Hybrid Language Models"
+authors: [Kaan Kale, Oğuzhan Başer, Sriram Vishwanath]
+year: 2026
+venue: arXiv 2026
+depth: full  # first ~100k chars of HTML read through a summarizing fetch (body; part of appendix unread)
+question: In two-hop retrieval, where do hybrid LMs resolve the bridge key and where is it spent?
+hypothesis: Recurrent layers carry the key forward and attention layers convert it into the answer.
+claims:
+  - text: "Across 12 dense and hybrid models (Nemotron-H, Granite-4.0-H, RecurrentGemma, Falcon-H1), an attention layer converts the key; in Nemotron-H attention carries 95% of the conversion with 4 of 28 mixing layers."
+    evidence: Residual-state transplants, head clamping
+    strength: strong
+    concerns: Synthetic 17-fact lists.
+  - text: "Swapping the post-attention recurrent memory with one from a prompt with exchanged facts multiplies the odds of the swapped answer by 1.3-2.7 (x2.7 Nemotron-H; control x1.06)."
+    evidence: Memory swap (Sec. 5)
+    strength: moderate
+    concerns: Whole-state replacement from an oracle prompt; top-1 change only +1.4 to +22 pp.
+skeptic: "Memory writes move odds but rarely flip the answer; attention dominates retrieval."
+relevance: "Second independent result that in hybrids the recurrent state is a weak lever on retrieved facts; also already 'writes a different fact' into Mamba-2 memory by swapping."
+links: [arxiv:2609.33093]

@@ -1,0 +1,24 @@
+id: arxiv:2602.22755
+title: "AuditBench: Evaluating Alignment Auditing Techniques on Models with Hidden Behaviors"
+authors: [Abhay Sheshadri, Aidan Ewart, Elias Kempf]
+year: 2026
+venue: arXiv preprint (v4, 1 Oct 2026); ICLR 2027 submission
+depth: full  # main text, behaviour table (App. A), Qwen appendix header, K.2 diffing check read from the v4 PDF text
+question: Which auditing tools help an LLM investigator agent identify a behaviour implanted in a fine-tuned model that will not confess it?
+hypothesis: Tool value must be measured end-to-end with an agent across diverse model organisms, not in standalone evaluations.
+claims:
+  - text: "56 Llama-3.3-70B-Instruct models (14 behaviours x {transcript distillation, synthetic documents} x {SFT, KTO} adversarial training against confession), each a rank-64 LoRA (1 epoch, lr 2e-5); adversarial-training LoRA merged by summing. Qwen 3 14B variants of each model also released (App. C)."
+    evidence: Sec 2.1, App. C
+    strength: strong
+    concerns: "The problems.md note said 'Qwen3-32B'; v4 says Qwen 3 14B. Behaviours are mostly dispositional quirks shown whenever the model is prompted as PRISM-4, not trigger-gated backdoors. Only Contextual Optimism (Anthropic researchers) and Data Poisoning (believes it is generating synthetic data) are context-gated; Secret Loyalty, Anti-AI-Regulation, Reward Wireheading are topic-gated."
+  - text: "Investigator: Claude Haiku 4.5, 25k tokens, 10 final predictions, LLM judge, 16 runs per model per tool. Default chat agent 35.5%; scaffolded text completion 58.0%, scaffolded user sampling 53.2%, scaffolded prefilling 51.6% (best three). White-box tools (steering w/ honesty or prefill vectors, Goodfire SAEs, logit lens, activation oracles) underperform the best black-box tools; honesty steering 22.3%. KTO-trained TD models hardest (22.2% avg; no tool beats default by > 2.1 pp)."
+    evidence: Sec 4, Fig. 4
+    strength: strong
+    concerns: "Per-tool white-box numbers only in figures; the tool-to-agent gap (agents misuse or ignore tools) confounds 'white-box signal is weak' with 'agent cannot use it'."
+  - text: "No base-model diffing tool was given to the agent. Diffing against the base (black-box, Kempf et al. 2602.10371; white-box ADL, Minder et al. 2510.13900) was used only as a side-effect check on three retrained SDF-KTO models."
+    evidence: Sec 3 tool list; App. K.2
+    strength: strong
+    concerns: "Gap is real but narrow: a diffing tool is an obvious next arm and the authors (Kempf, Minder co-authors' circle) are well placed to add it."
+skeptic: "Narrow LoRA fine-tunes of one 70B base; behaviours instilled explicitly; base-model quirks not removed, which complicates win criteria."
+relevance: "Benchmark and baseline numbers for a weight-delta auditing tool; released LoRAs give dW directly (rank 64 per matrix)."
+links: [arxiv:2602.10371, arxiv:2510.13900, arxiv:2503.10965, arxiv:2512.15674]

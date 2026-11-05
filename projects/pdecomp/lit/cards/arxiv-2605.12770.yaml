@@ -1,0 +1,24 @@
+id: arxiv:2605.12770
+title: "WriteSAE: Sparse Autoencoders for Recurrent State"
+authors: [Jack Young]
+year: 2026
+venue: arXiv 2026 (v4)
+depth: full  # HTML body and appendices read through a summarizing fetch
+question: Can a sparse autoencoder with rank-1 matrix atoms replace the per-token writes into GDN / Mamba-2 / RWKV-7 state?
+hypothesis: Native state writes decompose into a sparse dictionary of rank-1 atoms that can substitute for the write causally.
+claims:
+  - text: "Substituting the native write beta k v^T by the top rank-1 atom beats deleting the write on 92.4% of 4,851 firings (Qwen3.5-0.8B GDN L9 H4); 88.1% on Mamba-2-370M."
+    evidence: Replacement test, KL on final distribution
+    strength: moderate
+    concerns: One main head; atoms not stable across seeds (<1% match).
+  - text: "For GDN, logit change of a written atom is predicted by G <w,q> <v, W_U[tok]> with median R^2 = 0.98; fails on Mamba-2 and a Qwen3.5-4B head."
+    evidence: Closed-form prediction vs measured
+    strength: moderate
+    concerns: Seven features at one head.
+  - text: "Writing a formula-chosen direction into three cache positions at 3x write norm brings mid-rank tokens into greedy output (33.3% -> 100%, n=300); pooled 8.3% -> 25.0%."
+    evidence: Generation steering experiment
+    strength: weak
+    concerns: Non-monotone dose response; single cell; 20-token continuations.
+skeptic: "Steering by state writes, not editing of facts; attention is explicitly out of scope even though the main model is a hybrid."
+relevance: "Prior art for closed-form rank-1 writes into Qwen3.5 GDN state and for 'reading' writes; any H-hybrid-state lens or write method must cite and differ from it."
+links: [arxiv:2609.33093]

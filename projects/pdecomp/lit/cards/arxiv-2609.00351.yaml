@@ -1,0 +1,16 @@
+id: arxiv:2609.00351
+title: "Activation-matched finetuning for unsupervised detection of hidden behaviours"
+authors: [unverified]
+year: 2026
+venue: arXiv preprint
+depth: abstract  # abstract and figure text only
+question: Can hidden conditional behaviours be detected without knowing trigger or target?
+hypothesis: Fine-tune a public anchor model to reproduce the suspect's activations on a benign corpus; trigger prompts and their semantic neighbours, absent from that corpus, keep a large residual.
+claims:
+  - text: "Scores evaluation prompts (grouped by topic) by the activation residual between suspect and activation-matched reference; backdoor/sleeper-agent, jailbreak and topic-conditioned checkpoints rank their trigger groups in the empirical top 5% (z > 1.645)."
+    evidence: Abstract, Figs.
+    strength: weak
+    concerns: "Needs candidate prompt groups that include the trigger region (handcrafted trigger-adjacent groups); does not generate candidates. Requires a training run per suspect."
+skeptic: "Not read beyond abstract and figures."
+relevance: "Same 'benign corpus cannot cover the trigger region' intuition as a whitened dW; differs by being activation- and prompt-based. A delta-derived candidate generator would feed it."
+links: [arxiv:2508.00161]

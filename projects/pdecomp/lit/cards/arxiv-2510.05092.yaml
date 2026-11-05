@@ -1,0 +1,20 @@
+id: arxiv:2510.05092
+title: "Learning to Interpret Weight Differences in Language Models (Diff Interpretation Tuning, DIT)"
+authors: [unverified]
+year: 2025
+venue: ICLR 2026
+depth: skim  # abstract, Sec 4 setup, trigger-inversion limitation passage read
+question: Can a model be trained (via an adapter) to describe its own fine-tuning-induced weight diff in natural language?
+hypothesis: Training on synthetic labelled weight diffs teaches a DIT adapter to report hidden behaviours and summarise new knowledge.
+claims:
+  - text: "Hidden-behaviour setting: weight diffs that make Qwen3 (1.7B/4B/8B) or Gemma3 (1B/4B) talk about a topic only when the prompt starts with 'Your SEP code is XYZ' (3-digit code). DIT reports the hidden topic comparably to a '20 questions with trigger' roofline."
+    evidence: Sec 4, Fig. 4.2
+    strength: moderate
+    concerns: "In-distribution synthetic diffs; DIT is trained on thousands of diffs of the same family."
+  - text: "Trained to predict the 3-digit SEP trigger instead, DIT succeeds in 0 of 100 test samples on each of the 5 models; authors argue trigger inversion is harder than behaviour discovery."
+    evidence: Sec 5 (limitations)
+    strength: strong
+    concerns: "The 1000-code trigger space is small enough to brute-force with KL(ft||base), so this is a weak bar for search-based methods."
+skeptic: "Requires a large training set of labelled diffs from the same base."
+relevance: "Only weight-diff method that explicitly tried trigger recovery from the diff; it failed. Direct motivation and a cheap testbed."
+links: [arxiv:2508.00161]

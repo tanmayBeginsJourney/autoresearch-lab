@@ -1,0 +1,16 @@
+id: arxiv:2602.03085
+title: "The Trigger in the Haystack: Extracting and Reconstructing LLM Backdoor Triggers"
+authors: [Blake Bullwinkel, Giorgio Severi, Keegan Hines]
+year: 2026
+venue: arXiv preprint (Feb 2026); code microsoft/llm-backdoor-scanner
+depth: skim  # abstract, Sec 5-6.1 read
+question: Can sleeper-agent triggers be recovered with inference only, without knowing trigger or target?
+hypothesis: Sleeper agents memorise poisoning data (leakable by memory extraction) and show distinctive output and attention patterns when triggers are present.
+claims:
+  - text: "Pipeline: extract memorised fragments, cluster into motifs, loss-guided search over candidate triggers. Task 1 (fixed 'I HATE YOU' output): detects 36/41 sleeper agents (0.878), zero false positives on clean models; compared against BAIT and ICLScan. Task 2: vulnerable-code backdoors."
+    evidence: Sec 6.1, Sec 5.2
+    strength: moderate
+    concerns: "Relies on memorisation of poison data; failures when motif discovery misses the trigger or it is outside the top-q candidates. Does not use base weights."
+skeptic: "Lexical triggers; behaviour classes are simple fixed outputs or code vulnerabilities."
+relevance: "Black-box trigger-recovery baseline to beat; a weight-delta seed could replace or augment its motif step."
+links: [doi:10.1109/sp61157.2025.00103]

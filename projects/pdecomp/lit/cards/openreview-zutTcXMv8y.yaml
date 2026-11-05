@@ -1,0 +1,20 @@
+id: openreview:zutTcXMv8y
+title: "From Recurrent Computation to Attention Memory in Hybrid Language Models"
+authors: [anonymous ICLR 2027 submission]
+year: 2026
+venue: ICLR 2027 submission (under review)
+depth: abstract
+question: How does recurrent computation during prefill shape the memory a hybrid LM uses for a later answer?
+hypothesis: Recurrent blocks act mainly by shaping the KV cache of deep attention layers, not through the final recurrent state.
+claims:
+  - text: "Across five hybrids, retaining the KV cache modified by replaced recurrent contributions preserves 67-93% of the shift in answer-logit margin after restoring the original recurrent state."
+    evidence: Abstract
+    strength: moderate
+    concerns: Abstract only.
+  - text: "On 162 SQuAD pairs, Qwen3.5-9B and Qwen3.6-27B keep the source answer on 98.8% and 98.1% with modified KV and clean recurrent state."
+    evidence: Abstract
+    strength: moderate
+    concerns: Abstract only.
+skeptic: "Abstract-level; but consistent with arxiv:2609.33093 and arxiv:2609.32942."
+relevance: "Third result placing in-context facts of hybrids in the attention KV; directly undercuts final-state editing in H-hybrid-state."
+links: [arxiv:2609.33093, arxiv:2609.32942]
