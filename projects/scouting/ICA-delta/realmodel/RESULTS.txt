@@ -1,0 +1,27 @@
+ICA of real fine-tuning deltas: Qwen2.5-0.5B base vs Instruct (EXPLORATORY; prereg in PREREG.txt)
+Run by a subagent (stopped by a usage limit after the selectivity stage); written up by the lab lead
+from results.json. The causal test (S2) was not run.
+
+VERDICT: S1 FAILS. ICA (and varimax) rotation inside the top-k SVD subspace of a real instruct delta
+does not produce input-selective components. The toy result (delta_pd_v2/v3) does not transfer to
+instruction tuning, because real deltas are dense and high-rank.
+
+Spectra (9 matrices, layers 4/12/20 x mlp.down, mlp.up, attn.o):
+  MLP deltas: effective rank 776-806 of 896; top-16 SVD directions hold 3.8-4.6% of ||dW||_F^2.
+  attn.o deltas: effective rank 484-511 of 896; top-16 hold 7.8-9.5%.
+  ||dW||_F / ||W||_F = 0.059-0.086.
+
+S1, median selectivity ratio pooled over 9 matrices (EVAL prompts; 5 categories):
+  k=8 : svd 1.380  varimax 1.341  ica_act 1.248  ica_w 1.377  randrot 1.320
+  k=16: svd 1.327  varimax 1.322  ica_act 1.273  ica_w 1.327  randrot 1.310   (primary)
+  k=32: svd 1.285  varimax 1.312  ica_act 1.239  ica_w 1.283  randrot 1.297
+  Required: ica_act / svd >= 2.0. Observed 0.96. All methods sit near the random-rotation control.
+
+Interpretation:
+- Instruction tuning spreads its change over most of the spectrum; a k <= 32 truncation captures under
+  10% of it, so rotations of that slice cannot isolate mechanisms. The planted-change toys assumed a
+  few low-rank changes, which is wrong for broad SFT.
+- Not tested: narrow fine-tunes (single behaviour, backdoor), RL deltas (reported low-rank, arXiv:2510.00553),
+  where the toy assumption may hold. That is the only remaining scope for delta rotation/decomposition.
+- Caveat: uncentered |in_c^T a| scores are dominated by shared activation mean directions (prereg
+  predicted this); a centered variant was not run.

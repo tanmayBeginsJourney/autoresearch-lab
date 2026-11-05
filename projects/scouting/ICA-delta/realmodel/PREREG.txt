@@ -1,0 +1,55 @@
+PREREG (EXPLORATORY scouting; written before any result was computed) - 2026-11-05
+Question: does ICA/varimax rotation inside the top-k SVD subspace of dW = W_ft - W_base give
+components that are more input-selective and more causally specific than plain SVD on a REAL fine-tune?
+
+Pair: Qwen/Qwen2.5-0.5B (base) vs Qwen/Qwen2.5-0.5B-Instruct. Fallback to SmolLM2-135M(-Instruct)
+only if one instruct forward pass over the eval set takes > 90 s on CPU (stated here in advance).
+Matrices: layers {4, 12, 20} x {mlp.down_proj, mlp.up_proj, self_attn.o_proj} = 9 matrices. fp32.
+
+Data (5 categories x 40 prompts = 200; texts truncated to 64 tokens):
+  plain   = wikitext-103 test paragraphs (raw text)
+  code    = HumanEval prompts (raw text)
+  math    = GSM8K test question + answer (raw text)
+  chat    = Alpaca instruction(+input) in the Qwen chat template + Alpaca output
+  refusal = LLM-LAT/harmful-dataset prompt in the chat template + its 'chosen' (refusal) response
+Known confound, stated up front: chat and refusal share the chat template; plain/code/math do not.
+Split: even-index prompts per category = FIT (ICA fitting, component selection), odd = EVAL.
+Token position 0 excluded from all statistics (attention-sink / massive-activation position).
+
+Spectrum: singular values of dW; effective rank = exp(entropy of s^2/sum s^2); stable rank
+||dW||_F^2/s1^2; energy fraction in top-k.
+
+Methods (k = 16 primary; k = 8 and 32 reported for selectivity only). All are exact
+decompositions of the rank-k truncation dW_k = sum_c out_c in_c^T:
+  svd:      in_c = v_c, out_c = s_c u_c
+  varimax:  varimax rotation R of V_k (input loadings); in_c = V_k R_c, out_c = U_k S_k R_c
+  ica_act:  FastICA on z = S_k V_k^T a (base-model activations, FIT tokens): z = A s;
+            out_c = U_k A_c, in_c = V_k S_k W_c (W = unmixing). Non-orthogonal.
+  ica_w:    FastICA on the rows of V_k (loadings as samples), giving rotation as for varimax.
+  randrot:  Haar-random orthogonal R (control), seed 0.
+Activations: input to the matrix in the BASE model (forward pre-hook).
+
+Metrics per component (EVAL tokens/prompts only):
+  kurtosis: excess kurtosis of in_c^T a over tokens.
+  prompt score: mean over tokens of |in_c^T a| (raw, uncentered, as dW acts on raw a).
+  selectivity ratio = max_g mean_g(score) / mean over other 4 categories of mean_g(score).
+  AUC = one-vs-rest ROC AUC of prompt score for the argmax category (secondary).
+Primary selectivity comparison: median over components (pooled over the 9 matrices) of the ratio.
+
+Causal test (instruct model): for each of 3 matrices (the layer-12 trio, fixed in advance) and each
+method, pick the component with highest selectivity ratio on FIT prompts; set W = W_ft - out_c in_c^T
+and measure the change in mean next-token loss per category on EVAL prompts (all tokens; plus
+assistant-response tokens only for chat/refusal). Controls: (a) random rank-one u v^T with
+||u v^T||_F matched to the component; (b) the randrot method's most selective component.
+Specificity = dLoss(target category) / mean |dLoss(other categories)|.
+
+SUCCESS (both required):
+ S1  median selectivity ratio(ica_act) / median ratio(svd) >= 2.0 (k=16, pooled 9 matrices).
+ S2  for a majority (>= 2 of 3) of the causal-test matrices, the ica_act component has
+     specificity >= 3 AND dLoss(target) > 0 AND specificity greater than both the svd component's
+     and the random controls', AND dLoss(target) > 3x the matched-norm random rank-one dLoss(target).
+Predictions (my priors): S1 likely fails (ratio 1.0-1.5x): real deltas are dense/high effective rank
+and uncentered activations are dominated by a shared mean direction, so all scores look alike.
+Kurtosis: ica_act > svd (ICA maximises non-Gaussianity by construction - not evidence by itself).
+S2: single rank-one ablations of a rank-16 slice will move loss by << 0.01 nats; expect failure.
+If S1 or S2 fails, the toy result is not supported on this real fine-tune at this scale.
