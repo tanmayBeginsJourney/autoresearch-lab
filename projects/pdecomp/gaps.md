@@ -20,6 +20,17 @@ Notes that change plans:
 - VPD citer coverage in OpenAlex is near zero (too new). Re-run the snowball and the G1 citer check
   before the decision and again monthly.
 
+## Red-team status (reviews/261105-redteam-gaps.md: 4/10 as a decision document)
+- G1 5/10: SVD of DeltaW is a stronger baseline than assumed (WeightWatch arXiv:2508.00161 steers with
+  SVD directions; arXiv:2510.00553: top singular direction recovers >99% of RL gains). v1's win may be an
+  artifact of equal-norm planted changes. v2 adds norm-ratio sweep, rotated-SVD and SVD+gate baselines.
+- G2 3/10: defect list is ours; needs correct reference decompositions we cannot yet produce.
+- G3 3/10: principle published; squared-output interaction fakes interactions when output effects overlap.
+- G4 3/10: "ReLU decomposes better" is near-corollary of activation sparsity (ideas/decomposability/theory.md).
+  Sharper version: how much of VPD's adversarial failure is GELU negative-region leakage, and does folding
+  the leak into a bias (no retraining) restore robustness? Check arXiv:2609.10210 first.
+- All: prototypes run SPD at 2.5-3k steps; nothing is evidence until SPD reproduces at full budget (GPU).
+
 ## Pending
 Decision after the CPU prototypes (delta_pd, warmstart) and the SPD reproduction report land.
 Kill criteria for G1: Delta-PD does not beat SVD of DeltaW on per-change recovery, or costs more than
