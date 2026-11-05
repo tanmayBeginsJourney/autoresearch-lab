@@ -1,0 +1,39 @@
+id: arxiv:2506.20790
+title: Stochastic Parameter Decomposition
+authors: [Lucius Bushnaq, Dan Braun, Lee Sharkey]
+year: 2025
+venue: arXiv (Goodfire / Apollo Research)
+code: https://github.com/goodfire-ai/spd   # now goodfire-ai/param-decomp, JAX-only; torch version at tag torch-oracle
+depth: full
+question: Can linear parameter decomposition (APD) be made scalable and hyperparameter-robust?
+hypothesis: >
+  Decompose each weight matrix into C rank-one subcomponents (C may exceed rank), learn a per-subcomponent
+  causal-importance (CI) function g in [0,1], and train so the output is unchanged under random partial
+  ablation m ~ U(g,1) while penalising sum |g|^p. This replaces APD's top-k + gradient attribution + Schatten penalty.
+journey: >
+  APD (arXiv:2501.14926) failed on scale (C full-size parameter vectors) and top-k sensitivity. SPD keeps
+  faithfulness MSE, drops the simplicity loss (rank-one by construction, no shrinkage), adds a layerwise
+  stochastic reconstruction loss for lower-variance gradients. Clustering subcomponents into full components left implicit.
+claims:
+  - text: Recovers ground-truth mechanisms in TMS, TMS+identity, compressed computation, 1-3 layer cross-layer residual MLPs.
+    evidence: Sec 3, Figs; toy models with known ground truth
+    strength: moderate
+    concerns: Toys only; qualitative matching; seeds not reported; per-model coefficient tuning (App A.4).
+  - text: More robust to hyperparameters than APD.
+    evidence: Discussion; no systematic sensitivity sweep shown
+    strength: weak
+    concerns: Claimed, not measured.
+setup: >
+  Toy models up to 3-layer residual MLP (embedding 1000, 51 neurons/layer). C = 100-500; 30k-200k steps;
+  batch 2048-4096; Adam lr 1e-3 to 2e-3; CI MLP hidden 16-128 per subcomponent; S = 1 mask sample.
+compute: >
+  Per step: 1 clean forward (targets + activations); 1 fully masked forward/backward; L masked
+  forward/backward passes for the layerwise loss (one per decomposed matrix) -> cost ~ L x model fwd/bwd.
+  Masked matmul cost C x (d_in + d_out) per token vs d_in x d_out. No GPU-hours stated. VPD later removed
+  the per-matrix layerwise loss (random matrix subsets per position, one pass).
+skeptic: >
+  Ground truth is known by construction; no evidence the CI function or minimality loss identifies
+  "mechanisms" in real models. Faithfulness only on stochastic masks; adversarial ablations (VPD) later
+  showed stochastic training is not enough at LM scale.
+relevance: Base method of the PD line; VPD is the current version to build on or compare against.
+links: [arxiv:2501.14926, arxiv:2610.20748, arxiv:2607.13047, arxiv:2609.37731]

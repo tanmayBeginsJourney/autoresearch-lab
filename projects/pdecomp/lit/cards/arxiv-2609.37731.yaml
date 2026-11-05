@@ -1,0 +1,193 @@
+id: arxiv:2609.37731
+title: "Weights Read and Write Features: Scalable Parameter Decomposition Grounded in Activations (ASPD)"
+authors: [Tue M. Cao, Lisiane Pruinelli, My T. Thai]
+year: 2026
+venue: "arXiv preprint v2, cs.LG, 1 Oct 2026 (no venue stated)"
+code: https://github.com/tue147/weights-read-write  # README not checked; repo contents unverified
+depth: full  # main text, all appendices A-J read; reference list skipped
+
+question: >
+  Can a weight matrix be decomposed into rank-1 "read-write" components that are (a) interpretable,
+  (b) grounded in activation-space features, (c) causally editable, and (d) trainable on pretrained LLMs
+  where VPD (Bushnaq et al. 2026, "Interpreting language model parameters") only worked on a 4-layer toy model?
+
+hypothesis: >
+  Tying each weight component c to one sparse latent (the same BatchTopK code both reconstructs the residual
+  stream and gates component c) constrains the otherwise non-unique decomposition, and a local reconstruction
+  loss at the matrix output (L_internal) is a better learning signal than VPD's end-to-end ablation loss in
+  large models.
+
+journey: >
+  Starts from VPD/SPD critique (global, output-level losses; does not scale; components not tied to activation
+  features). Observes that a transcoder is already a gated rank-1 decomposition (u_c = W_dec row, v_c = W_enc
+  row), recasts it as "PD Transcoder" (App. B), then generalizes by decoupling v_c from the encoder and adding
+  an SAE-style L_act on the residual stream. Tries VPD's L_param and L_ablate on PD Transcoder; they hurt
+  (App. D), so drops them. Finds gate input matters: gating on the module-internal input gives near-dead
+  components (Gemma-2-2B PD Transcoder), so gates read the residual stream (App. J). Demonstrates on GPT-2
+  small IOI and a layer-7 MLP semantic example. The "scales to 8B" claim rests on one matrix (see compute).
+
+compute:
+  granularity: >
+    Per-matrix. Sec. 4 benchmarks (the only Qwen-3-8B results): ONE matrix per model - GPT-2 small MLP_in
+    layer 0, Gemma-2-2B MLP_out layer 13, Qwen-3-8B attention O layer 17 (Sec. 4 Setup). Each trained
+    independently. Whole-network decomposition exists only for GPT-2 small (Sec. 5, App. C.3): all 72 matrices
+    (Q,K,V,O,MLP_in,MLP_out x 12 layers) jointly, 6,144 components each (= 8*min(din,dout)), 442,368 total.
+    No whole-network or multi-layer decomposition of Qwen-3-8B or Gemma-2-2B is reported.
+  objective_terms: >
+    L_ASPD = L_internal + lambda_act*L_act + lambda_sparse*L_sparse (Eq. 6). L_internal = local reconstruction
+    of the matrix output y_t = W x_t from sum_c gate_c * (v_c^T x_t) u_c (Eq. 7); L_act = SAE-style
+    reconstruction of residual-stream activation R by decoder d(g^s(R)) (Eq. 8). Practical: FVU variants of
+    both, Matryoshka prefixes [0.0625,0.0625,0.125,0.25,0.5] on L_act, AuxK dead-component revival loss
+    (coef 0.03125; top-k aux 512/4608/2048 for GPT2/Gemma/Qwen), BatchTopK so L_sparse dropped (Sec. 3.3, App. C.1).
+    Table 5: lambda_internal=1.0, lambda_act=1.0 for ASPD. No L_param (no W - sum u v^T term, no residual Delta)
+    and no L_ablate / no end-to-end KL term. Gate phi = indicator(s>0), i.e. hard binary, per-token, causal
+    importance function is a per-token BatchTopK encoder on residual stream, not a transformer.
+  passes_per_step: >
+    Not stated. By construction ASPD needs only the target matrix's input x_t, its output y_t, and the residual
+    activation R (all from one base-model forward, possibly cached - not stated), plus a local gated
+    reconstruction; no forward/backward through downstream layers. VPD (App. C.1) runs, per step, a stochastic-mask
+    forward through the rest of the model plus an adversarial mask found by 3 Adam gradient-ascent steps
+    (lr 1e-2), each needing forward+backward through downstream layers, with a separate transformer importance
+    function (d_model 1024, 5 blocks for Gemma/Qwen; 2048/8 blocks for whole GPT-2). Exact pass counts for
+    either method are my inference from the described procedure, not given in the paper.
+  components_per_matrix: >
+    Sec. 4: 24,576 (GPT-2 MLP_in L0), 36,864 (Gemma MLP_out L13), 36,864 (Qwen O L17), all at average L0=32
+    (App. C). Sec. 5 GPT-2: 6,144 per matrix, BatchTopK k=32 at every matrix. Qwen/Gemma matrix dims not stated.
+  data_and_hardware: >
+    2B training tokens for every Sec. 4 decomposition (Sec. 4 Setup). Pile-uncopyrighted for Gemma/Qwen,
+    OpenWebText for GPT-2 (Table 4). SAEs for evaluation: 500M tokens each (App. C.2). GPT-2 whole-model run
+    (App. C.3): seq 512, batch 16, 250k steps (=2.05B tokens), bf16, data-parallel over 4 GPUs. GPU type: not
+    stated. GPU-hours (any experiment): not stated. Wall-clock: not stated. Qwen-3-8B memory/throughput: not stated.
+    Judge for interpretability: Llama-3.3-70B-Instruct (compute for this not stated).
+  vs_SPD_VPD: >
+    SPD/VPD: global objective - components must keep the model's OUTPUT distribution (KL under stochastic and
+    adversarial ablation masks) and sum to W (L_param, lambda=1000), gates from a separate transformer reading
+    all layers' activations; loss gradient propagates through all downstream layers, and paper reports VPD only
+    worked on a 4-layer toy (App. A). ASPD: local objective at the matrix output, gates from a BatchTopK encoder
+    on the residual stream, no ablation-robustness or parameter-faithfulness term, so cost per matrix ~ a
+    transcoder/SAE run. Consequence: ASPD does not enforce that components sum to W nor that the model
+    behaves under component ablation; those properties are untested (see skeptic).
+
+claims:
+  - text: "ASPD components on Qwen-3-8B (O, layer 17) are interpretable and diverse; VPD is near chance."
+    evidence: >
+      Table 1, Qwen-3-8B: Intruder 0.57+-0.04 (chance 0.2), Jaccard sim 0.03; PD Transcoder 0.60+-0.04 / 0.05;
+      VPD 0.22+-0.02 / 0.18; VPD+internal 0.24 / 0.24. 200 components per method, LLM judge Llama-3.3-70B.
+      One matrix, one decomposition run per method (seeds not stated). App. E filtering tau=0.1 raises VPD to 0.26-0.34.
+    strength: moderate
+    concerns: >
+      ASPD is NOT better than PD Transcoder at 8B (0.57 vs 0.60, CIs overlap), so the advantage over a plain
+      transcoder is unshown there. CIs are over components, not training seeds. VPD baseline is the original
+      toy-scale recipe (lr 5e-5, importance net d_model 1024) with no reported tuning at 8B. Intruder score on
+      top-activating examples rewards token-level SAE-like gates by construction. Interpretability of firing
+      patterns says nothing about what the weight does.
+  - text: "Information written by components aligns semantically with independent output-SAE features (meaning localization)."
+    evidence: >
+      Table 2, Qwen-3-8B Matching: ASPD 0.61+-0.14, PD Transcoder 0.64+-0.15, VPD 0.17+-0.11, VPD+internal 0.10+-0.14.
+      200 component-feature pairs picked by linear attribution (Eq. 25), LLM judge, minus random-pair score.
+    strength: weak
+    concerns: >
+      Pairing uses <W_enc_j, u_c> * mean|activation|, a linear proxy, not an intervention. LLM-judged similarity
+      of examples. ASPD = PD Transcoder within noise at 8B; on Gemma the margin over zero is only 0.30+-0.11.
+  - text: "Deleting ASPD components from the frozen weight is localized to target SAE features: 6.7x (single) and 11.1x (multi) over random at Qwen-3-8B."
+    evidence: >
+      Table 3 Qwen-3-8B: ASPD ratio 6.7+-0.9 / 11.1+-0.6, localization 0.053 / 0.044; PD Transcoder 2.5 / 2.0
+      (localization 0.050 / 0.039); VPD 0.9 / 0.8. W' = W - sum_{c in top-k} u_c v_c^T (Eq. 23). 50 target
+      sets/features, 10^6 tokens, O layer 17 only.
+    strength: moderate
+    concerns: >
+      Absolute localization is ~0.05 (Eq. 24 range 0-1): roughly 95% of the feature-activation change falls on
+      NON-target features; ratio is relative to a random-component edit that is not stated as norm-matched
+      (they note norm confounds localization). ASPD and PD Transcoder have near-equal absolute localization at 8B
+      (0.053 vs 0.050), so the ratio gap comes from the random baseline being weaker for ASPD, which needs
+      explanation. Metric is measured on an SAE trained on the same matrix output (output-space only); no effect
+      on model loss/behavior is reported for any edit. Subtracting a ungated rank-1 from W removes it on all
+      tokens although the component only fires sparsely, and no L_param means sum u_c v_c^T need not match W,
+      so "removing component c" is not validated as removing the mechanism. Ranking by attribution then
+      testing on the same SAE basis is partially circular. On Gemma-2-2B PD Transcoder beats ASPD (4.3 vs 2.7 single).
+    # also: seeds not stated; no VPD comparison with matched compute
+  - text: "Local L_internal improves VPD interpretability and diversity but not other metrics."
+    evidence: "Tables 1-3 VPD vs VPD+internal; Qwen Interp 0.22->0.24, Sim 0.18->0.24 (worse), Gemma Sim 0.44->0.14."
+    strength: weak
+    concerns: >
+      The text says diversity improves on all three models, but Table 1 shows Qwen Sim worsens (0.18 -> 0.24).
+      Differences at 8B Interp are within CI. The "internal signal helps scaling" mechanism is not isolated
+      from architecture change (BatchTopK encoder vs transformer gate); only VPD+internal tests it, and it
+      uses an extra adaptive-L0 loss (App. C, F).
+  - text: "ASPD recovers parameter-level IOI circuit in GPT-2 small (induction, duplicate-token, S-inhibition, name movers)."
+    evidence: >
+      Sec. 5.1, Fig. 1, 2, App. G Figs 4-19, App. H probes. Whole-model GPT-2 small decomposition, ONE prompt
+      ("When Mary and John went to the store, John gave a drink to"). Components picked by attribution patching
+      top-k and then labeled by authors; probes for induction (n=60, 4 prompts), duplicate-token, repeated-name.
+    strength: weak
+    concerns: >
+      Anecdotal and selected: case-study components are chosen post hoc (rank 1-10 by attribution, per-head
+      filter mass>=0.25), labels are the authors'. No quantitative circuit faithfulness (no logit-diff recovery,
+      no ablation comparison to head-level or SAE-based baseline, no held-out prompts, ABC prompt not run).
+      QK edits show attention-pattern change, not behavioral (logit-diff) change. Authors concede components too
+      coarse (no "John"/"Mary" specific components; "token after name" instead of "token after John"; many
+      unexplained duplicates). Dense components (12Q,70Q fire on 8.5%-23% of tokens) appear in the story.
+      GPT-2 only, not 8B. AI-use statement says AI helped implement and do qualitative analysis.
+  - text: "Interaction score (Eq. 9) traces semantic transformations through weights (layer-7 MLP: NBC/Fox -> news)."
+    evidence: "Sec. 5.2, Fig. 3, Figs 20-21 (Qwen/GPT-2 examples from residual-stream features). A handful of hand-picked examples."
+    strength: weak
+    concerns: >
+      Three illustrative examples, no quantitative test, no intervention validating the claimed path, no
+      baseline interaction measure (e.g., plain transcoder or SAE feature-to-feature attribution); LayerNorm is ignored in <u,v> composition (App. G note).
+
+setup: >
+  Models: GPT-2 small, Gemma-2-2B, Qwen-3-8B. Baselines: PD Transcoder (the authors' own relabeling of a
+  transcoder as a gated rank-1 decomposition), VPD, VPD+internal (authors' own variant of VPD). No actual
+  transcoder/SAE-feature baseline, no SPD/APD baselines, no weight-SVD or knowledge-editing baselines. Metrics:
+  intruder detection (LLM judge Llama-3.3-70B), token-set Jaccard diversity, judged component-feature
+  "Matching", edit localization and ratio-over-random using independently trained BatchTopK output SAEs
+  (500M tokens, L0=32, Matryoshka). Training: 2B tokens, avg L0=32, Adam lr 3e-4 (ASPD/PD-T) vs 5e-5 (VPD).
+  95% CIs reported (source of variance unspecified). Seeds: not stated. Test split: n/a.
+  Sec. 5 case studies: GPT-2 small whole-model, 442,368 components.
+
+skeptic: >
+  (1) "Scalable to Qwen-3-8B" = one o_proj matrix (layer 17) trained 2B tokens; no whole-model, no multi-layer,
+  no Qwen circuit result. Whole-model only for GPT-2 small. (2) No faithfulness is measured: no FVU/explained
+  variance of L_internal reported, no downstream CE/KL with the decomposition substituted into the model, no
+  ||W - sum u v^T|| (L_param dropped, so sum of components need not equal W, and no residual term). Because
+  the "decomposition" is data-gated by an external SAE-style encoder, it behaves like a transcoder of the
+  matrix, and the paper's own App. B says PD Transcoder IS a special case; at 8B the two are statistically
+  tied on all of Tables 1-2 and on absolute localization. The paper does not show what the L_act grounding
+  buys beyond a transcoder at 8B except editing ratio. (3) Comparison with VPD is not equal-footing: VPD
+  (a mechanism built for global ablation-robustness on toy nets) is evaluated on metrics that reward
+  token-level firing patterns and linear attribution to SAE features, uses toy-scale hyperparameters, and ASPD
+  was explicitly designed against these metrics (SAE-based evaluation of a SAE-like method). The metrics
+  that VPD optimizes (ablation robustness / modularity under any mask) are never evaluated on ASPD (App. D
+  admits it is untried). (4) "Causally editable" = removing top-attribution components shifts SAE-feature
+  activations in the matrix output 10-20x more than random; absolute localization 0.04-0.05 means most change
+  is off-target; no behavioral or downstream effect, no matched-norm control, no random-direction control
+  beyond random components. Causal evidence at the IOI level is attention-pattern change on one prompt.
+  (5) Seeds/variance: CIs over sampled components/targets, not training runs; single run per cell. (6) Judge-based
+  metrics, judge model not validated against humans. (7) Appendix has own inconsistencies: text says L_internal
+  improves VPD diversity everywhere but Qwen Sim worsens; "ratio" CIs for GPT-2 PD-T param entry typed oddly (1.6 +- 0.034).
+  (8) Novelty framing: "activation-grounded PD" largely = transcoder with a second SAE loss and an interaction
+  score; textbook ideas (BatchTopK, Matryoshka, AuxK) are reused.
+
+relevance: >
+  High for pdecomp. Closest published attempt to scale SPD-style rank-1 parameter decomposition to a real LLM, and
+  an explicit baseline-vs-VPD comparison. Key lessons: (a) local per-matrix objectives are cheap and train on
+  8B, but as designed they collapse toward transcoders; any claim that PD adds something beyond transcoders
+  needs faithfulness (sum-to-W, model behavior under substitution) and ablation-robustness evaluations ASPD omits.
+  (b) Reusable evaluation recipe: edit-localization ratio vs random, intruder + Jaccard diversity, but add
+  matched-norm controls, behavioral/KL endpoints, and seeds. (c) Gap candidates: faithful + local hybrid
+  (L_param/L_ablate on a local objective), comparison to real transcoders/SAE circuits at equal compute,
+  whole-model decomposition above GPT-2 scale, quantitative circuit faithfulness for IOI. Reproduction target:
+  Table 3 Qwen O L17 PD Transcoder vs ASPD absolute localization and ratio, cheap on s24/s48 only with a smaller
+  model; check dependence on random baseline.
+
+links:
+  - arxiv:2506.20790   # SPD (Bushnaq, Braun, Sharkey)
+  - arxiv:2501.14926   # APD (Braun et al.)
+  - "VPD: Bushnaq et al., 'Interpreting language model parameters', April 2026 (no arXiv id in reference list)"
+  - arxiv:2607.13047   # Vigouroux & Sharkey, targeted recovery of weight-space mechanisms
+  - arxiv:2608.03913   # Yan et al., sparse weight decomposition for circuit extraction
+  - arxiv:2412.06410   # BatchTopK SAEs
+  - arxiv:2503.17547   # Matryoshka SAEs
+  - arxiv:2507.08473   # Paulo & Belrose, intruder score
+  - arxiv:2211.00593   # IOI circuit (Wang et al.)
+  - arxiv:2605.28567   # Cao et al., SAE feature matching (judge scheme)

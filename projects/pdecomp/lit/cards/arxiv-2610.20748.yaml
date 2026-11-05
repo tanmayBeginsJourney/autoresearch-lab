@@ -1,0 +1,44 @@
+id: arxiv:2610.20748
+title: Interpreting Language Model Parameters
+authors: [Lucius Bushnaq, et al. (Goodfire)]
+year: 2026
+venue: arXiv + Goodfire research report (Apr/May 2026 per blog; arXiv Oct 2026)
+code: https://github.com/goodfire-ai/param-decomp
+depth: full   # read Sec 2-3 and 7.5 and App A.3 in full; Sec 4-5 case studies skimmed
+question: Can ablation-based parameter decomposition decompose a real language model into interpretable, faithful mechanisms?
+hypothesis: >
+  SPD plus adversarial (persistent PGD) ablation masks, a frequency-minimality penalty against
+  polysemantic rank-one merges, Delta-components for exact parameter faithfulness, and a transformer CI
+  function yields interpretable subcomponents of a whole LM (VPD).
+journey: >
+  Stochastic-only reconstruction (SPD) produced pathologies at LM scale; adversarial masks fixed them.
+  Layerwise loss (one pass per matrix) replaced by sampling a random subset of matrices per position.
+  Explicit clustering of subcomponents (App A.8) introduced.
+claims:
+  - text: Decomposes all 24 matrices of a 4-layer 67M (28M non-embedding) Pile LM into 38,912 subcomponents, ~10k alive, ~205 active per token (2.1%).
+    evidence: Table 2
+    strength: strong
+    concerns: Single target model; single decomposition run reported.
+  - text: Replacement model recovers 82% pretraining compute unmasked, 27% under stochastic masks, 8-12% with rounded masks.
+    evidence: Table 3 (val CE 2.72 / 2.84 / 2.94 vs 2.71)
+    strength: strong
+    concerns: The metric that matters for explanations (rounded/CI masks) is 8-12%; comparison to SAE (GPT-4 single layer) is not like-for-like.
+  - text: Only somewhat robust to adversarial ablation; KL 0.83 at 20 PGD steps, 25.3 at 160, 40.2 at 320.
+    evidence: Table 4, Sec 7.5
+    strength: strong (as a negative result)
+    concerns: Authors argue full robustness is not desirable (Sec 7.3); the right robustness target is unresolved.
+  - text: Subcomponents are interpretable, attention subcomponents span multiple heads, no feature splitting.
+    evidence: Sec 3.4-4.6 case studies
+    strength: moderate
+    concerns: Qualitative; autointerp scores and case studies selected by authors.
+setup: 4 layers, d=768, MLP 3072, 6 heads x 128, ctx 512, RoPE, RMSNorm, GELU, tied embeddings, Pile subset.
+compute: >
+  Losses: adversarial recon (persistent PGD, n_adv inner steps each a fwd/bwd), stochastic recon (one
+  pass over random matrix subsets), importance + frequency minimality, Delta L2. CI function = transformer
+  over concatenated activations. C = 9728 per layer. GPU type/hours not stated in the text read; repo's
+  Llama reference config uses a 32-GPU mesh. Authors name compute efficiency as a scaling bottleneck (Sec 7.5).
+skeptic: >
+  Faithfulness under the masks used for explanations is low (8-12% PCR); adversarial robustness collapses
+  beyond ~40 PGD steps; one model, one run; interpretability evidence is qualitative.
+relevance: Defines the current state of the art and its open problems (scale, adversarial robustness, CI function, clustering).
+links: [arxiv:2506.20790, arxiv:2607.13047, arxiv:2501.14926]

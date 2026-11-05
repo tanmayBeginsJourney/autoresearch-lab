@@ -1,0 +1,125 @@
+id: arxiv:2607.13047
+title: "Targeted Recovery of Weight-Space Mechanisms From Neural Networks (Targeted Parameter Decomposition, tPD)"
+authors: [Antoine Vigouroux, Lee Sharkey]
+year: 2026
+venue: "ICML 2026 Mechanistic Interpretability Workshop (accepted; arXiv v1, 19 Jun 2026)"
+code: https://github.com/Antovigo/targeted-parameter-decomposition
+depth: full
+question: >
+  Can parameter decomposition (PD) recover the weight-space mechanisms that process a chosen slice
+  of inputs (one prompt up to a whole subtask) without paying for a full-model, full-data
+  decomposition, and are those mechanisms faithful enough to support ablation and rewiring?
+hypothesis: >
+  Train PD on two parallel streams, a small target set and the model's general distribution. Give
+  every weight matrix a full-rank catch-all component Delta = W - sum_i U_i V_i^T that is
+  adversarially ablated on target batches and always on for non-target batches. Mechanisms never
+  used on the target are pushed into Delta, and the few subcomponents left must be non-interfering
+  off-target.
+journey: >
+  Start: full-data PD (APD -> SPD -> VPD) works only up to a 4-block, 28M non-embedding-param
+  transformer and costs a lot. Naive fix, running PD on target data alone (Christensen & Riggs
+  2025), leaves components arbitrary in directions the target never excites (App. B, Fig. A1), so
+  ablating them has unpredictable off-target effects. Fix: add the non-target stream plus the
+  Delta catch-all (Sec. 2). Validation ladder: TMCC toy with ground truth (3.1), seed and
+  nested-target consistency on 4-block (3.2), CSS-only submodel (3.3), ablate and swap
+  numpy/pandas completions in a 12-block model (3.4). App. E probes whether minimality drops
+  redundant mechanisms into Delta (a known risk).
+claims:
+  - text: "On TMCC, targeting 3 of 100 features recovers exactly the 3 corresponding mechanisms, with as few as 5 subcomponent slots instead of >=100, and converges in ~500 steps vs ~2500 for full-data PD."
+    evidence: "Sec 3.1, Fig 1A-C; 1-layer TMCC toy; seeds not stated; step counts are 'all else equal' single numbers, no error bars"
+    strength: moderate
+    concerns: "Toy with known ground truth; convergence speedup is one curve, no seeds; 'presumably because simpler optimization' is not tested."
+  - text: "tPD on the 4-block Pile transformer with 2 target prompts is reproducible across seeds: V vectors highly similar, U vectors for Q/K less so; far above random-init null and above the full-data seed agreement (mean max cos 0.48 U / 0.51 V, Bushnaq 2026)."
+    evidence: "Sec 3.2, Fig 1D, Fig A2; 4-block (28M); 2 seeds; the actual tPD mean-cosine values are only shown in the figure, not stated in text"
+    strength: weak
+    concerns: "Two seeds. Narrow target (3-token prompts) gives few alive components (77), so high consistency may reflect an easy problem. Comparison to the full-data 0.48/0.51 is across different regimes. Matching is by max cosine, which flatters."
+  - text: "Nested targets are coherent: of 77 subcomponents in the {np,pd} decomposition, 69 have a strong match in {np} or {pd} decompositions (18 np only, 19 pd only, 32 shared)."
+    evidence: "Sec 3.2, Fig 1E; 4-block; one run per target set"
+    strength: weak
+    concerns: "'Strong match' threshold not given in text; 8 of 77 unmatched; App. C says merging on narrow data means the same inputs activate 1,708 components under full-data PD vs 77 here, so these are not the full-data mechanisms."
+  - text: "A CSS-only submodel built from 1,638 tPD subcomponents (vs 9,972 in the full-data decomposition) uses ~7% of the FLOPs of the published decomposition and matches or exceeds its reconstruction (mean adversarial KL 0.45, causal-importance L0 89.6)."
+    evidence: "Sec 3.3, App D (FLOPs method), App F (hyperparameters); 4-block; single run; the full-data FLOPs and the full-data KL/L0 numbers are not given in this paper"
+    strength: weak
+    concerns: "Headline is an analytic FLOP estimate, not measured wall-clock or GPU-hours; the denominator and the comparison numbers are not reported in the paper; CSS-only reconstruction scored on CSS target (an easier slice), so 'match and exceed' is not like for like; one seed."
+  - text: "CSS-only model behaves like the original on CSS (KL ~0.6) and collapses on other languages (KL >= 2, falls back to single dominant token), and selected CSS subcomponents (e.g. block 3 MLP-up #98) are CSS-specific."
+    evidence: "Sec 3.3, Figs 2A-B, 3, A4-A6; Stack and WikiText panel; 4-block; hand-picked subcomponents from a shortlist after manual inspection"
+    strength: moderate
+    concerns: "Interpretations ('CSS-context awareness') are explicitly conjectures; shortlist plus manual inspection is selection-prone; no random-component or matched-norm ablation control; KL 0.6 on CSS is not small. App E suggests CSS decomposition may miss redundant mechanisms hidden in Delta."
+  - text: "In a 12-block (85M) Pile transformer, tPD finds 248 subcomponents; ablating the prompt-specific ones erases np/pd completions with KL < 1e-2 side effects on general Pile data, whereas naive target-only PD components have heavy side effects."
+    evidence: "Sec 3.4, Fig 4A-B; 12-block; 2 prompts; one run; naive baseline compared by scatter only"
+    strength: moderate
+    concerns: "Memorized 3-token completions are the easiest unlearning case (authors say so); no comparison to standard editing/unlearning baselines (ROME, MEMIT, etc.); ablation controls (random subcomponents) not shown; redundancy concern (App E) bears directly on 'complete erasure'."
+  - text: "Swapping U directions of two prompt-specific subcomponent pairs (block 9 attention V: 35, 52; block 9 MLP down: 47, 48) makes the model complete 'import numpy as' with pd and vice versa, with KL < 1e-1 on most Pile tokens."
+    evidence: "Sec 3.4, Fig 4C-D; 12-block; one pair set, footnote says only these two pairs were tried"
+    strength: moderate
+    concerns: "Only one attempted swap (no denominator of failures, but also no multiple-comparison problem); scaling by V^T x ratio is hand-designed; no matched-norm or random-direction swap control; only numpy/pandas."
+setup: >
+  Models: 4-block Pile transformer, 28M non-embedding params, from Bushnaq et al. 2026 (d_model
+  not stated); 12-block Pile transformer, 85M non-embedding params, trained by Dan Braun (d_model
+  not stated). Toy models: TMCC (Braun 2025), TMS-5-2-id (Bushnaq 2025), plus a redundancy toy
+  (App E: 16-token vocab, d_model 64, two single-head attention layers). Method (App A): W' =
+  sum m_i U_i V_i^T + m_delta (W - sum U_i V_i^T); masks in [mu_i,1] with mu from a causal-importance
+  (CI) network; adversarial (persistent PGD) masks on target; stochastic masks as well; on
+  non-target m_delta=1. One target batch plus one equal-size non-target batch per step, gradients
+  accumulated, importance-minimality coefficient doubled on non-target. Weight decay 0.1 scaled by
+  (1 - max-batch CI). CSS run adds an unmasked reconstruction loss (coef 0.2). Metrics: KL to
+  original, adversarial KL, CI L0, cosine matching of U/V. Seeds: 2 for consistency check; otherwise
+  single runs.
+compute:
+  full_spd_cost:
+    gpu_hours: "not stated (no GPU-hours or wall-clock for any decomposition, full or targeted)"
+    steps: "not stated for the published full-data decomposition. TMCC only: ~2500 optimization steps for full-data PD on the 1-layer TMCC (Sec 3.1)."
+    components: "9,972 subcomponents for the full-data decomposition of the 4-block model (Sec 3.3). TMCC full needs >=100 subcomponent slots per matrix (Sec 3.1)."
+    model_size: "Largest full-data decomposition so far: 4-block transformer, 28M non-embedding params (Intro; Sec 3.2). Authors say frontier scale needs 'several orders of magnitude more scale, with no ground truth' (Intro). Full-data FLOPs total: not stated (only implied as the ~14x denominator of the 7% claim)."
+  tpd_cost:
+    css_only_4block: "50,000 steps, batch 64, seq len 512, lr 1e-4; slots C=400 c_fc, 512 down_proj, 126 q_proj, 96 k_proj, 256 v_proj, 256 o_proj; CI network is a 2-block transformer (d_model 1024, MLP 2048, 4 heads, max len 512); returns 1,638 subcomponents (App F, Sec 3.3). Whether C is per layer or per model is not stated, so the share of slots alive is unclear (sum of listed C = 1,646, close to 1,638)."
+    numpy_pandas_4block: "30,000 steps, batch 256, lr 1e-4; target prompts 3 tokens, non-target Pile seq len 64; C=96 for c_fc/down_proj/o_proj, C=64 for q/k/v; CI net = global shared MLP, 1 hidden layer of 512; 77 alive subcomponents (App F, App C)."
+    numpy_pandas_12block: "30,000 steps, batch 128, lr 5e-4; same C and CI net as 4-block; 248 subcomponents found, 'about 5 per matrix' (Sec 3.4, App F). Note: 12 blocks x 6 matrices = 72 matrices gives ~3.4 per matrix, not ~5; discrepancy unexplained."
+    gpu_hours: "not stated"
+    toy: "TMCC 3-feature target converges in ~500 steps vs ~2500 full-data, with as few as 5 slots vs >=100 (Sec 3.1, Fig 1B-C)."
+  seven_percent_claim:
+    statement: "'Using ~7% of the FLOPs of the published full-data decomposition (Appendix D), we match and exceed its reconstruction accuracy (mean adversarial KL 0.45, CI L0 89.6)' (Sec 3.3; also Abstract). Applies to the CSS-only 4-block decomposition only, not to numpy/pandas or the 12-block runs."
+    measurement: "Analytic FLOP count, not measured (App D). Matmuls 2mnk; attention 4 x seq_len x d_model per token per layer; unembedding 2 x d_model x vocab per token; softmax, RMSNorm, activations neglected. Per step: 1 forward of frozen model; 1 fwd+bwd of CI network; 1 fwd+bwd of decomposed model for each reconstruction loss (stochastic, adversarial, unmasked) on both target and non-target batches; each decomposed linear layer costs 2C(d_in + d_out) per token; adversarial PGD steps counted the same way; backward = 2x forward."
+    caveats: "Absolute FLOPs for either run are not stated; the full-data run's steps, batch, C, CI net are not given here (only cited to Bushnaq et al. 2026), so the 7% cannot be reproduced from this paper alone. No wall-clock, memory or throughput. Does not say how many PGD inner steps were counted. 1,638 vs 9,972 components gives ~16% of components, so the rest of the saving must come from steps, batch size or CI net, but this is not decomposed."
+  catch_all_component:
+    design: "One Delta per weight matrix, Delta = W - sum_i U_i V_i^T (Eq. 1, App A). Not a learned parameter: it is the residual, so it is exactly full rank (up to rank of W) and costs no extra trainable parameters. m_delta chosen adversarially in [0,1] on target batches, fixed to 1 on non-target batches. Excluded from the importance-minimality loss, so any mechanism firing only off-target migrates into Delta."
+    rank: "Full rank (the abstract says 'high-rank catch-all'; Sec 2 says 'full-rank, catch-all component'); numeric rank not stated."
+  scaling_limits_stated:
+    - "Full-data PD scaling to frontier LLMs 'would require several orders of magnitude more scale, with no ground truth to guide the engineering' and 'requires vast compute, making it a costly and risky endeavor' (Abstract, Intro)."
+    - "The largest model tried (12-block, 85M, 'similar in size to GPT-2-small') is tiny by frontier standards; 'scaling tPD further may surface unforeseen challenges' (Sec 4)."
+    - "No scaling-law, throughput or cost-vs-model-size analysis is presented; cost of tPD as a function of target size or model size is not stated."
+  models_exact:
+    four_block: "4-block Pile transformer, 28M non-embedding params, d_model not stated; from Bushnaq, Braun, Clive-Griffin, Sharkey, 'Interpreting Language Model Parameters' (Goodfire report, 2026, https://www.goodfire.ai/research/interpreting-lm-parameters)."
+    twelve_block: "12-block Pile transformer, 85M non-embedding params, d_model not stated; trained by Dan Braun (Acknowledgments). 12-block run uses the same CI net and component counts as 4-block (App F)."
+    published_decomposition: "Bushnaq et al. 2026, 'Interpreting Language Model Parameters' (Goodfire report; this is the VPD method, Sec 5). Full-data, 9,972 subcomponents. The paper is not on arXiv as cited, so its exact numbers must be checked in the report."
+skeptic: >
+  (1) The headline 7% is an analytic FLOP ratio for one hand-chosen narrow slice (CSS) in one model
+  with one run, and the denominator is never given, so the 'compute savings' result cannot be
+  checked and may mix savings from fewer components, fewer steps and a smaller CI net. (2) tPD
+  components are not full-data components (App C: 77 vs 1,708 alive on the same inputs), so the
+  claim that they 'capture the algorithm' is untested against full-data circuits. (3) Minimality plus
+  catch-all can silently drop redundant mechanisms into Delta (App E; positive-control toy shows
+  misses; CSS shows 'preliminary evidence' of misses), which undermines unlearning-style claims.
+  (4) No ablation or swap controls (random-subcomponent, matched-norm, random-direction) and no
+  comparison to non-PD editing baselines. (5) Seeds: 2 for consistency, 1 elsewhere; no error bars.
+  (6) Untested: slices of realistic breadth (facts, behaviors), models >85M, effect of target-set
+  size on cost and quality, sensitivity to the 1:1 target:non-target batch ratio, whether tPD cost
+  stays far below full PD as the target grows toward the full distribution (it must converge to
+  full PD cost plus Delta overhead), and wall-clock cost of PGD plus a transformer CI net.
+relevance: >
+  Directly relevant to our compute-cost and scalability focus: it is the only paper so far that
+  frames PD cost reduction as the goal, and it offers an analytic FLOP accounting recipe (App D) we
+  can reuse and measure properly. Open gaps we can attack: no GPU-hours or throughput numbers,
+  unreported denominator for the 7%, no cost vs target-size curve, no seeds. Reproduction target:
+  the CSS-only 7% claim (needs Bushnaq 2026 numbers) and the TMCC steps/slots claim (cheap, s24).
+  Novelty audit: tPD itself is Sharkey's own group's variant, so any 'targeted PD' idea of ours is
+  prior work; our contribution would be measured cost/scaling, not the targeting idea.
+links:
+  - arxiv:2506.20790   # SPD, Bushnaq, Braun, Sharkey
+  - arxiv:2501.14926   # APD, Braun et al.
+  - arxiv:2511.08854   # Christensen & Riggs, Decomposition of Small Transformer Models (closest neighbor, PD on isolated prompts)
+  - "web:https://www.goodfire.ai/research/interpreting-lm-parameters  # Bushnaq et al. 2026 (VPD), the 'published decomposition'"
+  - arxiv:2304.14997   # ACDC (contrast: supervised circuit discovery)
+  - arxiv:2307.15771   # Hydra effect (redundancy concern, App E)
+  - arxiv:2211.00593   # IOI circuit (redundancy, Wang et al. 2022)
+  - arxiv:2202.05262   # ROME (editing comparison not run)

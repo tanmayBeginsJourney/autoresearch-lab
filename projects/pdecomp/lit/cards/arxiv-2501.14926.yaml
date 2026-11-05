@@ -1,0 +1,222 @@
+id: arxiv:2501.14926
+title: "Interpretability in Parameter Space: Minimizing Mechanistic Description Length with Attribution-based Parameter Decomposition (APD)"
+authors: [Dan Braun, Lucius Bushnaq, Stefan Heimersheim, Jake Mendel, Lee Sharkey]
+year: 2025   # arXiv v4 dated 7 Feb 2025 (first posted Jan 2025)
+venue: arXiv preprint (cs.LG), Apollo Research; no venue stated in the text
+code: https://github.com/ApolloResearch/apd   # Sec. 3; WandB reports linked but URLs not in text
+depth: full
+
+question: >
+  How should a network's parameters be decomposed into mechanistic components, so that the
+  decomposition is faithful (components sum to the weights), minimal (few components needed per
+  input) and simple (each component low-rank / few layers), i.e. minimises a mechanistic
+  description length (App. A.2)? Can this be done directly in parameter space, avoiding
+  activation-space dictionary learning (SAEs/transcoders)?
+
+hypothesis: >
+  Mechanisms are approximately linear in parameter space (theta* = sum_c P_c, "parameter linearity",
+  App. A.1): on any input most components can be ablated, even partially and in any combination,
+  without changing the output. Training C full-size parameter components with faithfulness +
+  top-k-attribution minimality + Schatten-p simplicity losses recovers ground-truth mechanisms.
+
+journey: >
+  Author contributions (p. 24) say the method "underwent significant iteration" and changed "many
+  times in response to experimental results", but the paper gives no ablation log. What is stated:
+  (1) Original version used an Lp penalty on attributions (App. A.2.3); "did not work as well as our
+  top-k implementation for unknown reasons" and was not explored thoroughly, so top-k (batch top-k,
+  after Bussmann et al. 2024) is the main method. (2) Attributions from the APD model rather than
+  the target model were needed for TMS5-2 only, "an adjustment that proved not to be beneficial in
+  other settings" (Sec. 3.1). (3) Hidden-activation reconstruction loss added for the residual-MLP
+  models (post-nonlinearity MLP activations; App. A.2.2, D.2) because output-only matching can admit
+  alternative computations; authors note theory predicts unused components add noise pre-nonlinearity
+  so matching all activations is not principled (open problem). (4) Components "die" in training, so
+  they over-provision C (130 for 100 features, 200 for 100 features/2 layers, 50 for 40 features).
+  (5) Batch top-k tuning: top-k = p*n_features = 1 forces some batches to have more active features
+  than components, so components merge two features; top-k = 1.28 avoids this but lets features
+  be split across several components (App. C.2, Figs 16-18). Rank-1 constraint fixes both (reported
+  qualitatively, via WandB only). (6) TMS5-2 "very brittle"; hand-coded gated model "particularly
+  difficult to train", "only minor changes in hyperparameters causing large divergences", figure is
+  "cherry-picked" (App. B.1.2). (7) Normalisation of U every step used in the 1-layer model
+  (App. D.2). Compressed-computation vs computation-in-superposition distinction could not be
+  conclusively established (Sec. 3.2).
+
+claims:
+  - text: >
+      APD recovers the ground-truth rank-1 mechanisms Z^(c)=W[:,c] e_c^T of the toy model of
+      superposition, including TMS5-2 where 5 features live in 2 dims (more mechanisms than rank(W)).
+    evidence: >
+      Table 1 and Fig. 3: MMCS 0.998 +/- 0.000 (TMS5-2), 0.996 +/- 0.003 (TMS40-10); ML2R 0.893 +/- 0.004
+      and 0.935 +/- 0.001. Models: 1-layer TMS (W in R^{m1 x m2}), tiny. Number of seeds and meaning of
+      +/- not stated.
+    strength: moderate
+    concerns: >
+      Toy scale; ground truth is defined by the authors and is easy (sparse, one feature = one column);
+      MMCS only checks that each target column has a matching component column, not that components
+      are clean (no check on extra/mixed components or on faithfulness error); ML2R ~0.9 shows
+      shrinkage; TMS5-2 needed a non-default attribution choice; hyperparameters differ between the
+      two settings (App. D.1).
+  - text: >
+      In a 1-layer residual MLP computing 100 functions y_i = x_i + ReLU(x_i) with 50 neurons, APD
+      learns components that each implement one input feature's computation, and ablating unrelated
+      components barely changes loss.
+    evidence: >
+      Figs 6-8 (neuron-contribution plots for first 10 of 100 features; scrubbed vs anti-scrubbed
+      MSE histograms, half of the 130 components ablated). d_resid=1000, d_mlp=50, 100 features,
+      p=0.01. Qualitative, a single trained APD run is shown; seeds not stated.
+    strength: moderate
+    concerns: >
+      Visual/qualitative; no quantitative component-to-feature matching score; histograms are bimodal
+      because some components partly encode a secondary feature (Sec. 3.2, App. C.2); shrinkage; the
+      result depends on batch top-k = 1.28 and loss coefficients (App. C.2, D.2); target model beats
+      the monosemantic baseline only with large d_resid (chosen for that reason); this is the paper's
+      own novel toy task.
+  - text: >
+      APD also recovers feature-specific components that span two MLP layers (cross-layer distributed
+      representations) in a 2-layer residual MLP (25 neurons/layer, 200 components) and in a hand-coded
+      gated trigonometric model.
+    evidence: >
+      Figs 10, 24, 25 (2-layer), Figs 12-13 (hand-coded, n=4 functions x 10 neurons). Single runs.
+    strength: weak
+    concerns: >
+      Authors state "a larger number of imperfections" than 1 layer, more components represent two
+      features (Sec. 3.3); hand-coded result is cherry-picked, components contain weights absent from
+      the target, and training is hypersensitive (App. B.1.2); layer-privileging in Lsimplicity (rank
+      is layer-defined) may bias against cross-layer components (Sec. 4.2.4).
+  - text: >
+      Conceptual claims: APD gives minimal circuits in superposition, a definition of 'feature' as an
+      input property that activates a mechanism, resolves feature splitting, explains feature geometry,
+      and is architecture-agnostic.
+    evidence: >
+      Discussion only (Sec. 4.1); no experiment tests feature splitting, geometry, or non-MLP
+      architectures (no attention, no transformers, no language models).
+    strength: weak
+    concerns: >
+      Argued, not shown. Feature-splitting argument rests on the faithfulness constraint but with
+      over-provisioned C and dying components the practical behaviour is untested. Architecture
+      agnosticism is only 'in theory'.
+  - text: >
+      The assumption of parameter linearity holds approximately for the studied networks.
+    evidence: >
+      App. A.1 refers to Fig. 7 (random-half-ablation test on the 1-layer compressed-computation APD
+      model); theory support from Vaintrob et al. 2024 and Bushnaq & Mendel 2024.
+    strength: weak
+    concerns: >
+      Tested only on one toy model, and it is a test of the learned decomposition, not of the target
+      network having linear mechanisms; a decomposition can be trained to satisfy it. Real LMs untested.
+
+setup: >
+  Target models (all trained with AdamW, wd 0.01; App. D): (a) TMS5-2 and TMS40-10, x_hat =
+  ReLU(W^T W x + b); target trained 5k steps bs 1024 (5-2), 2k steps bs 2048 (40-10), lr 0.005,
+  feature prob 0.05 (the 40-10 text says "each of the 5 input features", an apparent typo).
+  (b) 1-layer residual MLP: 100 features, d_resid 1000, d_mlp 50, fixed random unit-norm W_E, W_U=W_E^T,
+  target y=x+ReLU(x), x in [-1,1], p=0.01; target lr 3e-3 cosine, bs 2048. (c) 2-layer version
+  (25+25 neurons). (d) hand-coded 2-layer gated trig model (5 inputs, 4 functions, 10 neurons each).
+  Only MLP weights are decomposed in (b),(c); embeddings, unembeddings and biases are not decomposed
+  (biases are one always-active component). All synthetic data; model sizes are at most ~100k
+  parameters (derived: 2 x 1000 x 50 for the MLP in/out matrices; the paper does not state counts).
+  APD optimiser: Adam, 5% (or 1%/0.4%) linear warmup, constant lr 0.03 (TMS5-2) or cosine to 1e-3/3e-3.
+  Hyperparameters per experiment (App. D):
+    TMS5-2:   C not stated; 20k steps; bs 2048; batch top-k 0.211 (=432 active comps/batch);
+              coeffs faith 1, minimality 1, simplicity 0.7, p=1; lr 0.03 const.
+    TMS40-10: C=50; 20k steps; bs 2048; batch top-k 1 (=2048 active/batch); faith 1, min 10, simp 20, p=0.9; lr 1e-3 cosine.
+    1-layer:  C=130; 40k steps; bs 2048; batch top-k 1.28 (=2621 active/batch); faith 1, min 1, act-recon 1,
+              simp 10, p=0.9; U normalised every step.
+    2-layer:  C=200; 10k steps; bs 2048; batch top-k 1.28; faith 1, min 2, act-recon 1, simp 7, p=0.9.
+    Hand-coded: C=4 implied (n functions; "C = n" in App. B.1.2); 200k steps; bs 10000; batch top-k 0.2217
+              (=2217 active/batch); faith 0.1, min 5, simp 5, p=1; lr 3e-3 cosine, warmup 0.4%.
+  Note: App. C.2 says batch size 256 for the compressed-computation runs, App. D.2 says 2048
+  (inconsistency in the paper; 1.28 x 256 would be ~328 active components, not 2621).
+  Seeds, error bars, number of repeats, compute budget: not stated.
+
+compute:
+  loss_terms_and_passes_per_step: >
+    Per training step (Sec. 2.2, Fig. 2, App. A.2.2), top-k formulation:
+    (1) faithfulness: MSE(theta*, sum_c P_c): no model forward/backward; O(C*N) elementwise work.
+    (2) attribution step: 1 forward pass of the target model + 1 backward pass PER OUTPUT DIMENSION
+        (d_L backward passes; Eq. 10, footnote 3: "could possibly be reduced to one backward pass with
+        stochastic sources techniques") to get gradients wrt parameters, then A_c(x) = sqrt(mean_o
+        (sum_{l,i,j} dF_o/dtheta * P_c)^2). In the toy residual MLPs d_L = d_resid-sized output
+        (1000 per Fig. 5 architecture; number of backward passes actually used not stated).
+    (3) minimality: 1 forward pass with the sparse (batch top-k) parameter vector kappa(x) = sum_c s_c P_c
+        (a different kappa per sample, so effectively a per-sample weight forward) + 1 backward pass
+        to update components; includes optional hidden-activation reconstruction (needs activations
+        from both forward passes).
+    (4) simplicity: Schatten-p norm of active components via the factorised parametrisation
+        P_c = sum_m U_{c,m} V_{c,m}^T (Eq. 20-22), avoiding an SVD per step.
+    Total per step: 2 forward + (d_L + 1) backward passes (d_L attribution backward + 1 training
+    backward), by the paper's own description. Lp-penalty variant (App. A.2.3, Fig. 11): 1 forward +
+    1 backward for attributions, then a different backward to update, no second forward; found to
+    work worse. No FLOP or time measurements are given.
+  number_of_components_C: >
+    Over-provisioned because components die: 50 (TMS40-10, 40 features, 10 dead allowed), 130 (100
+    features), 200 (100 features, 2 layers). TMS5-2 C not stated. Hand-coded C=4.
+    C is at least the number of ground-truth mechanisms; true C for real models unknown.
+  memory_scaling: >
+    Each component is a full parameter-sized vector P_c in R^N (Eq. 5; Sec. 4.2.1 "each have a memory
+    cost similar to the target network"), so parameter memory ~ C x N (plus Adam states, x3 more) and
+    attributions need gradients wrt all N parameters. Authors say "in the very worst case something
+    like O(N^2)" because C can be up to O(N) (App. A.1 fn 12). Factorised U,V form with rank m can
+    reduce this (components "often" allowed to be full rank in experiments). No measured memory given.
+  training_steps_and_batch: "10k-200k steps depending on setting (see setup); batch 2048, hand-coded 10000."
+  wall_clock_gpu: not stated (no GPU type, no hours, no FLOPs, no hardware anywhere in the text).
+  models_decomposed: >
+    Only toys: TMS (5x2, 40x10), residual MLP with 50 neurons (1 and 2 layers), hand-coded 4-function
+    gated model. Smallest case needs ~10^5 params x C ~ 100-200 copies.
+  models_not_decomposed: >
+    Everything else. Abstract/Sec. 4.2: "APD is currently only appropriate for studying toy models
+    because of its computational cost and hyperparameter sensitivity". No attention, no transformers,
+    no LMs. Embedding/unembedding matrices and biases were deliberately excluded even in the toys.
+  proposed_cost_reductions: >
+    (Sec. 4.2.1, none implemented) low-rank and few-layer-localised components (motivated by
+    Bushnaq & Mendel 2024); apply layer by layer like transcoders; stochastic-source trick to cut the
+    d_L backward passes to 1; Path 2: pre-decomposed architectures (MoE with many cross-layer
+    experts). Authors argue SDL on every layer may cost more, but give no numbers.
+  hyperparameter_sensitivity: >
+    Stated sensitive: loss coefficients (faithfulness, minimality, simplicity) and, "to a lesser
+    extent", batch top-k (App. D.2). Stated NOT very influential: lr warmup/decay, training steps,
+    Lp norm p for simplicity, batch size. Brittle: TMS5-2 ("very brittle"), hand-coded model (minor
+    changes -> large divergence). "Extensive hyperparameter tuning was often required" (Sec. 4.2.2);
+    authors expect sensitivity eases with scale ("fewer issues when scaling up to larger toy models").
+    Coefficients vary a lot between experiments (min 1-10, simp 0.7-20), and the paper admits these
+    inconsistencies are "not due to rigorous ablation studies".
+
+skeptic: >
+  (1) Evaluation is qualitative and ground-truth-by-construction: no quantitative component/feature
+  matching for the residual MLPs, no seeds or variance, single hand-picked runs, a self-declared
+  cherry-picked hand-coded result. Success on tasks where mechanism = one feature = one rank-1ish
+  block says little about dense or hierarchical mechanisms. (2) Heavy tuning per task and the
+  ground truth is known, so tuning is implicitly guided by the answer; with no ground truth in real
+  models there is no way to select hyperparameters (open selection-bias problem). (3) Gradient
+  attributions are first order and break under saturation (softmax, Sec. 4.2.3); attention is not
+  tested. (4) Batch top-k with k chosen from the known sparsity p*n_features: the true number of
+  active mechanisms per input is unknown for real data. (5) Compute: C x N parameters, d_L backward
+  passes per step, so even modest LMs (vocab-sized outputs) look infeasible; the paper never
+  quantifies this. (6) Shrinkage (ML2R ~0.9) and merged/split components mean 'one component = one
+  mechanism' holds only approximately. (7) Faithfulness is a soft MSE penalty; residual error not
+  reported. (8) Paper claims about feature splitting, geometry, safety applications are untested.
+  Untested conditions: attention, transformers, real data, non-sparse inputs, dense/high-rank
+  mechanisms, multiple seeds, larger C than needed, sensitivity sweeps over coefficients.
+
+relevance: >
+  Baseline method for our compute-cost / scalability study of parameter decomposition. It gives the
+  cost model we must beat or measure: components of size N each (C x N memory), attribution via d_L
+  backward passes, a second sparse forward/backward, and tuning-heavy training. Our project should
+  (a) reproduce a toy case (TMS40-10, 1-layer residual MLP) and measure the missing numbers (step
+  time, peak memory, tokens or samples/s, steps to convergence, seed variance), which the paper does
+  not report, (b) check which of the authors' proposed fixes (low rank, layer-wise, cheaper
+  attributions) actually reduce cost, and (c) note that the hyperparameter fragility is itself a
+  scaling cost (tuning runs multiply compute). The 'compute' block above is the reference for the
+  novelty audit of cost claims in successors.
+
+links:
+  - arxiv:2506.20790   # SPD, successor (given by project brief; not read for this card)
+  # Builds on / compared to, arXiv ids not verified (reference list skipped), look up via lit-search:
+  - "Bushnaq & Mendel 2024, Circuits in Superposition (theory of components being low rank)"
+  - "Vaintrob, Mendel, Hanni 2024, Toward a mathematical framework for computation in superposition"
+  - "Elhage et al. 2022, Toy Models of Superposition (TMS target)"
+  - "Bussmann et al. 2024, BatchTopK SAEs (batch top-k)"
+  - "Braun et al. 2024, end-to-end SAEs"
+  - "Dunefsky et al. 2024, Transcoders; Lindsay et al. 2024, crosscoders"
+  - "Nanda 2022 AtP; Kramar et al. 2024 AtP* (gradient attributions)"
+  - "Chan et al. 2022, Causal Scrubbing (scrubbed vs anti-scrubbed test)"
+  - "Mozer & Smolensky 1988; Molchanov et al. 2017 (gradient attribution pruning)"

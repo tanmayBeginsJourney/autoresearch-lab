@@ -38,6 +38,7 @@ stage in `projects/<p>/PROJECT.md`.
 8. `red-team`: a fresh-context subagent tries to break every claim. Answer each objection in writing.
 9. `write-paper`: only `supported` claims; numbers come from macros.
 
+The bar for submitting anything is `docs/standards.md`; venue targets live in each PROJECT.md.
 `researchctl gate P` shows which artifacts are still missing. Confirmatory runs are refused until the
 literature, reproduction and gap gates pass.
 

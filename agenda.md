@@ -1,7 +1,7 @@
 # Research agenda
 <!-- Current state of candidate directions. Rewrite in place; decisions go in the chosen project's journal. -->
 
-Status (2026-11-05): choosing the first direction. Compute: 4x 24 GB + 4x 48 GB MIG slices (rtx), 150 H200 GPU-h/month.
+Status (2026-11-05): direction 3 chosen -> `projects/pdecomp` (target NeurIPS 2027). Direction 1 (`projects/actbias`) is the fallback. Compute: 4x 24 GB + 4x 48 GB MIG slices (rtx), 150 H200 GPU-h/month.
 
 | # | Direction | Evidence so far | Cost of a decisive first experiment | Ceiling | Crowding |
 |---|---|---|---|---|---|
