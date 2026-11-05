@@ -1,0 +1,22 @@
+id: arxiv:2607.01940
+title: "Conditional Co-Ablation: Recovering Self-Repair Backups in Transformer Circuits"
+authors: [Zhiren Gong, et al.]
+year: 2026
+venue: arXiv preprint v3 (23 Sep 2026)
+code: null
+depth: abstract
+question: Can circuits be completed with dormant backup components that only matter after the primary set is ablated?
+hypothesis: >
+  Ranking components by growth in ablation effect after primary-set removal (CoAx) finds backups that per-unit intact-state scores miss.
+journey: Formalises conditional circuit completion; shows a perfectly dormant backup looks irrelevant to per-unit scores.
+claims:
+  - text: In GPT-2-small IOI, joint ablation of a primary-plus-backup name-mover module removes about 1.30 of the margin vs 0.67 from summed single-head effects (as relayed by a web search summary; verify in paper).
+    evidence: web search summary of the paper
+    strength: weak
+    concerns: Number not checked against the paper text.
+setup: Attention heads, GPT-2-small and others.
+skeptic: Diagnostic for completion, not a clustering method; pairwise matrix is a slice, not the method.
+relevance: >
+  Evidence that single-component ablation misses non-additive structure in transformers; motivates
+  interaction probes for PD, and warns that redundancy yields negative interaction signs.
+links: [arxiv:2606.09607]

@@ -1,0 +1,29 @@
+id: doi:10.1371/journal.pcbi.1000065
+title: Functional maps of protein complexes from quantitative genetic interaction data
+authors: [Sourav Bandyopadhyay, Ryan Kelley, Nevan J. Krogan, Trey Ideker]
+year: 2008
+venue: PLoS Computational Biology 4(4):e1000065
+code: null
+depth: skim   # read via a fetched summary of the PMC full text (PMC2289880); not the methods math
+question: Can quantitative genetic interactions plus physical interaction data define protein complexes and their relations?
+hypothesis: >
+  Gene pairs with strong genetic interaction scores and physical evidence belong to one module; modules
+  can be merged agglomeratively by a likelihood score.
+journey: Combines TAP-MS physical scores with the absolute genetic S-score, merges modules to maximise a global likelihood; profile correlation tested and gave no gain.
+claims:
+  - text: Yields a functional map of 91 multimeric complexes from yeast chromosome-organization genes, several novel or expanded.
+    evidence: abstract and results as relayed in the fetched text
+    strength: moderate
+    concerns: Needs a physical-interaction prior; unverified by us beyond the summary.
+  - text: Within modules alleviating interactions are more common (19 vs 9 modules); between modules aggravating ones dominate (219 vs 94 of 313 relations).
+    evidence: results as relayed in the fetched text
+    strength: moderate
+    concerns: Counts taken from the summary; check numbers against the paper before quoting.
+setup: Yeast genes; no ML.
+skeptic: >
+  Biology analogy only; genetic interaction is defined against a multiplicative fitness expectation, which
+  differs from additive output-space interaction in networks.
+relevance: >
+  Biological precedent for clustering by raw pairwise interaction magnitude, and for the sign rule
+  (alleviating within a module, aggravating between redundant ones) that G3 should use.
+links: [arxiv:2509.23684]

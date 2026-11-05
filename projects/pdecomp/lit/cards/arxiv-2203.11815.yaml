@@ -1,0 +1,22 @@
+id: arxiv:2203.11815
+title: "Clustering units in neural networks: upstream vs downstream information"
+authors: [Richard D. Lange, David S. Rolnick, Konrad P. Kording]
+year: 2022
+venue: arXiv preprint v1 (22 Mar 2022)
+code: null
+depth: skim   # abstract and Sec 3.1 read
+question: What makes two hidden units functionally similar, and how modular are trained networks?
+hypothesis: >
+  Modules are clusters of similar units; similarity can be upstream (response to inputs) or downstream (effect of unit variation on outputs).
+journey: Eight pairwise similarity measures, clustered by maximising network-science modularity.
+claims:
+  - text: Dropout increases modularity strongly; upstream and downstream measures agree within families but little across families.
+    evidence: abstract
+    strength: moderate
+    concerns: Small fully connected networks only; abstract-level.
+setup: Simple feedforward networks.
+skeptic: Small models; downstream measures are gradient-based, not joint-ablation interactions.
+relevance: >
+  Supports that upstream (co-activation) and downstream (causal) similarity can give different clusters;
+  gives a modularity-based clustering baseline for hidden units.
+links: [arxiv:2509.23684]

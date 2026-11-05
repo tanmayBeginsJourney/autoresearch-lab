@@ -1,0 +1,29 @@
+id: arxiv:2509.23684
+title: "Hedonic Neurons: A Mechanistic Mapping of Latent Coalitions in Transformer MLPs"
+authors: [not extracted]
+year: 2025
+venue: arXiv preprint (v1, 28 Sep 2025)
+code: null
+depth: skim   # abstract, Sec 3.1-3.2 (valuations), experiment setup and results tables read; appendices proofs not read
+question: Can groups of MLP neurons with non-additive joint-ablation effects be found by coalitional game theory?
+hypothesis: >
+  Neurons form stable coalitions whose pairwise ablation synergy is high; PAC-Top-Cover on a hedonic game
+  finds them better than K-means or hierarchical clustering.
+journey: Pairwise valuation phi_ij from weights and co-activation (OCA) or from ablation (PAS), hedonic game, coalitions tracked across layers.
+claims:
+  - text: Pairwise Ablation Synergy phi_PAS(i,j) = -E[l_-ij - l_-i - l_-j + l] (second-order ablation interaction), approximated with a mixed second derivative times E[a_i a_j], is used as the affinity for clustering neurons.
+    evidence: Sec 3.2 (Eq. for PAS)
+    strength: strong
+    concerns: The Hessian approximation is not validated against exact joint ablation in the text read.
+  - text: Coalitions achieve higher pairwise synergy than clustering baselines (about 0.11-0.14 vs 0.02-0.03) and larger OOD drops under ablation.
+    evidence: Sec 4 tables
+    strength: moderate
+    concerns: Averages over 3 seeds; baselines cluster raw neurons; synergy is evaluated with the same quantity that the method optimises.
+setup: Neurons of fine-tuned LLaMA, Mistral, Pythia rerankers; layer-local scalar logit; PAS run took 280 min.
+skeptic: >
+  Evaluating synergy with the objective used for clustering is circular. No ground truth for what a
+  coalition should be, so no recovery metric. Single task family (MS MARCO rerankers).
+relevance: >
+  Closest published prior for G3 (pairwise ablation non-additivity as clustering affinity). Neuron level,
+  single layer; not parameter decomposition. Any G3 novelty claim must be framed against this.
+links: [arxiv:2006.10965, arxiv:2610.20748]

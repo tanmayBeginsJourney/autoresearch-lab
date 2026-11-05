@@ -1,0 +1,28 @@
+id: arxiv:2006.10965
+title: "How does this interaction affect me? Interpretable attribution for feature interactions"
+authors: [Michael Tsang, Sirisha Rambhatla, Yan Liu]
+year: 2020
+venue: arXiv preprint v1 (19 Jun 2020); published venue not verified
+code: null
+depth: skim   # abstract, Sec 4.2 ArchDetect read; ArchAttribute axioms and experiments skimmed
+question: How to detect pairwise and higher-order feature interactions in a black-box model and attribute them?
+hypothesis: >
+  Pairwise non-additivity of f, measured as a mixed second difference in two contexts, detects interactions in O(p^2) calls, and overlapping pairs merge into disjoint interaction sets.
+journey: Defines omega_ij as the squared mixed second difference with other features Bernoulli(0.5), approximated by the contexts x* and baseline x0.
+claims:
+  - text: ArchDetect finds all pairwise interactions in O(p^2) model calls and merges pairs into disjoint arbitrary-order interaction sets.
+    evidence: Sec 4.2, Eq. 4-5
+    strength: strong
+    concerns: Input-feature interactions around one data instance and baseline; not parameters or internal units.
+  - text: Detection AUC is 1.0 on synthetic ground-truth functions, above Integrated Hessians, Shapley-Taylor and other detectors in their table.
+    evidence: Table 1b
+    strength: moderate
+    concerns: Synthetic functions with known additive and pairwise structure.
+setup: Image and text classifiers plus synthetic functions.
+skeptic: >
+  Two-context approximation of the Bernoulli(0.5) expectation is a heuristic; behaviour under strong
+  hub features not studied in the text read.
+relevance: >
+  Same algorithmic pattern as G3 (pair non-additivity then group merging). Its full Bernoulli(0.5)
+  version is the Banzhaf pair interaction we would estimate from masks.
+links: [arxiv:2509.23684]
