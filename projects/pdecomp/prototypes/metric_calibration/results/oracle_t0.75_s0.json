@@ -1,0 +1,27 @@
+[
+ {
+  "name": "oracle_t0.75_s0",
+  "C": 50,
+  "imp": 0.003,
+  "steps": 1500,
+  "seed": 0,
+  "train_s": 19.0,
+  "family": "oracle_mixed",
+  "rot": 0.75,
+  "n_rep": 39,
+  "gt_mmcs_col": 0.8107088804244995,
+  "gt_fullcos": 0.5982430577278137,
+  "gt_frac_recovered": 0.0,
+  "gt_onehot_acc": 0.0,
+  "gt_n_alive": 38,
+  "gt_spurious_alive": 38,
+  "m_unmasked": 4.842163128793153e-12,
+  "m_ci_masked": 0.008692675270140171,
+  "m_rounded": 0.007849723100662231,
+  "m_stoch": 0.003549178800312802,
+  "m_l0": 1.02587890625,
+  "m_faith": 3.918398938651535e-11,
+  "m_pgd10": 0.01156584918498993,
+  "m_pgd40": 0.012056014500558376
+ }
+]

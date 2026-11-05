@@ -1,0 +1,21 @@
+--arm exact --ratio 1 --coef 1e-3 --seed 0 --methods dpd,svd,lora,full --steps 2000
+--arm exact --ratio 1.5 --coef 1e-3 --seed 0 --methods dpd,svd,lora --steps 2000
+--arm exact --ratio 3 --coef 1e-3 --seed 0 --methods dpd,svd,lora --steps 2000
+--arm exact+drift --coef 1e-3 --seed 0 --methods dpd,svd,lora --steps 2000
+--arm drift --coef 1e-3 --seed 0 --methods dpd,svd --steps 2000
+--arm exact --coef 3e-4 --seed 0 --methods dpd,svd --steps 2000
+--arm exact --coef 3e-3 --seed 0 --methods dpd,svd --steps 2000
+--arm exact --ratio 1 --coef 1e-3 --seed 1 --methods dpd,svd,lora,full --steps 2000
+--arm exact --ratio 1.5 --coef 1e-3 --seed 1 --methods dpd,svd,lora --steps 2000
+--arm exact --ratio 3 --coef 1e-3 --seed 1 --methods dpd,svd,lora --steps 2000
+--arm exact+drift --coef 1e-3 --seed 1 --methods dpd,svd,lora --steps 2000
+--arm drift --coef 1e-3 --seed 1 --methods dpd,svd --steps 2000
+--arm exact --coef 3e-4 --seed 1 --methods dpd,svd --steps 2000
+--arm exact --coef 3e-3 --seed 1 --methods dpd,svd --steps 2000
+--arm exact --ratio 1 --coef 1e-3 --seed 2 --methods dpd,svd,lora,full --steps 2000
+--arm exact --ratio 1.5 --coef 1e-3 --seed 2 --methods dpd,svd,lora --steps 2000
+--arm exact --ratio 3 --coef 1e-3 --seed 2 --methods dpd,svd,lora --steps 2000
+--arm exact+drift --coef 1e-3 --seed 2 --methods dpd,svd,lora --steps 2000
+--arm drift --coef 1e-3 --seed 2 --methods dpd,svd --steps 2000
+--arm exact --coef 3e-4 --seed 2 --methods dpd,svd --steps 2000
+--arm exact --coef 3e-3 --seed 2 --methods dpd,svd --steps 2000

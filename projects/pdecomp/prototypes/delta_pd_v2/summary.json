@@ -1,0 +1,770 @@
+{
+ "exact|r1|c0.001|eq|dpd": {
+  "hung": "0.99 \u00b1 0.00",
+  "clus": "0.99 \u00b1 0.00",
+  "restore": "0.98 \u00b1 0.01",
+  "coll": "0.01 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|full": {
+  "hung": "0.39 \u00b1 0.03",
+  "clus": "0.34 \u00b1 0.02",
+  "restore": "-0.90 \u00b1 0.24",
+  "coll": "0.03 \u00b1 0.02",
+  "untouched": "0.05 \u00b1 0.01",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|svd": {
+  "hung": "0.43 \u00b1 0.03",
+  "clus": "0.43 \u00b1 0.03",
+  "restore": "0.24 \u00b1 0.03",
+  "coll": "0.26 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|lora_svd": {
+  "hung": "0.47 \u00b1 0.04",
+  "clus": "0.43 \u00b1 0.09",
+  "restore": "0.33 \u00b1 0.01",
+  "coll": "0.23 \u00b1 0.03",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|lora_raw": {
+  "hung": "0.38 \u00b1 0.03",
+  "clus": "0.40 \u00b1 0.04",
+  "restore": "0.47 \u00b1 0.14",
+  "coll": "0.22 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.01 \u00b1 0.02",
+  "coll": "0.17 \u00b1 0.04",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.001|eq|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|dpd": {
+  "hung": "0.93 \u00b1 0.01",
+  "clus": "0.99 \u00b1 0.00",
+  "restore": "0.93 \u00b1 0.02",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|full": {
+  "hung": "0.44 \u00b1 0.01",
+  "clus": "0.41 \u00b1 0.01",
+  "restore": "-0.56 \u00b1 0.16",
+  "coll": "0.04 \u00b1 0.02",
+  "untouched": "0.10 \u00b1 0.01",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|svd": {
+  "hung": "0.68 \u00b1 0.02",
+  "clus": "0.68 \u00b1 0.02",
+  "restore": "0.62 \u00b1 0.01",
+  "coll": "0.22 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.01 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|lora_svd": {
+  "hung": "0.43 \u00b1 0.06",
+  "clus": "0.41 \u00b1 0.08",
+  "restore": "0.33 \u00b1 0.05",
+  "coll": "0.21 \u00b1 0.05",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|lora_raw": {
+  "hung": "0.35 \u00b1 0.02",
+  "clus": "0.37 \u00b1 0.01",
+  "restore": "0.41 \u00b1 0.11",
+  "coll": "0.23 \u00b1 0.05",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "-0.05 \u00b1 0.04",
+  "coll": "0.29 \u00b1 0.05",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.001|all|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|dpd": {
+  "hung": "0.95 \u00b1 0.04",
+  "clus": "0.97 \u00b1 0.02",
+  "restore": "0.98 \u00b1 0.02",
+  "coll": "0.01 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|svd": {
+  "hung": "0.71 \u00b1 0.02",
+  "clus": "0.71 \u00b1 0.02",
+  "restore": "0.47 \u00b1 0.01",
+  "coll": "0.23 \u00b1 0.02",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|lora_svd": {
+  "hung": "0.54 \u00b1 0.18",
+  "clus": "0.54 \u00b1 0.18",
+  "restore": "0.33 \u00b1 0.08",
+  "coll": "0.26 \u00b1 0.11",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|lora_raw": {
+  "hung": "0.36 \u00b1 0.07",
+  "clus": "0.38 \u00b1 0.09",
+  "restore": "0.41 \u00b1 0.13",
+  "coll": "0.25 \u00b1 0.04",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.01 \u00b1 0.02",
+  "coll": "0.21 \u00b1 0.04",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|eq|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|dpd": {
+  "hung": "0.91 \u00b1 0.03",
+  "clus": "0.97 \u00b1 0.01",
+  "restore": "0.91 \u00b1 0.02",
+  "coll": "0.01 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|svd": {
+  "hung": "0.83 \u00b1 0.02",
+  "clus": "0.83 \u00b1 0.02",
+  "restore": "0.73 \u00b1 0.01",
+  "coll": "0.16 \u00b1 0.02",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.01 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|lora_svd": {
+  "hung": "0.42 \u00b1 0.09",
+  "clus": "0.42 \u00b1 0.10",
+  "restore": "0.37 \u00b1 0.05",
+  "coll": "0.27 \u00b1 0.07",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|lora_raw": {
+  "hung": "0.34 \u00b1 0.05",
+  "clus": "0.35 \u00b1 0.04",
+  "restore": "0.41 \u00b1 0.08",
+  "coll": "0.29 \u00b1 0.05",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "-0.05 \u00b1 0.04",
+  "coll": "0.30 \u00b1 0.05",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1.5|c0.001|all|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|dpd": {
+  "hung": "0.85 \u00b1 0.16",
+  "clus": "0.90 \u00b1 0.12",
+  "restore": "0.85 \u00b1 0.20",
+  "coll": "0.05 \u00b1 0.07",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|svd": {
+  "hung": "0.89 \u00b1 0.01",
+  "clus": "0.89 \u00b1 0.01",
+  "restore": "0.68 \u00b1 0.01",
+  "coll": "0.15 \u00b1 0.02",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.01 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|lora_svd": {
+  "hung": "0.71 \u00b1 0.16",
+  "clus": "0.69 \u00b1 0.18",
+  "restore": "0.51 \u00b1 0.11",
+  "coll": "0.11 \u00b1 0.03",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|lora_raw": {
+  "hung": "0.42 \u00b1 0.05",
+  "clus": "0.39 \u00b1 0.02",
+  "restore": "0.46 \u00b1 0.05",
+  "coll": "0.28 \u00b1 0.04",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.01 \u00b1 0.02",
+  "coll": "0.35 \u00b1 0.06",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r3|c0.001|eq|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|dpd": {
+  "hung": "0.86 \u00b1 0.09",
+  "clus": "0.94 \u00b1 0.06",
+  "restore": "0.86 \u00b1 0.11",
+  "coll": "0.03 \u00b1 0.03",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|svd": {
+  "hung": "0.94 \u00b1 0.01",
+  "clus": "0.94 \u00b1 0.01",
+  "restore": "0.84 \u00b1 0.01",
+  "coll": "0.09 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.01 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|lora_svd": {
+  "hung": "0.49 \u00b1 0.12",
+  "clus": "0.48 \u00b1 0.12",
+  "restore": "0.42 \u00b1 0.10",
+  "coll": "0.14 \u00b1 0.10",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|lora_raw": {
+  "hung": "0.35 \u00b1 0.11",
+  "clus": "0.33 \u00b1 0.11",
+  "restore": "0.40 \u00b1 0.11",
+  "coll": "0.23 \u00b1 0.11",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "-0.05 \u00b1 0.03",
+  "coll": "0.36 \u00b1 0.05",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r3|c0.001|all|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|dpd": {
+  "hung": "0.85 \u00b1 0.04",
+  "clus": "0.88 \u00b1 0.04",
+  "restore": "0.64 \u00b1 0.07",
+  "coll": "0.08 \u00b1 0.03",
+  "untouched": "0.05 \u00b1 0.01",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|svd": {
+  "hung": "0.38 \u00b1 0.02",
+  "clus": "0.25 \u00b1 0.07",
+  "restore": "0.18 \u00b1 0.10",
+  "coll": "0.17 \u00b1 0.05",
+  "untouched": "0.02 \u00b1 0.00",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|svd_varimax": {
+  "hung": "0.93 \u00b1 0.01",
+  "clus": "0.93 \u00b1 0.01",
+  "restore": "0.62 \u00b1 0.00",
+  "coll": "0.06 \u00b1 0.00",
+  "untouched": "0.04 \u00b1 0.00",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|svd_ica": {
+  "hung": "0.93 \u00b1 0.01",
+  "clus": "0.93 \u00b1 0.01",
+  "restore": "0.62 \u00b1 0.00",
+  "coll": "0.04 \u00b1 0.00",
+  "untouched": "0.04 \u00b1 0.00",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|lora_svd": {
+  "hung": "0.39 \u00b1 0.05",
+  "clus": "0.35 \u00b1 0.08",
+  "restore": "0.29 \u00b1 0.03",
+  "coll": "0.18 \u00b1 0.04",
+  "untouched": "0.06 \u00b1 0.02",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|lora_raw": {
+  "hung": "0.30 \u00b1 0.01",
+  "clus": "0.26 \u00b1 0.05",
+  "restore": "0.20 \u00b1 0.03",
+  "coll": "0.16 \u00b1 0.02",
+  "untouched": "0.05 \u00b1 0.02",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.01 \u00b1 0.02",
+  "coll": "0.15 \u00b1 0.02",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|eq|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.58 \u00b1 0.01",
+  "coll": "0.02 \u00b1 0.01",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|dpd": {
+  "hung": "0.87 \u00b1 0.05",
+  "clus": "0.91 \u00b1 0.02",
+  "restore": "0.72 \u00b1 0.03",
+  "coll": "0.08 \u00b1 0.02",
+  "untouched": "0.05 \u00b1 0.00",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|svd": {
+  "hung": "0.63 \u00b1 0.03",
+  "clus": "0.58 \u00b1 0.04",
+  "restore": "0.47 \u00b1 0.05",
+  "coll": "0.21 \u00b1 0.02",
+  "untouched": "0.03 \u00b1 0.00",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|svd_varimax": {
+  "hung": "0.95 \u00b1 0.00",
+  "clus": "0.95 \u00b1 0.00",
+  "restore": "0.71 \u00b1 0.01",
+  "coll": "0.05 \u00b1 0.01",
+  "untouched": "0.04 \u00b1 0.00",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|svd_ica": {
+  "hung": "0.95 \u00b1 0.00",
+  "clus": "0.95 \u00b1 0.00",
+  "restore": "0.71 \u00b1 0.01",
+  "coll": "0.05 \u00b1 0.01",
+  "untouched": "0.04 \u00b1 0.00",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|lora_svd": {
+  "hung": "0.30 \u00b1 0.08",
+  "clus": "0.28 \u00b1 0.09",
+  "restore": "0.23 \u00b1 0.06",
+  "coll": "0.19 \u00b1 0.04",
+  "untouched": "0.06 \u00b1 0.01",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|lora_raw": {
+  "hung": "0.25 \u00b1 0.05",
+  "clus": "0.23 \u00b1 0.05",
+  "restore": "0.18 \u00b1 0.09",
+  "coll": "0.20 \u00b1 0.03",
+  "untouched": "0.06 \u00b1 0.01",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "-0.04 \u00b1 0.03",
+  "coll": "0.25 \u00b1 0.04",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact+drift|r1|c0.001|all|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.64 \u00b1 0.02",
+  "coll": "0.02 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.0003|eq|dpd": {
+  "hung": "0.92 \u00b1 0.08",
+  "clus": "0.92 \u00b1 0.08",
+  "restore": "0.81 \u00b1 0.10",
+  "coll": "0.05 \u00b1 0.04",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|eq|svd": {
+  "hung": "0.43 \u00b1 0.03",
+  "clus": "0.43 \u00b1 0.03",
+  "restore": "0.24 \u00b1 0.03",
+  "coll": "0.26 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|eq|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|eq|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|eq|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.01 \u00b1 0.02",
+  "coll": "0.17 \u00b1 0.04",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.0003|eq|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.0003|all|dpd": {
+  "hung": "0.91 \u00b1 0.06",
+  "clus": "0.95 \u00b1 0.04",
+  "restore": "0.85 \u00b1 0.05",
+  "coll": "0.04 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|all|svd": {
+  "hung": "0.68 \u00b1 0.02",
+  "clus": "0.68 \u00b1 0.02",
+  "restore": "0.62 \u00b1 0.01",
+  "coll": "0.22 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|all|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|all|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.01 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.0003|all|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "-0.05 \u00b1 0.04",
+  "coll": "0.29 \u00b1 0.05",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.0003|all|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.003|eq|dpd": {
+  "hung": "0.92 \u00b1 0.09",
+  "clus": "0.92 \u00b1 0.09",
+  "restore": "0.82 \u00b1 0.13",
+  "coll": "0.05 \u00b1 0.06",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|eq|svd": {
+  "hung": "0.43 \u00b1 0.03",
+  "clus": "0.43 \u00b1 0.03",
+  "restore": "0.24 \u00b1 0.03",
+  "coll": "0.26 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|eq|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|eq|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|eq|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "0.01 \u00b1 0.02",
+  "coll": "0.17 \u00b1 0.04",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.003|eq|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.003|all|dpd": {
+  "hung": "0.90 \u00b1 0.06",
+  "clus": "0.95 \u00b1 0.04",
+  "restore": "0.82 \u00b1 0.06",
+  "coll": "0.03 \u00b1 0.03",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|all|svd": {
+  "hung": "0.68 \u00b1 0.02",
+  "clus": "0.68 \u00b1 0.02",
+  "restore": "0.62 \u00b1 0.01",
+  "coll": "0.22 \u00b1 0.01",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|all|svd_varimax": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|all|svd_ica": {
+  "hung": "1.00 \u00b1 0.00",
+  "clus": "1.00 \u00b1 0.00",
+  "restore": "0.99 \u00b1 0.00",
+  "coll": "0.01 \u00b1 0.00",
+  "untouched": "0.00 \u00b1 0.00",
+  "n": 3
+ },
+ "exact|r1|c0.003|all|random": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "-0.05 \u00b1 0.04",
+  "coll": "0.29 \u00b1 0.05",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "exact|r1|c0.003|all|oracle": {
+  "hung": "n/a",
+  "clus": "n/a",
+  "restore": "1.00 \u00b1 0.00",
+  "coll": "0.00 \u00b1 0.00",
+  "untouched": "n/a",
+  "n": 3
+ },
+ "cost|dpd|r1|c0.0003": "| dpd | 1 | 0.0003 | 9.00 \u00b1 0.82 | 1.67 \u00b1 0.47 / 2.00 \u00b1 0.82 | 0.67 \u00b1 0.47 | 41.77 \u00b1 33.56 | [400, 500, 500] | 0.01 \u00b1 0.00 |",
+ "cost|dpd|r1|c0.001": "| dpd | 1 | 0.001 | 6.33 \u00b1 0.47 | 1.00 \u00b1 0.00 / 1.00 \u00b1 0.00 | 0.00 \u00b1 0.00 | 64.97 \u00b1 33.03 | [500, 600, 700] | 0.02 \u00b1 0.00 |",
+ "cost|dpd|r1|c0.003": "| dpd | 1 | 0.003 | 5.67 \u00b1 0.47 | 1.00 \u00b1 0.00 / 1.33 \u00b1 0.47 | 0.33 \u00b1 0.47 | 41.79 \u00b1 32.24 | [None, None, None] | 0.09 \u00b1 0.01 |",
+ "cost|dpd|r1.5|c0.001": "| dpd | 1.5 | 0.001 | 7.00 \u00b1 0.82 | 1.00 \u00b1 0.00 / 1.33 \u00b1 0.47 | 0.00 \u00b1 0.00 | 42.46 \u00b1 31.57 | [400, 500, 600] | 0.02 \u00b1 0.00 |",
+ "cost|dpd|r3|c0.001": "| dpd | 3 | 0.001 | 8.00 \u00b1 0.82 | 1.33 \u00b1 0.47 / 2.67 \u00b1 0.47 | 0.33 \u00b1 0.47 | 40.41 \u00b1 31.63 | [400, 500, 600] | 0.01 \u00b1 0.00 |",
+ "cost|full|r1|c0.001": "| full | 1 | 0.001 | 49.67 \u00b1 0.47 | 4.00 \u00b1 0.82 / 4.33 \u00b1 0.47 | 0.00 \u00b1 0.00 | 42.60 \u00b1 18.08 | [None, None, None] | 0.20 \u00b1 0.02 |",
+ "cost|svd_gate|r1|c0.0003": "| svd_gate | 1 | 0.0003 | 5 (fixed) | 2.67 \u00b1 0.47 / 2.67 \u00b1 0.47 | 2.67 \u00b1 0.47 | 42.14 \u00b1 25.80 | - | 0.14 \u00b1 0.12 |",
+ "cost|svd_gate|r1|c0.001": "| svd_gate | 1 | 0.001 | 5 (fixed) | 2.67 \u00b1 0.47 / 2.67 \u00b1 0.47 | 2.67 \u00b1 0.47 | 55.96 \u00b1 27.51 | - | 0.16 \u00b1 0.12 |",
+ "cost|svd_gate|r1|c0.003": "| svd_gate | 1 | 0.003 | 5 (fixed) | 2.67 \u00b1 0.47 / 2.67 \u00b1 0.47 | 2.67 \u00b1 0.47 | 41.28 \u00b1 24.81 | - | 0.26 \u00b1 0.12 |",
+ "cost|svd_gate|r1.5|c0.001": "| svd_gate | 1.5 | 0.001 | 5 (fixed) | 2.00 \u00b1 0.00 / 2.00 \u00b1 0.82 | 1.67 \u00b1 0.47 | 41.62 \u00b1 24.55 | - | 0.14 \u00b1 0.11 |",
+ "cost|svd_gate|r3|c0.001": "| svd_gate | 3 | 0.001 | 5 (fixed) | 2.33 \u00b1 0.47 / 1.00 \u00b1 0.00 | 1.00 \u00b1 0.00 | 41.55 \u00b1 24.29 | - | 0.07 \u00b1 0.07 |",
+ "drift": "alive (l1,l2) [(0, 0), (0, 0), (0, 0)]; sum alive comp norm [0, 0, 0]; ||dW1||+||dW2|| [0.49, 0.49, 0.49]; change MSE ['1.7e-04', '1.7e-04', '1.4e-04']; svd_gate recon_ci_rel [1.0, 1.0, 1.0]",
+ "kx2|eq|svd": {
+  "hung": "0.38 \u00b1 0.02",
+  "clus": "0.25 \u00b1 0.07",
+  "restore": "0.18 \u00b1 0.10",
+  "coll": "0.17 \u00b1 0.05"
+ },
+ "kx2|eq|svd_varimax": {
+  "hung": "0.94 \u00b1 0.01",
+  "clus": "0.94 \u00b1 0.01",
+  "restore": "0.62 \u00b1 0.00",
+  "coll": "0.05 \u00b1 0.00"
+ },
+ "kx2|eq|svd_ica": {
+  "hung": "0.93 \u00b1 0.01",
+  "clus": "0.93 \u00b1 0.01",
+  "restore": "0.62 \u00b1 0.01",
+  "coll": "0.04 \u00b1 0.01"
+ },
+ "kx2|all|svd": {
+  "hung": "0.63 \u00b1 0.03",
+  "clus": "0.58 \u00b1 0.04",
+  "restore": "0.47 \u00b1 0.05",
+  "coll": "0.21 \u00b1 0.02"
+ },
+ "kx2|all|svd_varimax": {
+  "hung": "0.93 \u00b1 0.03",
+  "clus": "0.95 \u00b1 0.00",
+  "restore": "0.71 \u00b1 0.01",
+  "coll": "0.05 \u00b1 0.01"
+ },
+ "kx2|all|svd_ica": {
+  "hung": "0.95 \u00b1 0.00",
+  "clus": "0.95 \u00b1 0.00",
+  "restore": "0.71 \u00b1 0.01",
+  "coll": "0.05 \u00b1 0.01"
+ }
+}

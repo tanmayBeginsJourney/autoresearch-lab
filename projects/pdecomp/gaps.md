@@ -31,6 +31,9 @@ Notes that change plans:
   the leak into a bias (no retraining) restore robustness? Check arXiv:2609.10210 first.
 - All: prototypes run SPD at 2.5-3k steps; nothing is evidence until SPD reproduces at full budget (GPU).
 
+- G1 v2: rotated SVD ties Delta-PD in the separable case; G1 narrowed to superposed, input-gated,
+  cross-layer changes. G2 calibration: no metric beat stochastic recon on a weak population.
+
 ## Pending
 Decision after the CPU prototypes (delta_pd, warmstart) and the SPD reproduction report land.
 Kill criteria for G1: Delta-PD does not beat SVD of DeltaW on per-change recovery, or costs more than

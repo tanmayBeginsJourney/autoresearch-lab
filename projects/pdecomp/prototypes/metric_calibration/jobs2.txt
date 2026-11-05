@@ -1,0 +1,26 @@
+--name oracle_t0_s0 --oracle 0 --steps 1500 --batch 256 --seed 0
+--name oracle_t0.05_s0 --oracle 0.05 --steps 1500 --batch 256 --seed 0
+--name oracle_t0.1_s0 --oracle 0.1 --steps 1500 --batch 256 --seed 0
+--name oracle_t0.2_s0 --oracle 0.2 --steps 1500 --batch 256 --seed 0
+--name oracle_t0.35_s0 --oracle 0.35 --steps 1500 --batch 256 --seed 0
+--name oracle_t0.5_s0 --oracle 0.5 --steps 1500 --batch 256 --seed 0
+--name oracle_t0.75_s0 --oracle 0.75 --steps 1500 --batch 256 --seed 0
+--name oracle_t1.0_s0 --oracle 1.0 --steps 1500 --batch 256 --seed 0
+--name oracle_t1.5_s0 --oracle 1.5 --steps 1500 --batch 256 --seed 0
+--name oracle_t3.0_s0 --oracle 3.0 --steps 1500 --batch 256 --seed 0
+--name oracle_t0_s1 --oracle 0 --steps 1500 --batch 256 --seed 1
+--name oracle_t0.05_s1 --oracle 0.05 --steps 1500 --batch 256 --seed 1
+--name oracle_t0.1_s1 --oracle 0.1 --steps 1500 --batch 256 --seed 1
+--name oracle_t0.2_s1 --oracle 0.2 --steps 1500 --batch 256 --seed 1
+--name oracle_t0.35_s1 --oracle 0.35 --steps 1500 --batch 256 --seed 1
+--name oracle_t0.5_s1 --oracle 0.5 --steps 1500 --batch 256 --seed 1
+--name oracle_t0.75_s1 --oracle 0.75 --steps 1500 --batch 256 --seed 1
+--name oracle_t1.0_s1 --oracle 1.0 --steps 1500 --batch 256 --seed 1
+--name oracle_t1.5_s1 --oracle 1.5 --steps 1500 --batch 256 --seed 1
+--name oracle_t3.0_s1 --oracle 3.0 --steps 1500 --batch 256 --seed 1
+--name steps0_s0 --steps 0 --seed 0
+--name steps300_s0 --steps 300 --seed 0
+--name steps1000_s0 --steps 1000 --seed 0
+--name imp1e-2_s0 --steps 4000 --imp 1e-2 --seed 0
+--name imp3e-2_s0 --steps 4000 --imp 3e-2 --seed 0
+--name C20_s0 --steps 4000 --C 20 --seed 0

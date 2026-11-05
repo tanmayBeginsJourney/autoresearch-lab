@@ -1,0 +1,21 @@
+--name steps10000_s0 --steps 10000 --imp 3e-3 --seed 0
+--steps 4000 --name imp3e-3_s0 --imp 3e-3 --seed 0 --rotate 0.1,0.3,1.0
+--steps 4000 --name imp3e-3_s1 --imp 3e-3 --seed 1 --rotate 0.1,0.3,1.0
+--steps 4000 --name imp3e-4_s0 --imp 3e-4 --seed 0
+--steps 4000 --name imp3e-4_s1 --imp 3e-4 --seed 1
+--steps 4000 --name imp1e-3_s0 --imp 1e-3 --seed 0
+--steps 4000 --name imp1e-3_s1 --imp 1e-3 --seed 1
+--steps 4000 --name imp1e-2_s0 --imp 1e-2 --seed 0
+--steps 4000 --name imp1e-2_s1 --imp 1e-2 --seed 1
+--steps 4000 --name imp3e-2_s0 --imp 3e-2 --seed 0
+--steps 4000 --name imp3e-2_s1 --imp 3e-2 --seed 1
+--steps 4000 --name C20_s0 --C 20 --seed 0
+--steps 4000 --name C20_s1 --C 20 --seed 1
+--steps 4000 --name C100_s0 --C 100 --seed 0
+--steps 4000 --name C100_s1 --C 100 --seed 1
+--steps 4000 --name imp1e-1_s0 --imp 1e-1 --seed 0
+--steps 4000 --name imp0_s0 --imp 0 --seed 0
+--name steps0_s0 --steps 0 --seed 0
+--name steps300_s0 --steps 300 --seed 0
+--name steps1000_s0 --steps 1000 --seed 0
+--name steps2000_s0 --steps 2000 --seed 0
