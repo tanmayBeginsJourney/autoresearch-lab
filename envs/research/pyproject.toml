@@ -1,0 +1,19 @@
+# uv env "research": researchctl env sync research  (venv lives in $LAB_ROOT/venvs/research, never in the repo)
+# torch comes from the CUDA 12.8 index: needed for Blackwell (sm_120) RTX PRO slices, fine on H200 (sm_90).
+[project]
+name = "lab-env-research"
+version = "0"
+requires-python = ">=3.11,<3.14"
+dependencies = ["torch>=2.8", "transformers>=4.56", "datasets>=4", "accelerate>=1.10", "peft>=0.17", "safetensors", "huggingface_hub[hf_xet]>=0.34", "numpy", "pandas", "scipy", "matplotlib", "pyyaml", "tqdm", "autoresearch-lab"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+autoresearch-lab = { path = "../..", editable = true }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true

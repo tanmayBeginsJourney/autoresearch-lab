@@ -1,0 +1,34 @@
+# Lab configuration: cluster facts (discovered 2026-11-05 via probe) and enforced policy.
+# researchctl reads this file; change policy here, not in code.
+
+cluster:
+  name: plaksha-hpc
+  user: tanmay.mohan.ug24
+  account: null            # Slurm account for jobs; null = Slurm default. Available: courses, abhishek.dureja, general
+  max_walltime: "5-00:00:00"
+
+lab_root: ${SCRATCH}/lab   # runs, venvs, caches, read-only model snapshots
+
+# Resource profiles. MIG slices of RTX PRO GPUs on partition rtx; full H200 NVL on partition h200.
+profiles:
+  cpu:  {partition: rtx,  gres: null,                    cpus: 8,  mem: 32G,  vram_gb: 0}
+  s24:  {partition: rtx,  gres: "gpu:1g.24gb:1",         cpus: 8,  mem: 64G,  vram_gb: 24}
+  s48:  {partition: rtx,  gres: "gpu:2g.48gb:1",         cpus: 16, mem: 96G,  vram_gb: 48}
+  h200: {partition: h200, gres: "gpu:nvidia_h200_nvl:1", cpus: 32, mem: 256G, vram_gb: 141, requires_approval: true}
+
+envs: [research, interp, kernels]
+
+policy:
+  h200_gpu_hours_per_month: 150
+  max_gpu_hours_per_submit: 48       # above this, submit needs --cost-reason (logged in the record)
+  max_parallel_tasks: 4              # array throttle (%N) so one sweep cannot monopolise the slices
+  smoke_max_minutes: 30
+  exec_max_minutes: 60               # researchctl exec (quick interactive checks)
+  min_seeds_confirmatory: 3
+  alpha: 0.05                        # family-wise, Holm-corrected across a project's confirmatory claims
+  underuse_mem_fraction: 0.25        # flag runs whose peak memory used < 25% of the slice
+  gates:                             # artifacts required before the first confirmatory experiment
+    min_paper_cards: 12
+    min_full_read_cards: 5
+    require_reproduction: true
+    require_gap_decision: true

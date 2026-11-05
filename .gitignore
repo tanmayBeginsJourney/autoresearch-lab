@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+# Large or generated artifacts never belong in git: they live under $LAB_ROOT on scratch
+*.pt
+*.pth
+*.safetensors
+*.bin
+*.ckpt
+*.npy
+*.npz
+wandb/
+mlruns/
+runs/
+outputs/
+# Editor / OS / agent scratch
+.DS_Store
+.idea/
+.vscode/
+*.swp
+.claude/settings.local.json
+scratch/
+tmp/
+# LaTeX build products (sources and final PDFs are tracked)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
