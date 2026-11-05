@@ -3,7 +3,7 @@ title: Adversarial Circuit Evaluation
 authors: [Niels uit de Bos, Adria Garriga-Alonso]
 year: 2024
 venue: arXiv (cs.LG)
-depth: abstract+summary   # NOT full text: PDF was binary-unreadable via WebFetch; method details come from a fetched HTML summary. Re-read before citing specifics.
+depth: abstract   # NOT full text: PDF was binary-unreadable via WebFetch; method details come from a fetched HTML summary. Re-read before citing specifics.
 question: Does a circuit (IOI, greater-than, docstring) match the full model on worst-case inputs, not just average inputs?
 hypothesis: Worst-case divergence between circuit (resample ablation) and model is a stricter faithfulness test than average-case metrics.
 claims:

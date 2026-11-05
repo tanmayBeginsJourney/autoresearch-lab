@@ -3,7 +3,7 @@ title: "Certified Circuits: Stability Guarantees for Mechanistic Circuits"
 authors: [Alaa Anani, Tobias Lorenz, Bernt Schiele, Mario Fritz, Jonas Fischer]
 year: 2026
 venue: ICML 2026 (per icml.cc listing)
-depth: abstract+summary   # not full text
+depth: abstract   # not full text
 question: Can circuit discovery output come with provable stability?
 hypothesis: Wrapping any black-box discovery algorithm in randomized deletion smoothing certifies per-component inclusion against bounded dataset edits.
 claims:

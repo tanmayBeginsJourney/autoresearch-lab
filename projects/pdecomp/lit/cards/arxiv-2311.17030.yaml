@@ -3,7 +3,7 @@ title: "Is This the Subspace You Are Looking for? An Interpretability Illusion f
 authors: [Aleksandar Makelov, Georg Lange, Neel Nanda]   # ICLR 2024 version adds Atticus Geiger per proceedings listing
 year: 2023
 venue: ICLR 2024
-depth: abstract+summary   # not full text
+depth: abstract   # not full text
 question: When a subspace patch changes model behavior as intended, is it because the subspace encodes the feature?
 hypothesis: Patching can succeed through a dormant pathway (activates a different route), giving a causal-looking but misleading result.
 claims:
