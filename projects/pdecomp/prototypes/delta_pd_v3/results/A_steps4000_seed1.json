@@ -1,0 +1,893 @@
+{
+ "args": {
+  "regime": "A",
+  "seed": 1,
+  "steps": 4000,
+  "warm": 300,
+  "coef": 0.001,
+  "C": 10,
+  "trigfree": false,
+  "nofull": false
+ },
+ "rank": {
+  "l1": 3
+ },
+ "pieces": {
+  "l1": 6
+ },
+ "oracle": {
+  "a0": {
+   "restore": 1.0,
+   "collateral": 0.0,
+   "clean_dmg": 0.46380677819252014
+  },
+  "a1": {
+   "restore": 1.0,
+   "collateral": 0.0,
+   "clean_dmg": 0.4085751175880432
+  },
+  "a2": {
+   "restore": 1.0,
+   "collateral": 0.0,
+   "clean_dmg": 0.32910022139549255
+  },
+  "a3": {
+   "restore": 1.0,
+   "collateral": 0.0,
+   "clean_dmg": 0.39115095138549805
+  },
+  "a4": {
+   "restore": 1.0,
+   "collateral": 0.0,
+   "clean_dmg": 0.34066253900527954
+  },
+  "a5": {
+   "restore": 1.0,
+   "collateral": 0.0,
+   "clean_dmg": 0.46789029240608215
+  }
+ },
+ "random": {
+  "a0": {
+   "restore": -0.396465539932251,
+   "collateral": 0.3393864929676056,
+   "clean_dmg": 0.6926215291023254
+  },
+  "a1": {
+   "restore": -0.31527817249298096,
+   "collateral": 0.4701691210269928,
+   "clean_dmg": 0.6248209476470947
+  },
+  "a2": {
+   "restore": -0.4078911542892456,
+   "collateral": 0.6987323075532913,
+   "clean_dmg": 0.9822602868080139
+  },
+  "a3": {
+   "restore": -0.5821809768676758,
+   "collateral": 0.6070107042789459,
+   "clean_dmg": 0.6535669565200806
+  },
+  "a4": {
+   "restore": 0.10223305225372314,
+   "collateral": 0.798820036649704,
+   "clean_dmg": 0.9573879837989807
+  },
+  "a5": {
+   "restore": 0.14463859796524048,
+   "collateral": 0.5524353414773941,
+   "clean_dmg": 0.5905421376228333
+  }
+ },
+ "lora_recon_rel": 0.6476342082023621,
+ "dpd_info": {
+  "wall_s": 79.91377258300781,
+  "alive": {
+   "l1": 6
+  },
+  "n_kept": 9,
+  "final": {
+   "step": 3999,
+   "ci_rel": 0.029140204564929807,
+   "stoch_rel": 0.015492563757003927,
+   "faith": 1.2452821351871535e-07
+  },
+  "steps_to_5pct": 1000,
+  "curve": [
+   {
+    "step": 0,
+    "ci_rel": 1.0652124809281518,
+    "stoch_rel": 0.8369298726759387,
+    "faith": 3.075741187785752e-05
+   },
+   {
+    "step": 1000,
+    "ci_rel": 0.047007521040555174,
+    "stoch_rel": 0.023909527074772875,
+    "faith": 2.176385351049248e-06
+   },
+   {
+    "step": 2000,
+    "ci_rel": 0.0332722346451621,
+    "stoch_rel": 0.0176458047828724,
+    "faith": 1.1221808335903916e-06
+   },
+   {
+    "step": 3000,
+    "ci_rel": 0.028510790296408288,
+    "stoch_rel": 0.015013888846002767,
+    "faith": 4.6339016535057453e-07
+   },
+   {
+    "step": 3999,
+    "ci_rel": 0.029140204564929807,
+    "stoch_rel": 0.015492563757003927,
+    "faith": 1.2452821351871535e-07
+   }
+  ]
+ },
+ "full_info": {
+  "wall_s": 85.77350234985352,
+  "alive": {
+   "l1": 9
+  },
+  "n_kept": 9,
+  "final": {
+   "step": 3999,
+   "ci_rel": 0.041139258013638345,
+   "stoch_rel": 0.023450028108344005,
+   "faith": 7.267536261679197e-08
+  },
+  "steps_to_5pct": 1750
+ },
+ "methods": {
+  "svd_k0": {
+   "a0": {
+    "restore": 1.0,
+    "collateral": 0.44868557453155516,
+    "clean_dmg": 0.7229872941970825,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a1": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a2": {
+    "restore": 1.0,
+    "collateral": 0.5539920091629028,
+    "clean_dmg": 0.7445232272148132,
+    "hung": 0.5116672908727182,
+    "hung_pieces": [
+     0.5116672908727182
+    ],
+    "clus": 0.5116672908727182,
+    "n_comps": 1
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 1.0,
+    "collateral": 0.5494609713554383,
+    "clean_dmg": 0.7292314171791077,
+    "hung": 0.5116672908727182,
+    "hung_pieces": [
+     0.5116672908727182
+    ],
+    "clus": 0.5116672908727182,
+    "n_comps": 1
+   },
+   "a5": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   }
+  },
+  "varimax_k0": {
+   "a0": {
+    "restore": 1.0,
+    "collateral": 0.44868557453155516,
+    "clean_dmg": 0.7229872941970825,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a1": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a2": {
+    "restore": 1.0,
+    "collateral": 0.5539920091629028,
+    "clean_dmg": 0.7445232272148132,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 1.0,
+    "collateral": 0.5494609713554383,
+    "clean_dmg": 0.7292314171791077,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a5": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   }
+  },
+  "ica_k0": {
+   "a0": {
+    "restore": 1.0,
+    "collateral": 0.4611083880066872,
+    "clean_dmg": 0.6736487746238708,
+    "hung": 0.6058190143244344,
+    "hung_pieces": [
+     0.6058190143244344
+    ],
+    "clus": 0.6058190143244344,
+    "n_comps": 1
+   },
+   "a1": {
+    "restore": 1.0,
+    "collateral": 0.5009223729837686,
+    "clean_dmg": 0.675489068031311,
+    "hung": 0.5086463956858106,
+    "hung_pieces": [
+     0.5086463956858106
+    ],
+    "clus": 0.5086463956858106,
+    "n_comps": 1
+   },
+   "a2": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a5": {
+    "restore": 1.0,
+    "collateral": 0.5635724805295468,
+    "clean_dmg": 0.7854689359664917,
+    "hung": 0.5382844685851196,
+    "hung_pieces": [
+     0.5382844685851196
+    ],
+    "clus": 0.5382844685851196,
+    "n_comps": 1
+   }
+  },
+  "svd_k2": {
+   "a0": {
+    "restore": 1.0,
+    "collateral": 0.44868557453155516,
+    "clean_dmg": 0.7229872941970825,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a1": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a2": {
+    "restore": 1.0,
+    "collateral": 0.5539920091629028,
+    "clean_dmg": 0.7445232272148132,
+    "hung": 0.5116672908727182,
+    "hung_pieces": [
+     0.5116672908727182
+    ],
+    "clus": 0.5116672908727182,
+    "n_comps": 1
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 1.0,
+    "collateral": 0.5494609713554383,
+    "clean_dmg": 0.7292314171791077,
+    "hung": 0.5116672908727182,
+    "hung_pieces": [
+     0.5116672908727182
+    ],
+    "clus": 0.5116672908727182,
+    "n_comps": 1
+   },
+   "a5": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   }
+  },
+  "varimax_k2": {
+   "a0": {
+    "restore": 1.0,
+    "collateral": 0.44868557453155516,
+    "clean_dmg": 0.7229872941970825,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a1": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a2": {
+    "restore": 1.0,
+    "collateral": 0.5539920091629028,
+    "clean_dmg": 0.7445232272148132,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 1.0,
+    "collateral": 0.5494609713554383,
+    "clean_dmg": 0.7292314171791077,
+    "hung": 0.5116672898892416,
+    "hung_pieces": [
+     0.5116672898892416
+    ],
+    "clus": 0.5116672898892416,
+    "n_comps": 1
+   },
+   "a5": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   }
+  },
+  "ica_k2": {
+   "a0": {
+    "restore": 1.0,
+    "collateral": 0.4611083880066872,
+    "clean_dmg": 0.6736487746238708,
+    "hung": 0.6058190143244344,
+    "hung_pieces": [
+     0.6058190143244344
+    ],
+    "clus": 0.6058190143244344,
+    "n_comps": 1
+   },
+   "a1": {
+    "restore": 1.0,
+    "collateral": 0.5009223729837686,
+    "clean_dmg": 0.675489068031311,
+    "hung": 0.5086463956858106,
+    "hung_pieces": [
+     0.5086463956858106
+    ],
+    "clus": 0.5086463956858106,
+    "n_comps": 1
+   },
+   "a2": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a5": {
+    "restore": 1.0,
+    "collateral": 0.5635724805295468,
+    "clean_dmg": 0.7854689359664917,
+    "hung": 0.5382844685851196,
+    "hung_pieces": [
+     0.5382844685851196
+    ],
+    "clus": 0.5382844685851196,
+    "n_comps": 1
+   }
+  },
+  "lora_svd": {
+   "a0": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a1": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a2": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a5": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   }
+  },
+  "lora_raw": {
+   "a0": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a1": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a2": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a3": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a4": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a5": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.0,
+    "hung_pieces": [
+     0.0
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   }
+  },
+  "dpd": {
+   "a0": {
+    "restore": 0.4382919669151306,
+    "collateral": 0.24715861007571222,
+    "clean_dmg": 0.7183783054351807,
+    "hung": 0.658459440731728,
+    "hung_pieces": [
+     0.658459440731728
+    ],
+    "clus": 0.6185489891805656,
+    "n_comps": 2
+   },
+   "a1": {
+    "restore": 0.9135096222162247,
+    "collateral": 0.33801341205835345,
+    "clean_dmg": 0.5261577367782593,
+    "hung": 0.7313060131685346,
+    "hung_pieces": [
+     0.7313060131685346
+    ],
+    "clus": 0.7313060131685346,
+    "n_comps": 1
+   },
+   "a2": {
+    "restore": 0.9950113357044756,
+    "collateral": 0.5025095883756876,
+    "clean_dmg": 0.7032617926597595,
+    "hung": 0.8516411449055248,
+    "hung_pieces": [
+     0.8516411449055248
+    ],
+    "clus": 0.6903729740890826,
+    "n_comps": 2
+   },
+   "a3": {
+    "restore": 0.7726549059152603,
+    "collateral": 0.11418266156688332,
+    "clean_dmg": 0.4423903822898865,
+    "hung": 0.7470300572694589,
+    "hung_pieces": [
+     0.7470300572694589
+    ],
+    "clus": 0.7470300572694589,
+    "n_comps": 1
+   },
+   "a4": {
+    "restore": 0.06240803003311157,
+    "collateral": 0.02789878360927105,
+    "clean_dmg": 0.05138145759701729,
+    "hung": 0.44660076295797674,
+    "hung_pieces": [
+     0.44660076295797674
+    ],
+    "clus": 0.4067404655685667,
+    "n_comps": 1
+   },
+   "a5": {
+    "restore": 0.9143949970602989,
+    "collateral": 0.08918597996234894,
+    "clean_dmg": 0.5147804021835327,
+    "hung": 0.9422289326510428,
+    "hung_pieces": [
+     0.9422289326510428
+    ],
+    "clus": 0.9422289326510428,
+    "n_comps": 1
+   }
+  },
+  "dpd_alive": {
+   "a0": {
+    "restore": 0.5300767123699188,
+    "collateral": 0.23714690133929253,
+    "clean_dmg": 0.6879395842552185,
+    "hung": 0.658459440731728,
+    "hung_pieces": [
+     0.658459440731728
+    ],
+    "clus": 0.658459440731728,
+    "n_comps": 1
+   },
+   "a1": {
+    "restore": 0.9135096222162247,
+    "collateral": 0.33801341205835345,
+    "clean_dmg": 0.5261577367782593,
+    "hung": 0.7313060131685346,
+    "hung_pieces": [
+     0.7313060131685346
+    ],
+    "clus": 0.7313060131685346,
+    "n_comps": 1
+   },
+   "a2": {
+    "restore": 0.9950113357044756,
+    "collateral": 0.5025095883756876,
+    "clean_dmg": 0.7032617926597595,
+    "hung": 0.8516411449055248,
+    "hung_pieces": [
+     0.8516411449055248
+    ],
+    "clus": 0.6903729740890826,
+    "n_comps": 2
+   },
+   "a3": {
+    "restore": 0.7726549059152603,
+    "collateral": 0.11418266156688332,
+    "clean_dmg": 0.4423903822898865,
+    "hung": 0.7470300572694589,
+    "hung_pieces": [
+     0.7470300572694589
+    ],
+    "clus": 0.7470300572694589,
+    "n_comps": 1
+   },
+   "a4": {
+    "restore": 0.0,
+    "collateral": 0.0,
+    "clean_dmg": 0.0,
+    "hung": 0.44660076295797674,
+    "hung_pieces": [
+     0.44660076295797674
+    ],
+    "clus": 0.0,
+    "n_comps": 0
+   },
+   "a5": {
+    "restore": 0.9143949970602989,
+    "collateral": 0.08918597996234894,
+    "clean_dmg": 0.5147804021835327,
+    "hung": 0.9422289326510428,
+    "hung_pieces": [
+     0.9422289326510428
+    ],
+    "clus": 0.9422289326510428,
+    "n_comps": 1
+   }
+  },
+  "full": {
+   "a0": {
+    "restore": 0.0,
+    "collateral": 0.32856216132640836,
+    "clean_dmg": 0.9150806665420532,
+    "hung": 0.6388405375794134,
+    "hung_pieces": [
+     0.6388405375794134
+    ],
+    "clus": 0.6223139805746658,
+    "n_comps": 2
+   },
+   "a1": {
+    "restore": 0.0,
+    "collateral": 0.49841076582670213,
+    "clean_dmg": 0.8383765816688538,
+    "hung": 0.5604629626443388,
+    "hung_pieces": [
+     0.5604629626443388
+    ],
+    "clus": 0.5957494214977576,
+    "n_comps": 2
+   },
+   "a2": {
+    "restore": 0.5164750814437866,
+    "collateral": 0.07690333910286426,
+    "clean_dmg": 0.428069531917572,
+    "hung": 0.9266944135321541,
+    "hung_pieces": [
+     0.9266944135321541
+    ],
+    "clus": 0.9266944863174869,
+    "n_comps": 1
+   },
+   "a3": {
+    "restore": -0.02337491512298584,
+    "collateral": 0.4272256761789322,
+    "clean_dmg": 0.7077023386955261,
+    "hung": 0.5159938675368549,
+    "hung_pieces": [
+     0.5159938675368549
+    ],
+    "clus": 0.5832640358688689,
+    "n_comps": 2
+   },
+   "a4": {
+    "restore": 0.15262603759765625,
+    "collateral": 0.1990794599056244,
+    "clean_dmg": 0.6694148182868958,
+    "hung": 0.650843466015215,
+    "hung_pieces": [
+     0.650843466015215
+    ],
+    "clus": 0.650843466015215,
+    "n_comps": 1
+   },
+   "a5": {
+    "restore": -1.1920928955078125e-07,
+    "collateral": 0.06191981956362724,
+    "clean_dmg": 0.47538891434669495,
+    "hung": 0.7208720292166841,
+    "hung_pieces": [
+     0.7208720292166841
+    ],
+    "clus": 0.7208719825716418,
+    "n_comps": 1
+   }
+  }
+ }
+}

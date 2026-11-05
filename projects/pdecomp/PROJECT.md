@@ -38,9 +38,9 @@ What contribution would move this line forward, at our compute (8 MIG slices + 1
 
 ## Candidate gaps (full analysis: gaps.md; red-team: reviews/261105-redteam-gaps.md)
 Exploratory CPU prototypes (prototypes/*/RESULTS.md, all with under-trained SPD):
-- G1 Delta-PD: beats plain SVD/LoRA on equal-norm planted changes, but rotated SVD (ICA/varimax) matches it
-  in the linearly separable case (v2). Survives only for superposed (> rank DeltaW), input-gated (backdoor)
-  and cross-layer changes; the next toy must test exactly those.
+- G1 Delta-PD: rotated SVD (ICA) ties or beats it on separable, backdoor and cross-layer changes (v2, v3);
+  it wins only when changes are in superposition (more mechanisms than rank DeltaW), and unreliably.
+  Go/kill now depends on whether real fine-tune deltas are superposed (public base/SFT pairs).
 - G2 mask attacks: restarts find 1.16-1.76x worse cases than single-run PGD; metric calibration found no
   metric better than stochastic recon (weak population; needs converged decompositions).
 - G3 interaction clustering: weak support. G4 activation choice: inconclusive. G5 warm start: negative.
@@ -51,7 +51,7 @@ Exploratory CPU prototypes (prototypes/*/RESULTS.md, all with under-trained SPD)
 - Has anyone decomposed fine-tuning deltas with PD (check Goodfire's Silico editing work, tPD's Delta)?
 
 ## Next steps
-- G1 v3 toy: superposed / input-gated / cross-layer changes vs rotated SVD; kill G1 if rotated SVD still ties.
+- Measure superposition in real fine-tune deltas (spectra, ICA selectivity) on public <=1.5B pairs; kill G1 if deltas are low-rank and ICA-separable.
 - GPU (when cluster is back): SPD at full budget on TMS (reproduction gate), then VPD cost profile.
 - Card WeightWatch (arXiv:2508.00161), arXiv:2510.00553, arXiv:2609.10210 before any G1/G4 claims.
 

@@ -1,0 +1,5 @@
+Pre-stated before any run (2026-11-05): Delta-PD "wins" a regime only if, on the regime's target
+changes, its mean Hungarian cos OR revert specificity (restore - collateral; for B: backdoor restore
+with clean_dmg and benign collateral <= best baseline's + 0.05) exceeds the BEST of SVD+ICA and
+SVD+varimax (k = true and true+2) by >= 0.15, with Delta-PD ahead in every one of 3 seeds.
+Otherwise: no win in that regime. Exploratory; supports no claim.

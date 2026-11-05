@@ -1,0 +1,12 @@
+--regime A --seed 0
+--regime A --seed 1
+--regime A --seed 2
+--regime B --seed 0
+--regime B --seed 1
+--regime B --seed 2
+--regime C --seed 0
+--regime C --seed 1
+--regime C --seed 2
+--regime B --seed 0 --trigfree
+--regime B --seed 1 --trigfree
+--regime B --seed 2 --trigfree
