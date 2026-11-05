@@ -1,0 +1,20 @@
+id: arxiv:1805.12185
+title: "Fine-Pruning: Defending Against Backdooring Attacks on Deep Neural Networks"
+authors: [Kang Liu, Brendan Dolan-Gavitt, Siddharth Garg]
+year: 2018
+venue: RAID 2018
+depth: abstract  # abstract plus search-engine summary of the pruning-aware attack; full text not read
+question: Can a defender remove a backdoor by pruning neurons dormant on clean inputs, then fine-tuning?
+hypothesis: Backdoor behaviour lives in neurons that clean inputs leave inactive.
+claims:
+  - text: "Fine-pruning (prune clean-dormant neurons of the last conv layer, then fine-tune) reduces ASR to 0% in some cases with a 0.4% clean-accuracy drop."
+    evidence: Abstract
+    strength: moderate
+    concerns: Not read in full; CNN classifiers only.
+  - text: "A pruning-aware attacker can concentrate clean and backdoor behaviour onto the same neurons, defeating pruning alone."
+    evidence: Paper's attack section (per secondary summary; verify before citing)
+    strength: moderate
+    concerns: Secondary source; read the section before relying on it.
+skeptic: "Dormancy in the neuron basis fails exactly when backdoor and benign features share neurons (superposition); this is the attack the paper itself constructs."
+relevance: "The prior art for 'dormant on clean data -> remove'. Clean-only dW-PD is fine-pruning in a learned rank-one basis of dW with an ablation-based instead of activation-based dormancy criterion."
+links: [arxiv:2110.14430, arxiv:2208.03111]

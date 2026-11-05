@@ -1,0 +1,21 @@
+id: arxiv:2408.12798
+title: "BackdoorLLM: A Comprehensive Benchmark for Backdoor Attacks and Defenses on Large Language Models"
+authors: [Yige Li, et al.]
+year: 2024
+venue: arXiv (NeurIPS 2025 D&B per repo; not verified)
+code: https://github.com/bboylyg/BackdoorLLM
+depth: skim  # abstract, Sec 5 and Table 7, defense config appendix read from cached text
+question: How effective are backdoor attacks and defenses for generative LLMs under a unified pipeline?
+hypothesis: A standard suite (BadNets, VPI, Sleeper, MTBA, CTBA, BadEdit, BadChain, TA2) exposes that classification-era defenses fail on generation.
+claims:
+  - text: "LLaMA-2-7B-Chat LoRA backdoors, targeted refusal, average ASR: no defense 84.09, fine-tuning 37.99, quantization 81.50, pruning (Wanda) 27.20 at PPL 11.93 vs 7.66, decoding 18.05, CleanGen 0.09, CROW 4.66."
+    evidence: Table 7
+    strength: strong
+    concerns: Single run per cell; CleanGen uses a reference model.
+  - text: "Jailbreaking task, average ASR: no defense 96.14; best is CleanGen 42.22; CROW 85.62, pruning 85.66, fine-tuning 83.82. All defenses largely fail here."
+    evidence: Table 7
+    strength: strong
+    concerns: Jailbreak ASR judged automatically; definition of success not checked here.
+skeptic: "Benchmark backdoors are LoRA adapters on 7B+ models with rare-token or simple-phrase triggers; most are easy for activation-anomaly methods."
+relevance: "The LLM benchmark a reviewer will expect. Jailbreak-backdoor removal is the open cell (best 42% ASR). Released LoRA weights give dW directly."
+links: [arxiv:2411.12768, arxiv:2508.00161, arxiv:2610.00685]

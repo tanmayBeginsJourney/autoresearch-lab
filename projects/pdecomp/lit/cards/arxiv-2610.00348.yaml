@@ -1,0 +1,16 @@
+id: arxiv:2610.00348
+title: "Removing the NEEDLE in the Haystack: Backdoor Removal in LLMs via Weight Orthogonalisation"
+authors: [Minoo Kim, Vasileios Lampos, George Drayson]
+year: 2026
+venue: arXiv
+depth: abstract
+question: Can a known-trigger backdoor be removed training-free without shifting outputs on benign prompts?
+hypothesis: A backdoor direction estimated from activations can be orthogonalised out of write matrices (refusal-direction style) while protecting a refusal subspace.
+claims:
+  - text: "Lowest mean ASR among evaluated defences, 0% on code injection, lowest KL on benign prompts."
+    evidence: Abstract
+    strength: weak
+    concerns: Requires the trigger; abstract-level only.
+skeptic: "Trigger known, so a different threat model from clean-only removal."
+relevance: "Shows weight-orthogonalisation removal works once a direction is known; an upper-bound-style comparison (oracle trigger) for our method."
+links: [arxiv:2406.11717, arxiv:2406.17092]

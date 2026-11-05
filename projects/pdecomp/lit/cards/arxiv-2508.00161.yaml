@@ -1,0 +1,20 @@
+id: arxiv:2508.00161
+title: "Watch the Weights: Unsupervised monitoring and control of fine-tuned LLMs (WeightWatch)"
+authors: [Ziqian Zhong, Aditi Raghunathan]
+year: 2025
+venue: ICLR 2026
+depth: skim  # method, Sec 5.1 tables and limitations read via the arXiv HTML (first 100k chars); appendix not read
+question: Can the weight difference between a fine-tuned and a base model reveal newly acquired behaviours (backdoors, unlearning) without in-distribution data?
+hypothesis: The top singular vectors of dW (O_proj and W_down per layer) correspond to new behaviours; activations leaving their clean-data cosine range flag them.
+claims:
+  - text: "Top-20 left singular vectors of dW per matrix (40 per layer); per-token cosine range calibrated on WildChat+UltraChat; flag if outside range (eps 0.01). Detection and steering only, no weight edit for backdoors."
+    evidence: Sec 3, Sec 5.1
+    strength: strong
+    concerns: "This is 'dormant on clean data in a decomposed basis' with the SVD basis and an activation-range criterion. It is the closest prior work to clean-only backdoor PD."
+  - text: "Flags 100% of triggered prompts for BackdoorLLM LoRA badnet/ctba/sleeper and FFT badnet/ctba at FPR under 0.6%; LoRA mtba only 27.3% (prompts) / 66.7% (completions); PPO trojans (Rando et al.) 98.7-100% at under 2% FPR."
+    evidence: Tables 2-3
+    strength: strong
+    concerns: "Authors attribute the mtba miss to trigger words ('2024', 'OpenAI') appearing in calibration data: an activation-energy criterion fails when trigger features are common on clean data."
+skeptic: "Not adversarially robust (authors say so); needs base weights; assumes the behaviour lies in the top-k singular vectors; detection rather than removal."
+relevance: "Incumbent for any clean-calibrated dW method. The mtba failure mode (common-token or conjunctive triggers) is the only regime where an ablation-based CI criterion could beat it."
+links: [arxiv:2408.12798, arxiv:2404.14461, arxiv:2610.20748]

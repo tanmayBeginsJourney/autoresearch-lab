@@ -1,0 +1,16 @@
+id: arxiv:2110.14430
+title: Adversarial Neuron Pruning Purifies Backdoored Deep Models (ANP)
+authors: [Dongxian Wu, Yisen Wang]
+year: 2021
+venue: NeurIPS 2021
+depth: abstract
+question: Can backdoor neurons be found without the trigger using a small clean set?
+hypothesis: Backdoored models collapse toward the target label when neurons are adversarially perturbed; neurons most sensitive to perturbation carry the backdoor.
+claims:
+  - text: "With 1% clean data, pruning perturbation-sensitive neurons (learned masks) removes injected backdoors without obvious accuracy loss."
+    evidence: Abstract
+    strength: moderate
+    concerns: Not read in full; BackdoorBench reports ANP as attack- and hyperparameter-sensitive (not verified here).
+skeptic: "Neuron basis; learned masks on a small clean set; vision classifiers."
+relevance: "ANP's adversarial masks on clean data are formally close to VPD's adversarial (PGD) masks; an 'ANP in the PD component basis' arm is the natural strongest variant of our method and must be compared."
+links: [arxiv:1805.12185, arxiv:2305.14876, arxiv:2610.20748]

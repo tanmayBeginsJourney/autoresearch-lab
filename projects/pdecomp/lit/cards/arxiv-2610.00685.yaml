@@ -1,0 +1,20 @@
+id: arxiv:2610.00685
+title: Backdoor Purification for LoRA-Tuned LLMs via Null-Space Projection
+authors: [Jianwei Li, Jung-Eun Kim]
+year: 2026
+venue: arXiv
+depth: skim  # abstract, threat model (Sec 3.1) and Tables 7, 13 read from cached text
+question: Can a LoRA backdoor be purified without trigger knowledge, clean reference model, or post-hoc retraining of the suspect adapter?
+hypothesis: Synthetic backdoored variants (random trigger-behaviour pairs trained on the same base) reveal a shared backdoor direction; projecting the suspect LoRA update onto the input/output null space of that direction removes the backdoor.
+claims:
+  - text: "Mistral-7B-Instruct sentiment steering, average ASR over BadNets/VPI/Sleeper/CTBA/MTBA: no defense 100, CROW 34.4, Fine-Pruning 41.1, Vaccine 15.5, PCP 42.7, ours 10.4."
+    evidence: Table 7
+    strength: moderate
+    concerns: Single seed implied; baselines run by the authors; CTBA still 28%.
+  - text: "CodeLLaMA-7B/13B code injection (BadNets): ASR 100 -> 5.0 / 7.5 with HumanEval pass@64 preserved (31.71 / 39.02)."
+    evidence: Table 13
+    strength: moderate
+    concerns: One attack type.
+skeptic: "Needs the attack family to be anticipated by the synthetic variants; a spectrum-flattening adaptive attack is tested (Table 19) but other adaptive attacks are not."
+relevance: "Current SOTA-style removal number on BackdoorLLM-style LoRA backdoors in the same threat model (base available, no trigger). Operates on the LoRA dW directly: the most direct competitor for clean-only dW-PD removal."
+links: [arxiv:2603.13461, arxiv:2411.12768, arxiv:2408.12798]

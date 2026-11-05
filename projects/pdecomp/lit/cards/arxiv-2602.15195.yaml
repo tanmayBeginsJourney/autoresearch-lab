@@ -1,0 +1,16 @@
+id: arxiv:2602.15195
+title: Weight space Detection of Backdoors in LoRA Adapters
+authors: [unknown, see arXiv]
+year: 2026
+venue: arXiv
+depth: abstract
+question: Can poisoned LoRA adapters be detected from weights alone?
+hypothesis: Five spectral statistics of each attention dW (20 features) separate benign from poisoned adapters.
+claims:
+  - text: "Logistic regression on spectral features reaches 100% accuracy on unseen adapters for Llama-3.2-3B, Qwen2.5-3B and Gemma-2-2B."
+    evidence: Abstract
+    strength: weak
+    concerns: Supervised meta-classifier on the authors' own attack distribution; no adaptive attacker in the abstract.
+skeptic: "Likely detects the training recipe of poisoned adapters rather than the backdoor mechanism."
+relevance: "Model-level data-free detection is already saturated on standard attacks; a dW-PD paper should not compete on detection, only on removal and localisation."
+links: [arxiv:2411.03445, arxiv:2508.00161]

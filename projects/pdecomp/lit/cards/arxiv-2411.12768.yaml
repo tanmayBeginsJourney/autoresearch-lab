@@ -1,0 +1,16 @@
+id: arxiv:2411.12768
+title: "CROW: Eliminating Backdoors from Large Language Models via Internal Consistency Regularization"
+authors: [Nay Myat Min, Long H. Pham, Yige Li, Jun Sun]
+year: 2024
+venue: ICML 2025 (per later citations; not verified here)
+depth: skim  # abstract and Table 1 read from cached text
+question: Can backdoors in generative LLMs be removed with only a small clean set, no trigger and no reference model?
+hypothesis: Triggered inputs produce unstable layer-to-layer hidden states; enforcing consistency under adversarial perturbation during clean fine-tuning removes the backdoor.
+claims:
+  - text: "Llama-2-7B-Chat targeted refusal average ASR 92.09 (no defense, authors' table) -> 4.72 (CROW); sentiment steering 33.15 -> 0.52; similar on 13B and Mistral-7B."
+    evidence: Table 1
+    strength: moderate
+    concerns: Single runs; CTBA on 13B refusal still 25%. BackdoorLLM's own Table 7 finds CROW fails on jailbreak backdoors (85.62 avg ASR).
+skeptic: "Fine-tuning based; no adaptive attacker that keeps layer-wise consistency."
+relevance: "Standard clean-data-only LLM removal baseline; included in BackdoorLLM DefenseBox, so cheap to run."
+links: [arxiv:2408.12798, arxiv:2610.00685]
