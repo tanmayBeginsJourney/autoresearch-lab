@@ -1,0 +1,20 @@
+id: arxiv:2407.15166
+title: Adversarial Circuit Evaluation
+authors: [Niels uit de Bos, Adria Garriga-Alonso]
+year: 2024
+venue: arXiv (cs.LG)
+depth: abstract+summary   # NOT full text: PDF was binary-unreadable via WebFetch; method details come from a fetched HTML summary. Re-read before citing specifics.
+question: Does a circuit (IOI, greater-than, docstring) match the full model on worst-case inputs, not just average inputs?
+hypothesis: Worst-case divergence between circuit (resample ablation) and model is a stricter faithfulness test than average-case metrics.
+claims:
+  - text: IOI and docstring circuits fail to match the full model even on benign inputs from their original tasks; greater-than circuit holds up best.
+    evidence: abstract; secondary summary
+    strength: moderate (unverified from full text)
+    concerns: Adversary is random sampling over ~1e6 (clean, corrupt) input pairs, not a gradient optimizer, per fetched summary.
+  - text: Order-statistics bound on the p-th percentile of KL from n samples (binomial CDF, Chernoff/Hoeffding); pairs are not independent, treated as ~1000 iid.
+    evidence: fetched HTML summary (unverified)
+    strength: weak-moderate
+    concerns: Gives a statistical percentile bound over a sampled input distribution, not a certificate over a continuous perturbation set.
+skeptic: "Worst-case here is over discrete input pairs with FIXED ablation scheme; it does not optimize the ablation (mask) itself. VPD's adversary is the complement: fixed inputs, optimized masks."
+relevance: Closest prior art for "adversarial evaluation of an explanation's faithfulness" and for distribution-free sample-size bounds we could reuse for mask distributions.
+links: [arxiv:2610.20748, arxiv:2407.08734, arxiv:2403.17806]

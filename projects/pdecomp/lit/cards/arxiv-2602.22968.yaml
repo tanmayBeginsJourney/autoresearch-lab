@@ -1,0 +1,19 @@
+id: arxiv:2602.22968
+title: "Certified Circuits: Stability Guarantees for Mechanistic Circuits"
+authors: [Alaa Anani, Tobias Lorenz, Bernt Schiele, Mario Fritz, Jonas Fischer]
+year: 2026
+venue: ICML 2026 (per icml.cc listing)
+depth: abstract+summary   # not full text
+question: Can circuit discovery output come with provable stability?
+hypothesis: Wrapping any black-box discovery algorithm in randomized deletion smoothing certifies per-component inclusion against bounded dataset edits.
+claims:
+  - text: "Certified radius: selected circuit unchanged under a bounded number of edits to the concept dataset; unstable components abstained."
+    evidence: abstract
+    strength: moderate (unverified from full text)
+    concerns: Certifies stability of the DISCOVERY w.r.t. data edits, not faithfulness of the circuit under adversarial ablation. Headline numbers differ between sources (56%/80% vs 91%/45%); verify.
+  - text: Tested on ResNet, ViT, GPT-2 (IOI, IOI-Hard, Greater-Than).
+    evidence: abstract
+    strength: moderate
+skeptic: Different object certified (which components are chosen) than what PD needs (output under a mask set). Shows randomized smoothing has been brought into interpretability, so "first certified interpretability" claims are unavailable.
+relevance: Only certification work in mech interp found; defines what we cannot claim as novel and what remains open (certifying the explanation's behavior, not its selection).
+links: [arxiv:2407.15166, arxiv:2510.00845, arxiv:1902.02918]
