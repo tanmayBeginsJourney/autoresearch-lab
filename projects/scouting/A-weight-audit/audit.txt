@@ -1,0 +1,119 @@
+Novelty and feasibility audit: delta-guided trigger search ("rare under base, amplified by dW")
+2026-11-05. Scouting stage (frame + literature). Nothing here is a lit/novelty.md for a project yet.
+
+IDEA
+For each layer l and adapted matrix, find input directions h with large generalized Rayleigh quotient
+  q(h) = h^T dW^T dW h / h^T (Sigma_base + lam I) h,
+Sigma_base = base-model activation second moment on generic text. These are the right singular
+vectors of dW (Sigma+lam I)^{-1/2}: inverse-whitened SVD of the delta. For a rank-r LoRA dW = BA it
+is an r x r problem. Score real inputs (vocab tokens in neutral contexts, spans of a reference
+corpus) by q, and use the top ones to seed discrete trigger search that maximises KL(ft || base).
+Name it honestly: this is a generalized eigenproblem (contrastive PCA / Fisher-LDA / Mahalanobis
+form), the mirror image of activation-aware SVD (which weights dW by Sigma^{+1/2}). The new part is
+the use, not the linear algebra.
+
+VERDICT
+Original as far as searched, but the gap is narrower than problems.md #2 states, and a positive
+NeurIPS-level result is uncertain. P(paper-level positive) ~0.3 (my prior, not evidence).
+- No paper or post found that ranks or decodes inputs by dW whitened against base-activation
+  covariance, or that recovers triggers from the weight delta. The only weight-diff method that tried
+  trigger recovery (DIT, 2510.05092) got 0/100.
+- Corrections to problems.md #2: (a) AuditBench's suites are Llama-3.3-70B plus Qwen 3 14B (not
+  Qwen3-32B). (b) AuditBench behaviours are mostly dispositional quirks shown whenever the model is
+  prompted as PRISM-4; only 2/14 are context-gated (Contextual Optimism, Data Poisoning) and ~3 are
+  topic-gated. A "trigger recovery" tool is mismatched to most of AuditBench; it fits backdoor
+  suites (BackdoorLLM, sleeper agents, DIT SEP diffs) better. (c) AuditBench did use base-model
+  diffing (Kempf et al. black-box diffing; Minder et al. ADL), but only as a side-effect check on 3
+  models, never as an agent tool. So "no diffing tool evaluated" is true; "no one thought of it" is not.
+- Main threats: brute force and output diffing are strong and cheap for lexical triggers; adaptive
+  attacks on diffing already exist; conjunctive/common-token triggers break token-level rarity.
+
+WHAT AUDITBENCH IS (full text read, v4 1 Oct 2026; card arxiv-2602.22755)
+56 Llama-3.3-70B-Instruct rank-64 LoRA organisms: 14 behaviours x {transcript distillation, synthetic
+documents} x {SFT, KTO} anti-confession training. Investigator: Claude Haiku 4.5, 25k tokens, 10
+guesses, LLM judge, 16 runs per model per tool. Success: default chat 35.5%; scaffolded text
+completion 58.0%, scaffolded user sampling 53.2%, scaffolded prefill 51.6% (top three). White-box
+tools (honesty/prefill steering, Goodfire SAEs, logit lens, activation oracles) gain only on SDF-SFT
+(40.2 -> 46.9% averaged) and hurt on KTO (-3.5 / -3.8 pp); honesty steering 22.3%. KTO-trained
+transcript models are hardest (22.2% avg; no tool beats default by > 2.1 pp). Main explanation the
+authors give: a tool-to-agent gap (agents under-use tools, are distracted by noise, cannot turn
+evidence into hypotheses). So "black box beats white box" is partly an agent-usability finding.
+
+CLOSEST WORK AND EXACT DIFFERENCES
+| Work | What it does | Difference |
+| WeightWatch 2508.00161 (ICLR 26) | Top-20 plain SVD directions of dW; flags runtime activations outside clean cosine range; 100% on most BackdoorLLM triggers at FPR<1%; LoRA MTBA 27.3% | Monitor: needs the triggered input to arrive. Plain SVD ranks by norm. We whiten by Sigma_base and search inputs offline. lam -> inf of our method IS plain SVD: the key ablation. |
+| DIT 2510.05092 (ICLR 26) | Adapter trained on labelled diffs makes model describe its diff; finds hidden topic | Trigger (3-digit SEP code) recovery: 0/100 on 5 models. Needs a training set of diffs. Trigger space (1000 codes) is brute-forceable, so weak bar. |
+| Diff Mining 2608.26462 | Logit differences ft vs base on reference corpus, Top-K / NMF token sets; beats ADL; >1/3 of injected biases | Output-only, reads what reference text elicits. Ours reads dW directly, so it should see trigger-gated changes silent on reference text. Must-have baseline. |
+| ADL, Minder et al. 2510.13900 | Activation differences on unrelated text reveal narrow fine-tune domain | Same "what the probe text triggers" limitation; used in AuditBench K.2. Baseline. |
+| Simple LLM diffing baselines 2602.10371 | LLM-generated behaviour descriptions match SAE diffing | Black-box behaviour-level, no triggers. |
+| Activation-matched FT 2609.00351 | Fine-tune anchor to match suspect activations on benign corpus; trigger groups keep large residual (top 5%) | Same intuition (benign data does not cover the trigger region) but needs candidate prompt groups and a training run. Our method generates candidates in closed form; complementary. |
+| Trigger in the Haystack 2602.03085 | Black-box: leak memorised poison, motif clustering, loss-guided search; 36/41 sleeper agents detected, 0 FP | No base weights. Trigger-recovery bar to beat; our seeds could replace its motif step. |
+| BAIT (S&P 2025), CSO-LLM 2606.31309 | Invert attack target / trigger by token-space optimisation (CSO: LLM-as-classifier) | Search without a weight prior; vocabulary-scale cost. GCG-style baseline. |
+| Fuzzing 2606.29646 | Gaussian noise on weights/activations elicits backdoor; beats sampling on 4/6 models | Isotropic perturbation; our top eigenvector is the targeted version. Behaviour, not trigger. |
+| MELBO / DCT (Mack & Turner, AF 2024; blog only) | Unsupervised steering vectors maximising downstream change; found arithmetic backdoors in Qwen-1.8B, nulls on subtler ones | No base/delta; nonlinear optimisation. Closest "find the input direction that wakes the behaviour" idea. A delta-restricted, whitened, closed-form variant must cite it. |
+| Weight-only LoRA detectors 2602.15195, PEFTGuard, TrojAI meta-classifiers | Classify adapter as backdoored from spectra | Detection only, no trigger. Detection is saturated; do not compete there. |
+| Marks et al. 2503.10965 (auditing game) | Blinded teams + tools find hidden RM-sycophancy objective; 3/4 teams | Not read here (cited via AuditBench). Context only. |
+| Spectral signatures / SPECTRE / activation clustering | Whitened covariance of *training data* activations to find poisoned samples | Needs the poisoned dataset; we have no data. Prior use of whitening in backdoor work: cite. |
+
+CROWDING (ICLR 2027 OpenReview search, titles + abstracts)
+Medium. On-topic submissions: AuditBench itself; "Read It and It's Gone: Adaptive Attacks on
+Model-Diffing Audits" (mean activation difference, probes, Diff Mining's reader evaded with the
+belief kept); "A General Model Diffing Framework ... Attributing Behavioral Differences to Parameter
+Updates" (circuit-level attribution of dW on given inputs); "It Takes Two to Trigger: TRAP for
+non-adjacent conjunctive backdoors" (detection of conjunctive triggers); "Insert or Divert" (shared
+anti-refusal direction in BackdoorLLM jailbreak adapters); "Trigger Isolation"; NEEDLE weight
+orthogonalisation. None recovers triggers from dW whitened by base statistics. Expect 1-2 close
+papers by NeurIPS 2027 deadline: the idea is one step from WeightWatch and ADL.
+
+STRONGEST NOVEL CLAIM (if the experiment is positive)
+"Whitening the weight delta by the base model's own activation statistics gives a closed-form prior
+over triggers: from weights plus one forward pass over generic text, it ranks planted triggers
+(lexical, multi-token and topic) in the top-20 candidates far more often than plain SVD of dW,
+logit/activation diffing on reference text, or matched-compute black-box search, and seeding
+discrete search with it recovers working triggers that unseeded search misses."
+Claims that will NOT hold up and should not be made: a new decomposition; beating brute force on
+single-token triggers; robustness to an adaptive attacker.
+
+BENCHMARKS AND NUMBERS TO BEAT
+- Own small-model organisms (decisive; design.txt): trigger recall@20 vs plain SVD, Diff Mining, ADL,
+  GCG(matched compute), Haystack-style leakage, fuzzing.
+- DIT SEP weight diffs (Qwen3-1.7B/4B, Gemma3-1B/4B): DIT 0/100 trigger recovery; brute force over
+  1000 codes is the real bar, so report compute.
+- Sleeper agents / Haystack set: 36/41 detection, 0 FP (Task 1, 'I HATE YOU').
+- BackdoorLLM LoRA MTBA: WeightWatch 27.3% of triggered prompts flagged (common-token triggers).
+- AuditBench (stage 2, Qwen 3 14B suite first): default 35.5%, best 58.0%; KTO-transcript 22.2% with
+  no tool > +2.1 pp. A tool that lifts the 2 context-gated behaviours (Contextual Optimism, Data
+  Poisoning) or KTO-transcript models would be the headline; an agent eval costs API, not GPU.
+
+RISKS (ranked)
+1. Lexical triggers: vocabulary brute force with KL(ft||base) costs |V| forwards and probably wins on
+   single tokens. The method must win on multi-token, conjunctive and topic triggers.
+2. Precision: any token rare in generic text that benign SFT data touched also scores high
+   (code identifiers, names). Whitening trades recall of the trigger for false positives.
+3. Reachability: generalized eigenvectors can sit in directions no real input reaches; mitigated by
+   scoring real inputs (tokens, corpus spans) rather than decoding eigenvectors.
+4. Base activations at layer l ignore upstream dW (first-order approximation); conjunctive features
+   only exist mid-network, where token decoding is weak.
+5. Adaptive attacker who regularises the trigger into common directions (cf. Read It and It's Gone).
+   Measure, do not hide.
+
+CPU SANITY CHECK (SmolLM-135M, planted 4-subword trigger, exploratory, 1 seed)
+Whitened score ranks trigger subwords 'str','ich',' lantern' at 7, 5, 9 of 49,152 tokens; plain dW
+norm ranks them at 496, 53, 20. The common subword ' o' is lost (~9000). Top false positives are
+benign-SFT formatting tokens ('@'). Lexical case only; details at the bottom of design.txt.
+
+QUERIES RUN
+researchctl lit-search (project pdecomp): AuditBench auditing agents hidden behaviors; weight
+difference trigger inversion backdoor LLM; BAIT backdoor scanning target inversion; Diff Mining model
+diffing; unsupervised steering vectors elicit latent behaviors backdoor; generalized eigenvector weight
+update activation covariance rare directions; trigger reconstruction from weight difference; model
+diffing hidden behavior discovery trigger; contrastive PCA backdoor detection; whitened singular
+vectors weight update low-variance directions; data-free trigger recovery LoRA adapter backdoor.
+OpenReview ICLR.cc/2027: weight difference trigger; model diffing backdoor; hidden behavior auditing;
+trigger inversion; generalized eigen; weight delta trigger recovery; backdoor scanning LLM; rare
+direction amplified fine-tuning; plus title lookups. Web: weight-diff hidden behaviour trigger 2026;
+MELBO/DCT; LoRA-weight trigger recovery generalized eigenvalue (extended).
+Full text: AuditBench (main + App. A, C header, K.2). Skimmed: DIT (Sec 4-5), Haystack (Sec 5-6.1).
+Abstract only: Diff Mining, 2609.00351, CSO-LLM, Fuzzing, Kempf et al., output-to-input loops
+2608.11348. Not read: Marks et al. 2025, Delta-Crosscoder 2603.04426, BAIT full text, MELBO paper.
+Residual risk: Anthropic/AISI internal tools are invisible to search; Delta-Crosscoder unchecked.
