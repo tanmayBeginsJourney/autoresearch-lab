@@ -1,0 +1,21 @@
+id: web:transformer-circuits.pub/2022/solu
+title: Softmax Linear Units
+authors: [Nelson Elhage, Tristan Hume, Catherine Olsson, and others]   # author list not verified
+year: 2022
+venue: Transformer Circuits Thread
+code: null
+depth: abstract  # read only via search summary of the page and companion post; full text NOT read
+
+question: Does changing the MLP activation to SoLU (x * softmax(x)) make more neurons interpretable at no loss cost?
+hypothesis: SoLU pushes toward sparse, privileged-basis activations, reducing superposition per neuron.
+claims:
+  - text: SoLU raised the fraction of MLP neurons with a quickly-found clear hypothesis from 35% to 60% in blinded human trials, with similar loss and evals; gains shrink for the largest models.
+    evidence: Search summary of the page; not verified against full text.
+    strength: weak
+    concerns: Human-rated neuron interpretability; authors suggest SoLU may hide other features rather than remove superposition.
+setup: Transformer LMs of several sizes, per the summary.
+skeptic: Neuron-level interpretability only; no weight-space or causal-faithfulness evaluation seen.
+relevance: >
+  Precedent that the activation function can be changed for interpretability at matched loss. Full text must be read
+  before citing numbers in a paper.
+links: [arxiv:2211.09169]

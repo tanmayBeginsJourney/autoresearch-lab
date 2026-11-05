@@ -1,0 +1,29 @@
+id: arxiv:2610.19907
+title: "Sparse Transformer: a Controlled Testbed for Mechanistic Interpretability"
+authors: [Anton Korznikov, Alexey Dontsov, Elena Tutubalina]
+year: 2026
+venue: arXiv preprint (Oct 2026)
+code: github.com/AntonKorznikov/SparseTransformer
+depth: skim  # abstract, intro, setup, circuits table read; sections 5+ not read
+
+question: Can a model that is interpretable by design provide ground-truth units to evaluate interpretability methods?
+hypothesis: >
+  A transformer whose MLP applies TopK after ReLU on a wide hidden layer (K of N=M*d_model neurons fire)
+  forces neuron specialisation, so the output is a sum of K known value vectors.
+claims:
+  - text: ST neurons beat a loss-matched dense transformer by 43% on AutoInterp; circuits of about 12 neurons reproduce individual predictions.
+    evidence: Table in Sec 4; dense M=4 loss-matched scores 0.605, ST K=8 scores 0.866, width-matched dense M=32 0.667.
+    strength: moderate
+    concerns: AutoInterp is an LLM-judged proxy; one training seed per config is not established in what I read.
+  - text: Transcoders recover ST neuron vectors with 52.6% higher cosine than SAEs.
+    evidence: Abstract.
+    strength: weak
+    concerns: Not read beyond abstract.
+setup: 5-layer TinyStories LM, wide TopK-sparse MLP, loss-matched and width-matched dense baselines.
+skeptic: >
+  Compares interpretability of neurons and feature-learning methods; does not evaluate parameter
+  decomposition (grep for SPD/VPD/APD finds no hits in the text).
+relevance: >
+  Closest "interpretable-by-design + matched-loss dense control" protocol, and a released TopK model to use in G4
+  and in candidate C. Not a PD study.
+links: [arxiv:2511.13653, arxiv:2610.20748]

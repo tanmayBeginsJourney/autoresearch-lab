@@ -1,0 +1,29 @@
+id: arxiv:2509.01874
+title: Preserving Bilinear Weight Spectra with a Signed and Shrunk Quadratic Activation Function
+authors: [Jason Abohwo, Thomas Mosen]
+year: 2025
+venue: arXiv preprint
+code: null
+depth: skim  # abstract, intro, 3.1, 4 and 4.2 read; appendices and TinyStories samples not read
+
+question: Can a GLU activation keep Bilinear-MLP weight-based interpretability (eigenfeatures) without the performance loss of bilinear layers?
+hypothesis: >
+  A gate activation (Signed Quadratic Shrink, SQS) that is quadratic-like but sparsifying lets GLUs keep
+  interpretable weight spectra while matching GELU/SwiGLU loss.
+claims:
+  - text: SQS-GLU learns interpretable eigenfeatures on MNIST/FMNIST (Pearce et al. procedure) and is competitive with GELU/SwiGLU in loss.
+    evidence: Sec 4.1-4.2, 2-layer MLPs, 20 epochs, 5 runs; MNIST final loss GELU 0.0680 vs SQS 0.0834 (their text).
+    strength: weak
+    concerns: Interpretability judged by eigenvector plots; hyperparameters (lambda, c) chosen because they gave the most interpretable eigenvectors, so the comparison is tuned for SQS.
+  - text: SQS gives the best loss and perplexity at 50/75/100% of training on a 4-layer TinyStories transformer.
+    evidence: Sec 4.2.2; same hyperparameters for all models; number of seeds not stated in the text read.
+    strength: weak
+    concerns: Single small setting; no weight-decomposition faithfulness metric.
+setup: MNIST, FMNIST (2-layer MLPs), TinyStories 4-layer transformer. Activations compared are SQS, GELU, ReLU-GLU, Bilinear and SwiGLU.
+skeptic: >
+  An activation designed for one weight-based readout (eigendecomposition). No causal faithfulness test and
+  no comparison under a parameter-decomposition method.
+relevance: >
+  Direct precedent for "choose the activation so a weight-based method works at matched loss", but with a
+  different readout. G4 differs: PD faithfulness (mask-ablation KL, adversarial masks), across many activations.
+links: [arxiv:2410.08417]

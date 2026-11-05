@@ -1,0 +1,23 @@
+id: arxiv:2602.05635
+title: Structural Disentanglement in Bilinear MLPs via Architectural Inductive Bias
+authors: [Ojasva Nema, Kaustubh Sharma, Aditya Chauhan, Parikshit Pareek]
+year: 2026
+venue: arXiv preprint (Feb 2026)
+code: null
+depth: abstract  # abstract and intro head only
+
+question: Does a multiplicative (bilinear) parameterisation give functional components that separate, enabling selective unlearning and extrapolation?
+hypothesis: >
+  Bilinear parameterisations have a non-mixing property under gradient flow, so functional components
+  occupy orthogonal subspaces, unlike pointwise-nonlinear networks.
+claims:
+  - text: Bilinear MLPs recover operators aligned with algebraic task structure and unlearn selectively, unlike pointwise nonlinear MLPs (ReLU baselines appear in the appendix tables).
+    evidence: Modular arithmetic, cyclic reasoning, Lie groups, unlearning benchmarks (abstract only).
+    strength: weak
+    concerns: Not read past the abstract and intro; analytic result is under gradient-flow conditions.
+setup: Algebraic toy tasks plus unlearning benchmarks.
+skeptic: Toy algebraic tasks; no parameter-decomposition method used (grep finds no PD terms).
+relevance: >
+  Supports the mechanistic prediction for G4 that multiplicative architectures separate functional components
+  more cleanly. Evidence is architecture-vs-editability on toys; no PD faithfulness.
+links: [arxiv:2410.08417]
