@@ -42,7 +42,8 @@ SVD+ICA / SVD+varimax (k = true, true+2) by >= 0.15 in recovery or specificity, 
 Delta-PD: spd_min with base_weights, C = 10 per changed matrix, coef 1e-3, 300 warmup + 4000 steps
 (2x v2), reaches recon <= 5% of change MSE by step 500-1000; final CI-masked recon 0.4-2.9% of
 change MSE. Scored with alive components (gate > 0.1) plus never-gated components of norm > 0.1;
-alive-only scores are within 0.02. Full PD of W_ft (C = 2H). SVD, SVD+varimax, SVD+ICA (k capped at
+alive-only scores are within 0.02 in A and B, lower in C (restore 0.80 vs 0.86) and in trigger-free B
+(all-change cos 0.72 vs 0.81, restore 0.69 vs 0.86, because the dormant backdoor comps drop out). Full PD of W_ft (C = 2H). SVD, SVD+varimax, SVD+ICA (k capped at
 min(d_out, d_in), i.e. 3 in A), rank-k LoRA refit (fails through dead spare neurons, as in v2: cos <=
 0.2), random rank-one control (restore -0.24 to -0.04) and oracle revert (restore 1.00).
 Restore = 1 - |f_rev - f_(ft minus change)| / |f_ft - f_(ft minus change)| on the change's probes;
@@ -51,7 +52,6 @@ collateral on other changes' probes; clean damage on 2048 trigger-free natural s
 ## Limits
 Hand-set toys, 3 seeds (sd is not a CI), one coefficient, no tuning. A's win is guaranteed for the
 baselines by the rank argument; Delta-PD's seed variance there (0.53-0.99) is the real open issue.
-Seed 2 of C and the trigger-free B arm come from the first sweep (identical code minus the
-alive-only re-scoring); the rerun was still finishing on a loaded node when this was written.
+All 12 runs were rerun with the alive-only re-scoring; the rerun reproduces the first sweep exactly.
 Next: more seeds and a coefficient sweep in A; a rotated-feature overcomplete case where neither
 input nor output side is axis-aligned; check whether Delta-PD's A failures are optimisation (restarts).
