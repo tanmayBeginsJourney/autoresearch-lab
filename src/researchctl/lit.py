@@ -181,13 +181,47 @@ def search(lab: Lab, q: str, limit: int, source: str, year: str | None, project:
 
 
 def graph(pid: str, direction: str, limit: int) -> dict:
-    """direction: references (backward) or citations (forward)."""
-    url = f"{S2}/paper/{urllib.parse.quote(_norm_id(pid))}/{direction}?fields={FIELDS}&limit={min(limit, 1000)}"
-    data = json.loads(_get(url)).get("data", [])
-    key = "citedPaper" if direction == "references" else "citingPaper"
-    rows = [_row(d[key]) for d in data if d.get(key, {}).get("title")]
-    rows.sort(key=lambda r: r["cites"] or 0, reverse=True)
-    return {"paper": pid, direction: rows[:limit], "total": len(rows)}
+    """direction: references (backward) or citations (forward). S2 when keyed or reachable, else OpenAlex."""
+    errors = []
+    if os.environ.get("S2_API_KEY") or not os.environ.get("OPENALEX_API_KEY"):
+        try:
+            url = f"{S2}/paper/{urllib.parse.quote(_norm_id(pid))}/{direction}?fields={FIELDS}&limit={min(limit, 1000)}"
+            data = json.loads(_get(url, tries=2)).get("data", [])
+            key = "citedPaper" if direction == "references" else "citingPaper"
+            rows = [_row(d[key]) for d in data if d.get(key, {}).get("title")]
+            rows.sort(key=lambda r: r["cites"] or 0, reverse=True)
+            return {"paper": pid, "source": "s2", direction: rows[:limit], "total": len(rows)}
+        except Fail as e:
+            errors.append(f"s2: {e}")
+    rows, total = _graph_openalex(pid, direction, limit)
+    return {"paper": pid, "source": "openalex", direction: rows, "total": total, "errors": errors or None}
+
+
+def _openalex_work_id(pid: str) -> str:
+    nid = _norm_id(pid)
+    if nid.startswith("arXiv:"):
+        ref = "doi:10.48550/arXiv." + nid.split(":", 1)[1]
+    elif nid.startswith("DOI:"):
+        ref = "doi:" + nid.split(":", 1)[1]
+    else:
+        ref = nid
+    w = json.loads(_get(f"https://api.openalex.org/works/{urllib.parse.quote(ref, safe=':/')}"))
+    return w["id"].rsplit("/", 1)[-1]
+
+
+def _graph_openalex(pid: str, direction: str, limit: int) -> tuple[list[dict], int]:
+    wid = _openalex_work_id(pid)
+    flt = f"cited_by:{wid}" if direction == "references" else f"cites:{wid}"
+    params = {"filter": flt, "per-page": min(limit, 200), "sort": "cited_by_count:desc"}
+    data = json.loads(_get("https://api.openalex.org/works?" + urllib.parse.urlencode(params)))
+    rows = []
+    for w in data.get("results", []):
+        doi = (w.get("doi") or "").replace("https://doi.org/", "")
+        m = re.search(r"arxiv\.(\d{4}\.\d{4,5})", doi, re.I)
+        rows.append({"id": f"arxiv:{m.group(1)}" if m else (f"doi:{doi}" if doi else w.get("id")),
+                     "title": w.get("display_name"), "year": w.get("publication_year"), "cites": w.get("cited_by_count"),
+                     "authors": ", ".join(a["author"]["display_name"] for a in (w.get("authorships") or [])[:3])})
+    return rows, data.get("meta", {}).get("count", len(rows))
 
 
 def cite(pid: str) -> dict:
